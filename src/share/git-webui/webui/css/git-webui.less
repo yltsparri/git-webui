@@ -92,7 +92,8 @@ body {
     }
 }
 
-#global-container {
+#global-container,
+[data-reactroot] {
     .display-flex();
     .flex(1);
 }
@@ -100,6 +101,7 @@ body {
 #sidebar {
     .display-flex();
     .flex-direction(column);
+    min-height: 100%;
     width: 14em;
     background-color: @gray-dark;
 
@@ -200,6 +202,7 @@ body {
     .jumbotron {
         .flex(1);
         margin: 0;
+        padding: 30px;
 
         h1 {
             font-size: 36pt;
@@ -272,6 +275,10 @@ body {
                 a {
                     color: #777777;
                 }
+            }
+
+            span.label.ref {
+                margin-left: 0.5em;
             }
 
             .badge {

@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <!--
+ *
+Copyright 2017 Ülo Parri
 Copyright 2015 Eric ALBER
  *
 Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,71 +27,12 @@ limitations under the License.
         <link rel="icon" href="/img/git-icon.png" />
     </head>
     <body>
-        <script src="/js/jquery.min.js"></script>
-        <script src="/js/bootstrap.min.js"></script>
-        <script src="/js/git-webui.js"></script>
+        <script src="/js/react.min.js"></script>
+        <script src="/js/react-dom.min.js"></script>
+        <script src="/js/redux.min.js"></script>
+        <script src="/js/react-redux.min.js"></script>
 
-        <!-- Error modal dialog -->
-        <div class="modal fade" id="error-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal"><span>&times;</span><span class="sr-only">Close</span></button>
-                        <h4 class="modal-title">Error</h4>
-                    </div>
-                    <pre class="modal-body alert alert-danger"></pre>
-                </div>
-            </div>
-        </div>
-        <!-- Help modal dialog -->
-        <div class="modal fade" id="help-modal" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <h4>History Viewing</h4>
-                        <p>The toolbar on the left shows your branches and tags. The log of the currently selected one is displayed.</p>
-                        <p>When selecting a revision the diff of this specific commit is displayed in the right panel.</p><br>
-                        <img alt="Image of log commit" src="/img/doc/log-commit.png"><br>
-                        <p>On top of the right panel, you can choose 'Tree' to display the versioned content at the specific
-                            revision selected in the left panel. You can browse through directories and display file contents.</p><br>
-                        <img alt="Image of log tree" src="/img/doc/log-tree.png">
-
-                        <h4>Remote access</h4>
-                        <p>Other people on your network have read-only access to your repository:
-                            they may access to the web interface (without 'Workspace'), clone or pull from your repository.
-                            All this through the same url:</p>
-                        <p>Clone:</p>
-                        <pre>$ git clone http://&lt;ip_of_the_computer_running_webui&gt;:8000/ repo_name</pre>
-                        <p>Pull:</p>
-                        <pre>$ git pull http://&lt;ip_of_the_computer_running_webui&gt;:8000/</pre>
-
-                        <h4>Commit</h4>
-                        <p>Commits can only be made from localhost.</p>
-                        <img alt="Image of the workspace" src="/img/doc/workspace.png"><br>
-                        <ul>
-                            <li><strong>Working copy</strong> lists the modified files (compared to the staging area) in your working directory</li>
-                            <li><strong>Message</strong> lets you enter a commit message</li>
-                            <li><strong>Staging area</strong> lists the modified files (compared to HEAD) in your staging area. These are the changes that will be committed</li>
-                        </ul>
-                        <p>The diff view lets you review the differences of the selected file.
-                            You can select code in more fine grained way:
-                            <ul>
-                                <li>If the displayed diff is from the working copy, you may stage or cancel the selected lines.</li>
-                                <li>If the displayed diff is from the staging area, you may unstage the selected lines.</li>
-                            </ul>
-                        </p>
-
-                        <h4>Contributing</h4>
-                        You can clone the source code of <a href="https://github.com/alberthier/git-webui" target="_blank">git-webui on GitHub</a>
-
-                        <h4>Author</h4>
-                        <a href="mailto:eric.alber@gmail.com" target="_blank">Éric ALBER</a> (<a href="https://twitter.com/eric_alber" target="_blank">@eric_alber</a>)
-
-                        <h4>License</h4>
-                        This software is licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0.html" target="_blank">Apache 2.0</a> license
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="global-container">
+        <script src="/js/main.js"></script>
     </body>
 </html>
