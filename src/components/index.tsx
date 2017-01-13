@@ -23,11 +23,12 @@ import { Provider, connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import SidebarView, { SidebarViewDataProps, SidebarViewDispatchProps, SelectedItem } from './SidebarView';
 import { baseDataReducer, historyViewOptionsReducer, getBranchDataReducer, commitsReducer } from '../actions/Reducers';
-import { AppState, AppMode } from '../actions/AppState';
-import { commitSelected, itemSelected, initState } from '../actions/ActionCreators';
+import { AppState, AppMode, DiffViewMode } from '../actions/AppState';
+import { commitSelected, itemSelected, initState, selectDiffViewMode, loadNode } from '../actions/ActionCreators';
 import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from './HistoryView';
 import RemoteView from './RemoteView';
 import ModalMessage from './ModalMessage';
+import { FileInfo } from '../actions/git/Git';
 
 let reducer = combineReducers({
   baseData: baseDataReducer,
@@ -71,7 +72,10 @@ let ConnectedHistoryView = connect<HistoryViewDataProps, HistoryViewDispatchProp
       diffContext: state.historyViewOptions.diffContext,
       gitDiffOpts: state.historyViewOptions.gitDiffOpts,
       gitFile: state.historyViewOptions.gitFile,
-      commits: state.commits
+      commits: state.commits,
+      diffViewMode: state.historyViewOptions.diffViewMode,
+      path: state.historyViewOptions.path,
+      files: state.historyViewOptions.files
     };
   },
   (dispatch) => {
@@ -83,19 +87,25 @@ let ConnectedHistoryView = connect<HistoryViewDataProps, HistoryViewDispatchProp
         dispatch({ type: 'toggleIgnoreWhiteSpace' });
       },
       setDiffContext: (context) => {
-        store.dispatch({ type: 'UPDATE_BASEDATA', data: { diffContext: context } });
+        dispatch({ type: 'UPDATE_BASEDATA', data: { diffContext: context } });
+      },
+      selectDiffViewMode: (mode: DiffViewMode) => {
+        dispatch(selectDiffViewMode(mode));
+      },
+      onNodeSelected: (node: FileInfo) => {
+        dispatch(loadNode(node));
       }
     };
   })(HistoryView);
 
-let ConnectedModalMessage = connect<any,any, any>((state: AppState )=> {
-  return {message: state.baseData.messages};
+let ConnectedModalMessage = connect<any, any, any>((state: AppState) => {
+  return { message: state.baseData.messages };
 },
-dispatch => {
-  return {
-    close: () =>  dispatch({type : 'CLOSE_MESSAGE'})
-  };
-})(ModalMessage);
+  dispatch => {
+    return {
+      close: () => dispatch({ type: 'CLOSE_MESSAGE' })
+    };
+  })(ModalMessage);
 
 interface IndexProps {
   mode: AppMode;
@@ -107,7 +117,7 @@ class Index extends React.Component<IndexProps, undefined> {
     return <div>
       <ConnectedSidebarView />
       <div id='main-view'>
-      <ConnectedModalMessage />
+        <ConnectedModalMessage />
         {
           this.getMainViewContents()
         }

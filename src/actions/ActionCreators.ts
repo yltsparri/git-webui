@@ -17,12 +17,12 @@
 
 import { CommitInfo } from './git/CommitInfo';
 import { GitBranch, GitBrancesResponse, BranchStatus } from './git/Git';
-import Git from './git/Git';
-import { AppMode, AppState } from './AppState';
+import Git, { FileInfo } from './git/Git';
+import { AppMode, AppState, DiffViewMode } from './AppState';
 
 const git = new Git();
 const loadDiff = (commit: CommitInfo) => {
-  return (dispatch, getState) => {
+  return (dispatch, getState: () => AppState) => {
     const state = getState() as AppState;
     const { diffContext, ignoreWhitespace, gitDiffOpts, gitFile } = state.historyViewOptions;
     return git.getDiff(commit.hash, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)
@@ -35,10 +35,89 @@ const loadDiff = (commit: CommitInfo) => {
   };
 };
 
-export function commitSelected(commit: CommitInfo) {
+export function loadTree(parent: string) {
   return (dispatch) => {
-    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { commitHash: commit.hash } });
-    dispatch(loadDiff(commit));
+    return git.listFiles(parent)
+      .then(response => {
+        dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { files: response.data } });
+        if (response.message) {
+          dispatch({ type: 'ADD_MESSAGE', message: response.message });
+        }
+      });
+  };
+};
+
+export function loadNode(node: FileInfo) {
+  return (dispatch, getState: () => AppState) => {
+    let state = getState() as AppState;
+    let index = state.historyViewOptions.path.findIndex(item => item.objectId === node.objectId);
+    if (index >= 0) {
+      if (index < state.historyViewOptions.path.length - 1) {
+        dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { path: state.historyViewOptions.path.slice(0, index + 1), files: [] } });
+      }
+    }
+    else {
+      dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { path: state.historyViewOptions.path.concat(node), files: [] } });
+    }
+    if (node.type === 'tree') {
+      return git.listFiles(node.objectId)
+        .then(response => {
+          state = getState() as AppState;
+          dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { files: response.data } });
+          if (response.message) {
+            dispatch({ type: 'ADD_MESSAGE', message: response.message });
+          }
+        });
+    }
+  };
+};
+
+export function commitSelected(commit: CommitInfo) {
+  return (dispatch, getState: () => AppState) => {
+    let state = getState();
+    let root: FileInfo = {
+      name: state.baseData.dirName,
+      size: NaN,
+      objectId: commit.hash,
+      isSymbolicLink: false,
+      mode: 0,
+      type: 'tree',
+      parent: null
+    };
+    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { commitHash: commit.hash, path: [root], files: [] } });
+    state = getState();
+    if (state.historyViewOptions.diffViewMode === DiffViewMode.Diff) {
+      dispatch(loadDiff(commit));
+    }
+    else if (state.historyViewOptions.diffViewMode === DiffViewMode.Tree) {
+      dispatch(loadNode(root));
+    }
+  };
+}
+
+export function selectDiffViewMode(mode: DiffViewMode) {
+  return (dispatch, getState: () => AppState) => {
+    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diffViewMode: mode } });
+    let state = getState() as AppState;
+    let opts = state.historyViewOptions;
+    if (mode === DiffViewMode.Tree && opts.path.length < 2 && !opts.files.length) {
+      let root: FileInfo;
+      if (opts.path.length) {
+        root = opts.path[opts.path.length - 1];
+      }
+      else {
+        root = {
+          name: state.baseData.dirName,
+          size: NaN,
+          objectId: opts.commitHash,
+          isSymbolicLink: false,
+          mode: 0,
+          type: 'tree',
+          parent: null
+        };
+      }
+      dispatch(loadNode(root));
+    }
   };
 }
 

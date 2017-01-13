@@ -17,6 +17,12 @@
 
 import { GitBranch } from './git/Git';
 import { CommitInfo } from '../actions/git/CommitInfo';
+import { FileInfo } from './git/Git';
+
+export enum DiffViewMode {
+  Diff = 0,
+  Tree = 1
+}
 
 export interface HistoryViewOptions {
   commitHash: string;
@@ -25,7 +31,9 @@ export interface HistoryViewOptions {
   diffContext: number;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
-
+  diffViewMode: DiffViewMode;
+  path: Array<FileInfo>;
+  files: Array<FileInfo>;
 }
 
 export enum AppMode {

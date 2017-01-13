@@ -23,6 +23,16 @@ export interface GitResponse<T> {
   message?: string;
 }
 
+export interface FileInfo {
+  mode: number;
+  objectId: string;
+  size: number;
+  isSymbolicLink: boolean;
+  type: string;
+  name: string;
+  parent: string;
+}
+
 export enum BranchStatus {
   Normal = 0,
   Detached = 1,
@@ -42,19 +52,8 @@ export interface GitBrancesResponse {
 export default class Git {
 
   getViewOnly = (): Promise<GitResponse<string>> => {
-    var myInit = {
-      method: 'GET',
-      headers: new Headers({ 'Content-Type': 'text/plain' }),
-    };
 
-    var myRequest = new Request('viewonly', myInit);
-    return fetch(myRequest)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        throw Error(response.statusText);
-      })
+    return this.makeRequest('GET', 'viewonly', null, { 'Content-Type': 'text/plain' })
       .then((text: string) => { return { data: text, message: null, returnCode: 0 }; })
       .catch((error) => {
         console.log(error);
@@ -67,19 +66,7 @@ export default class Git {
   }
 
   getDirName = (): Promise<GitResponse<string>> => {
-
-    var myRequest = new Request('dirname', {
-      method: 'GET',
-      headers: new Headers({ 'Content-Type': 'text/plain' }),
-    });
-
-    return fetch(myRequest)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        throw Error(response.statusText);
-      })
+    return this.makeRequest('GET', 'dirname', null, { 'Content-Type': 'text/plain' })
       .then((text: string) => { return { data: text, message: null, returnCode: 0 }; })
       .catch((error) => {
         console.log(error);
@@ -102,14 +89,23 @@ export default class Git {
       }
       let branches: Array<GitBranch> = this.splitLines(d.data)
         .map(name => this.getGitBranch(name));
-      branches = branches.sort(this.compareBrances);
+      branches = branches.sort(this.compareBranches);
       return {
         data: branches,
         message: d.message,
         returnCode: d.returnCode
       };
     };
-    return this.runGit('branch', null).then((d) => handler(d));
+    return this.runGit('branch', null)
+    .then((d) => handler(d))
+    .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
+      });
   }
 
   getRemoteBranches = (): Promise<GitBrancesResponse> => {
@@ -123,14 +119,23 @@ export default class Git {
       }
       let branches: Array<GitBranch> = this.splitLines(d.data)
         .map(name => this.getGitBranch(name));
-      branches = branches.sort(this.compareBrances);
+      branches = branches.sort(this.compareBranches);
       return {
         data: branches,
         message: d.message,
         returnCode: d.returnCode
       };
     };
-    return this.runGit('branch --remotes', null).then((d) => handler(d));
+    return this.runGit('branch --remotes', null)
+    .then((d) => handler(d))
+    .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
+      });
   }
 
   getTags = (): Promise<GitBrancesResponse> => {
@@ -151,7 +156,16 @@ export default class Git {
         returnCode: d.returnCode
       };
     };
-    return this.runGit('tag', null).then(d => handler(d));
+    return this.runGit('tag', null)
+    .then(d => handler(d))
+    .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
+      });
   }
 
   getCommits = (rows: number, from: string): Promise<GitResponse<Array<CommitInfo>>> => {
@@ -254,9 +268,16 @@ export default class Git {
           ++count;
         }
         return { data: commits, message: null, returnCode: 0 };
+      })
+      .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
       });
   }
-
   getDiff = (commit: string,
     diffContext: number,
     ignoreWhitespace: boolean,
@@ -275,7 +296,82 @@ export default class Git {
     if (gitFile) {
       fullCmd += " -- " + gitFile;
     }
-    return this.runGit('show ' + commit + ' -- ', null);
+    return this.runGit('show ' + commit + ' -- ', null)
+    .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
+      });
+  }
+
+  listFiles = (parent: string): Promise<GitResponse<Array<FileInfo>>> => {
+    let readToNext = (str: string, char: string, start: number): string => {
+      var end = str.indexOf(char, start);
+      return end >= 0 ? str.substring(start, end) : str.substring(start);
+    };
+    return this.runGit('ls-tree -l ' + parent, null)
+      .then(response => {
+        if (response.returnCode !== 0) {
+          return {
+            data: null,
+            message: response.message,
+            returnCode: response.returnCode
+          };
+        }
+        let lines = response.data.split('\n');
+        let data = lines.map(line => {
+          // line format
+          // {mode} {type} {objectId} {size} {name}
+          let start = 0;
+
+          // mode
+          let substr = readToNext(line, ' ', start);
+          start += substr.length + 1;
+          let mode = parseInt(substr);
+
+          // type
+          let type = readToNext(line, ' ', start);
+          start += type.length + 1;
+
+          // objectId
+          let objectId = readToNext(line, ' ', start);
+          start += objectId.length + 1;
+
+          // size
+          substr = readToNext(line, '\t', start);
+          start += substr.length + 1;
+          let size = parseInt(substr.trim());
+
+          // name
+          let name = line.substring(start);
+
+          return {
+            mode: mode,
+            objectId: objectId,
+            size: size,
+            isSymbolicLink: (mode & 120000) === 120000,
+            type: type,
+            name: name,
+            parent: parent
+          };
+        });
+        return {
+          data: data,
+          message: response.message,
+          returnCode: response.returnCode
+        };
+      })
+      .catch((error) => {
+        console.log(error);
+        return {
+          data: undefined,
+          returnCode: error.code,
+          message: error.message
+        };
+      });
   }
 
   private getGitBranch = (name: string): GitBranch => {
@@ -299,7 +395,7 @@ export default class Git {
     };
   }
 
-  private compareBrances = (a: GitBranch, b: GitBranch) => {
+  private compareBranches = (a: GitBranch, b: GitBranch) => {
     if (a.name[0] === "*") {
       return -1;
     } else if (b.name[0] === "*") {
@@ -309,6 +405,33 @@ export default class Git {
     }
 
   }
+
+  private makeRequest = (method, url, data, headers) => {
+    return new Promise(function (resolve, reject) {
+      var xhr = new XMLHttpRequest();
+      xhr.open(method, url);
+      xhr.onload = function () {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          resolve(xhr.response);
+        } else {
+          reject({
+            code: xhr.status,
+            message: xhr.statusText
+          });
+        }
+      };
+      xhr.onerror = function () {
+        reject({
+          code: xhr.status,
+          message: xhr.statusText
+        });
+      };
+      for (var key in headers) {
+        xhr.setRequestHeader(key, headers[key]);
+      }
+      xhr.send(data);
+    });
+  }
   private runGit = (cmd: string, arg1: string): Promise<GitResponse<string>> => {
     // cmd = git command line arguments
     // other arguments = optional stdin content and a callback function:
@@ -316,21 +439,12 @@ export default class Git {
     // git("log", mycallback)
     // git("commit -F -", "my commit message", mycallback)
     // Convention : first line = git arguments, rest = process stdin
-    cmd += "\n" + arg1;
-    var myRequest = new Request('git', {
-      method: 'POST',
-      headers: new Headers({ 'Content-Type': 'text/plain' }),
-      body: cmd
-    });
+    if (arg1) {
+      cmd += "\n" + arg1;
+    }
 
-    return fetch(myRequest)
-      .then((response) => {
-        if (response.status === 200) {
-          return response.text();
-        }
-        throw Error(response.statusText);
-      })
-      .then((data) => {
+    return this.makeRequest('POST', 'git', cmd, { 'Content-Type': 'text/plain' })
+      .then((data: string) => {
         var footers = {};
         var fIndex = data.length;
         while (true) {
@@ -357,16 +471,11 @@ export default class Git {
           };
         }
         else {
-          throw Error(message);
+          throw {
+            code: rcode,
+            message: message
+          };
         }
-      })
-      .catch((error) => {
-        console.log(error);
-        return {
-          data: undefined,
-          returnCode: error.code,
-          message: error.message
-        };
       });
   }
 

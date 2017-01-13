@@ -18,7 +18,7 @@
 import assign from 'lodash/object/assign';
 import { GitBranch } from './git/Git';
 import { CommitInfo } from '../actions/git/CommitInfo';
-import { HistoryViewOptions, BaseData, AppMode } from '../actions/AppState';
+import { HistoryViewOptions, BaseData, AppMode, DiffViewMode } from '../actions/AppState';
 
 export function historyViewOptionsReducer(state: HistoryViewOptions, action): HistoryViewOptions {
   switch (action.type) {
@@ -29,7 +29,10 @@ export function historyViewOptionsReducer(state: HistoryViewOptions, action): Hi
     commitHash: '',
     diff: null,
     diffContext: 3,
-    ignoreWhitespace: false
+    ignoreWhitespace: false,
+    diffViewMode: DiffViewMode.Diff,
+    path: [],
+    files: []
   };
 };
 
@@ -55,7 +58,7 @@ export function getBranchDataReducer(key: string) {
   return (state: Array<GitBranch>, action): Array<GitBranch> => {
     switch (action.type) {
       case 'SET_' + key + '_BRANCHES':
-        return action.data;
+        return action.data || [];
       default:
         return state || [];
     }
@@ -65,7 +68,7 @@ export function getBranchDataReducer(key: string) {
 export function commitsReducer(state: Array<CommitInfo>, action): Array<CommitInfo> {
   switch (action.type) {
     case 'SET_COMMITS':
-      return action.commits as Array<CommitInfo>;
+      return action.commits as Array<CommitInfo>  || [];
     default:
       return state || [];
   }

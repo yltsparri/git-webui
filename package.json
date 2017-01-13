@@ -19,8 +19,7 @@
   "dependencies": {
     "react": "^15.4.1",
     "react-dom": "^15.4.1",
-    "react-overlays": "^0.6.10",
-    "whatwg-fetch": "^2.0.1"
+    "react-overlays": "^0.6.10"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.45",
@@ -28,7 +27,6 @@
     "@types/react-dom": "^0.14.20",
     "@types/react-redux": "^4.4.35",
     "@types/redux-thunk": "^2.1.32",
-    "@types/whatwg-fetch": "0.0.33",
     "babel-core": "^6.21.0",
     "babel-loader": "^6.2.10",
     "babel-polyfill": "^6.20.0",
@@ -52,6 +50,7 @@
     "tslint": "^4.2.0",
     "tslint-loader": "^3.3.0",
     "typescript": "^2.1.4",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
   }
 }

@@ -19,22 +19,29 @@ import { CommitInfo } from '../actions/git/CommitInfo';
 import React from 'react';
 import LogView from './LogView';
 import CommitView from './CommitView';
-import TabBox from './TabBox';
+import { DiffViewMode } from '../actions/AppState';
+import { FileInfo } from '../actions/git/Git';
 
 export interface HistoryViewDataProps {
   commitHash: string;
   diff: string;
   ignoreWhitespace: boolean;
   diffContext: number;
+  diffViewMode: DiffViewMode;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
   commits: Array<CommitInfo>;
+
+  path: Array<FileInfo>;
+  files: Array<FileInfo>;
 }
 
 export interface HistoryViewDispatchProps {
   onCommitClicked(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile);
   setDiffContext(n);
   toggleIgnoreWhiteSpace();
+  selectDiffViewMode(mode: DiffViewMode);
+  onNodeSelected(node: FileInfo);
 }
 
 interface HistoryViewProps extends HistoryViewDataProps, HistoryViewDispatchProps { }
@@ -46,13 +53,27 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
   }
 
   render() {
-    const {commits, diff, ignoreWhitespace, diffContext, gitDiffOpts, gitFile, commitHash} = this.props;
+    const {
+      commits,
+      diff,
+      ignoreWhitespace,
+      diffViewMode,
+      diffContext,
+      gitDiffOpts,
+      path,
+      files,
+      gitFile,
+      commitHash
+    } = this.props;
 
     return <div id='history-view'>
       <LogView commits={commits} onCommitClicked={this.commitClicked} active={commitHash} />
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
-          <TabBox buttons={[{ name: "Commit", id: 'Commit' }, { name: "Tree", id: 'Tree' }]} onClicked={e => e} />
+          <ul className='nav nav-pills nav-justified' role='tablList'>
+            <li onClick={() => this.props.selectDiffViewMode(DiffViewMode.Diff)} className={diffViewMode === DiffViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
+            <li onClick={() => this.props.selectDiffViewMode(DiffViewMode.Tree)} className={diffViewMode === DiffViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
+          </ul>
         </div>
         <CommitView buttons={[]}
           hunkSelectionAllowed={true}
@@ -62,7 +83,13 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
           ignoreWhitespace={ignoreWhitespace}
           diffContext={diffContext}
           gitDiffOpts={gitDiffOpts}
-          gitFile={gitFile} updateDiffContext={(n) => this.props.setDiffContext(n)} toggleIgnoreWhieSpace={this.props.toggleIgnoreWhiteSpace} />
+          gitFile={gitFile}
+          diffViewMode={diffViewMode}
+          updateDiffContext={(n) => this.props.setDiffContext(n)}
+          toggleIgnoreWhieSpace={this.props.toggleIgnoreWhiteSpace}
+          onNodeSelected={this.props.onNodeSelected}
+          path={path}
+          files={files} />
       </div>
     </div>;
   }
