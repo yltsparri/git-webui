@@ -16,8 +16,11 @@
  */
 
 import { CommitInfo } from './git/CommitInfo';
-import { GitBranch, GitBrancesResponse, BranchStatus } from './git/Git';
-import Git, { FileInfo } from './git/Git';
+import GitBranch from './git/GitBranch';
+import GitBrancesResponse from './git/GitBrancesResponse';
+import BranchStatus from './git/BranchStatus';
+import FileInfo from './git/FileInfo';
+import Git from './git/Git';
 import { AppMode, AppState, DiffViewMode } from './AppState';
 
 const git = new Git();

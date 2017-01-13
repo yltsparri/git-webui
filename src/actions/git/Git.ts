@@ -16,35 +16,13 @@
  */
 
 import { CommitInfo, Person, Ref, RefType } from './CommitInfo';
+import FileInfo from './FileInfo';
+import BranchStatus from './BranchStatus';
+import GitBranch from './GitBranch';
+import GitBrancesResponse from './GitBrancesResponse';
 
 export interface GitResponse<T> {
   data?: T;
-  returnCode: number;
-  message?: string;
-}
-
-export interface FileInfo {
-  mode: number;
-  objectId: string;
-  size: number;
-  isSymbolicLink: boolean;
-  type: string;
-  name: string;
-  parent: string;
-}
-
-export enum BranchStatus {
-  Normal = 0,
-  Detached = 1,
-  Current = 2,
-}
-
-export interface GitBranch {
-  name: string;
-  status: BranchStatus;
-}
-export interface GitBrancesResponse {
-  data?: Array<GitBranch>;
   returnCode: number;
   message?: string;
 }

@@ -28,7 +28,7 @@ import { commitSelected, itemSelected, initState, selectDiffViewMode, loadNode }
 import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from './HistoryView';
 import RemoteView from './RemoteView';
 import ModalMessage from './ModalMessage';
-import { FileInfo } from '../actions/git/Git';
+import FileInfo from '../actions/git/FileInfo';
 
 let reducer = combineReducers({
   baseData: baseDataReducer,

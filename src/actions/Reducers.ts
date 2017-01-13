@@ -16,7 +16,7 @@
  */
 
 import assign from 'lodash/object/assign';
-import { GitBranch } from './git/Git';
+import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
 import { HistoryViewOptions, BaseData, AppMode, DiffViewMode } from '../actions/AppState';
 
@@ -68,7 +68,7 @@ export function getBranchDataReducer(key: string) {
 export function commitsReducer(state: Array<CommitInfo>, action): Array<CommitInfo> {
   switch (action.type) {
     case 'SET_COMMITS':
-      return action.commits as Array<CommitInfo>  || [];
+      return action.commits as Array<CommitInfo> || [];
     default:
       return state || [];
   }

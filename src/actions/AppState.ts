@@ -15,9 +15,9 @@
  * limitations under the License.
  */
 
-import { GitBranch } from './git/Git';
+import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
-import { FileInfo } from './git/Git';
+import FileInfo from './git/FileInfo';
 
 export enum DiffViewMode {
   Diff = 0,

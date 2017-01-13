@@ -19,7 +19,7 @@ import React from 'react';
 import DiffView from './DiffView';
 import TreeView from './TreeView';
 import { DiffViewMode } from '../actions/AppState';
-import { FileInfo } from '../actions/git/Git';
+import FileInfo from '../actions/git/FileInfo';
 
 interface Button {
   name: string;

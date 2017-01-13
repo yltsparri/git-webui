@@ -1,5 +1,5 @@
 import React from 'react';
-import { FileInfo } from '../actions/git/Git';
+import FileInfo from '../actions/git/FileInfo';
 
 export interface TreeViewDataProps {
   path: Array<FileInfo>;
