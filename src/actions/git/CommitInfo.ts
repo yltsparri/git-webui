@@ -42,3 +42,5 @@ export interface CommitInfo {
   committer: Person;
   refs?: Array<Ref>;
 }
+
+export default CommitInfo;

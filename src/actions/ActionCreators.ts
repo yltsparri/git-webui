@@ -132,13 +132,17 @@ export function itemSelected(b) {
         .then((commits) => {
           if (commits.returnCode === 0) {
             dispatch({ type: 'SET_COMMITS', commits: commits.data });
-            if (commits.data && commits.data.length) {
+            if (commits.data.length) {
               dispatch(commitSelected(commits.data[0]));
             }
           }
           if (commits.message) {
             dispatch({ type: 'ADD_MESSAGE', message: commits.message });
           }
+        })
+        .catch((error) => {
+          console.log(error);
+          dispatch({ type: 'ADD_MESSAGE', message: error.message });
         }));
     }
   };
@@ -180,18 +184,17 @@ export function initState() {
               if (branches.message) {
                 dispatch({ type: 'ADD_MESSAGE', message: branches.message });
               }
-              return branches;
-            })
-            .then(branches => {
-              if (branches.data) {
-                let active: GitBranch = branches.data.find(b => b.status === BranchStatus.Current);
-                if (active) {
-                  dispatch(itemSelected({ selectedItem: active.name, mode: AppMode.LocalBranches }));
-                }
-                if (branches.message) {
-                  dispatch({ type: 'ADD_MESSAGE', message: branches.message });
-                }
+
+              let active: GitBranch = branches.data.find(b => b.status === BranchStatus.Current);
+              if (active) {
+                dispatch(itemSelected({ selectedItem: active.name, mode: AppMode.LocalBranches }));
               }
+              if (branches.message) {
+                dispatch({ type: 'ADD_MESSAGE', message: branches.message });
+              }
+            }).catch((error) => {
+              console.log(error);
+              dispatch({ type: 'ADD_MESSAGE', message: error.message });
             }));
 
           dispatch((dispatch) => git.getRemoteBranches()
@@ -203,6 +206,9 @@ export function initState() {
               if (branches.message) {
                 dispatch({ type: 'ADD_MESSAGE', message: branches.message });
               }
+            }).catch((error) => {
+              console.log(error);
+              dispatch({ type: 'ADD_MESSAGE', message: error.message });
             }));
 
           dispatch((dispatch) => git.getTags()
@@ -214,6 +220,9 @@ export function initState() {
               if (tags.message) {
                 dispatch({ type: 'ADD_MESSAGE', message: tags.message });
               }
+            }).catch((error) => {
+              console.log(error);
+              dispatch({ type: 'ADD_MESSAGE', message: error.message });
             }));
         }
       });

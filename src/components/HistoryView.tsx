@@ -20,7 +20,7 @@ import React from 'react';
 import LogView from './LogView';
 import CommitView from './CommitView';
 import { DiffViewMode } from '../actions/AppState';
-import FileInfo  from '../actions/git/FileInfo';
+import FileInfo from '../actions/git/FileInfo';
 
 export interface HistoryViewDataProps {
   commitHash: string;
