@@ -29,6 +29,7 @@ export interface HistoryViewOptions {
   diff: string;
   ignoreWhitespace: boolean;
   diffContext: number;
+  fullFileDiff: boolean;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
   diffViewMode: DiffViewMode;

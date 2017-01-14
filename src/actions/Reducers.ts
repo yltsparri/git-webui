@@ -24,11 +24,16 @@ export function historyViewOptionsReducer(state: HistoryViewOptions, action): Hi
   switch (action.type) {
     case 'UPDATE_COMMIT_VIEW_DATA':
       return assign({}, state, action.data);
+    case 'toggleShowFullFile':
+      return assign({}, state, { fullFile: !state.fullFileDiff });
+    case 'toggleIgnoreWhiteSpace':
+      return assign({}, state, { ignoreWhitespace: !state.ignoreWhitespace });
   }
   return state || {
     commitHash: '',
     diff: null,
     diffContext: 3,
+    fullFileDiff: false,
     ignoreWhitespace: false,
     diffViewMode: DiffViewMode.Diff,
     path: [],

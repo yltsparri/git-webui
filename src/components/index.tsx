@@ -24,7 +24,7 @@ import ReactDOM from 'react-dom';
 import SidebarView, { SidebarViewDataProps, SidebarViewDispatchProps, SelectedItem } from './SidebarView';
 import { baseDataReducer, historyViewOptionsReducer, getBranchDataReducer, commitsReducer } from '../actions/Reducers';
 import { AppState, AppMode, DiffViewMode } from '../actions/AppState';
-import { commitSelected, itemSelected, initState, selectDiffViewMode, loadNode } from '../actions/ActionCreators';
+import ActionCreators from '../actions/ActionCreators';
 import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from './HistoryView';
 import RemoteView from './RemoteView';
 import ModalMessage from './ModalMessage';
@@ -42,7 +42,7 @@ let store = createStore(reducer, applyMiddleware(
   thunkMiddleware, // lets us dispatch() functions
 ));
 
-store.dispatch(initState());
+store.dispatch(ActionCreators.initState());
 
 let ConnectedSidebarView = connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
   (state: AppState) => {
@@ -58,42 +58,47 @@ let ConnectedSidebarView = connect<SidebarViewDataProps, SidebarViewDispatchProp
   }, (dispatch): SidebarViewDispatchProps => {
     return {
       onItemClicked: (b: SelectedItem) => {
-        dispatch(itemSelected(b));
+        dispatch(ActionCreators.itemSelected(b));
       }
     };
   })(SidebarView);
 
 let ConnectedHistoryView = connect<HistoryViewDataProps, HistoryViewDispatchProps, any>(
   (state: AppState) => {
+    const options = state.historyViewOptions;
     return {
-      commitHash: state.historyViewOptions.commitHash,
-      diff: state.historyViewOptions.diff,
-      ignoreWhitespace: state.historyViewOptions.ignoreWhitespace,
-      diffContext: state.historyViewOptions.diffContext,
-      gitDiffOpts: state.historyViewOptions.gitDiffOpts,
-      gitFile: state.historyViewOptions.gitFile,
+      commitHash: options.commitHash,
+      diff: options.diff,
+      ignoreWhitespace: options.ignoreWhitespace,
+      diffContext: options.diffContext,
+      fullFile: options.fullFileDiff,
+      gitDiffOpts: options.gitDiffOpts,
+      gitFile: options.gitFile,
       commits: state.commits,
-      diffViewMode: state.historyViewOptions.diffViewMode,
-      path: state.historyViewOptions.path,
-      files: state.historyViewOptions.files
+      diffViewMode: options.diffViewMode,
+      path: options.path,
+      files: options.files,
     };
   },
   (dispatch) => {
     return {
       onCommitClicked: (commit) => {
-        dispatch(commitSelected(commit));
+        dispatch(ActionCreators.commitSelected(commit));
       },
       toggleIgnoreWhiteSpace: () => {
-        dispatch({ type: 'toggleIgnoreWhiteSpace' });
+        dispatch(ActionCreators.toggleIgnoreWhiteSpace());
+      },
+      toggleShowFullFile: () => {
+        dispatch(ActionCreators.toggleShowFullFile());
       },
       setDiffContext: (context) => {
-        dispatch({ type: 'UPDATE_BASEDATA', data: { diffContext: context } });
+        dispatch(ActionCreators.setDiffContext(context));
       },
       selectDiffViewMode: (mode: DiffViewMode) => {
-        dispatch(selectDiffViewMode(mode));
+        dispatch(ActionCreators.selectDiffViewMode(mode));
       },
       onNodeSelected: (node: FileInfo) => {
-        dispatch(loadNode(node));
+        dispatch(ActionCreators.loadNode(node));
       }
     };
   })(HistoryView);

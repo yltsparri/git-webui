@@ -79,7 +79,7 @@ export default class Git {
     ignoreWhitespace: boolean,
     gitDiffOpts?: Array<string>,
     gitFile?: string): Promise<GitResponse<string>> => {
-    var fullCmd = 'show ';
+    let fullCmd = 'show ' + commit;
     if (diffContext) {
       fullCmd += " --unified=" + diffContext.toString();
     }
@@ -92,7 +92,7 @@ export default class Git {
     if (gitFile) {
       fullCmd += " -- " + gitFile;
     }
-    return this.runGit('show ' + commit + ' -- ', null)
+    return this.runGit(fullCmd, null)
       .catch((error) => {
         console.log(error);
         return {

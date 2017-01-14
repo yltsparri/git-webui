@@ -24,27 +24,19 @@ import Git from './git/Git';
 import { AppMode, AppState, DiffViewMode } from './AppState';
 
 const git = new Git();
-const loadDiff = (commit: CommitInfo) => {
+const loadDiff = (commit: string) => {
   return (dispatch, getState: () => AppState) => {
     const state = getState() as AppState;
-    const { diffContext, ignoreWhitespace, gitDiffOpts, gitFile } = state.historyViewOptions;
-    return git.getDiff(commit.hash, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)
+    const { ignoreWhitespace, gitDiffOpts, gitFile, fullFileDiff } = state.historyViewOptions;
+    let diffContext = state.historyViewOptions.diffContext;
+    if (fullFileDiff) {
+      diffContext = 99999999;
+    }
+    return git.getDiff(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)
       .then(diff => {
         dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diff: diff.data } });
         if (diff.message) {
           dispatch({ type: 'ADD_MESSAGE', message: diff.message });
-        }
-      });
-  };
-};
-
-export function loadTree(parent: string) {
-  return (dispatch) => {
-    return git.listFiles(parent)
-      .then(response => {
-        dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { files: response.data } });
-        if (response.message) {
-          dispatch({ type: 'ADD_MESSAGE', message: response.message });
         }
       });
   };
@@ -90,7 +82,7 @@ export function commitSelected(commit: CommitInfo) {
     dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { commitHash: commit.hash, path: [root], files: [] } });
     state = getState();
     if (state.historyViewOptions.diffViewMode === DiffViewMode.Diff) {
-      dispatch(loadDiff(commit));
+      dispatch(loadDiff(commit.hash));
     }
     else if (state.historyViewOptions.diffViewMode === DiffViewMode.Tree) {
       dispatch(loadNode(root));
@@ -121,6 +113,33 @@ export function selectDiffViewMode(mode: DiffViewMode) {
       }
       dispatch(loadNode(root));
     }
+  };
+}
+
+export function setDiffContext(context: number) {
+  return (dispatch, getState: () => AppState) => {
+    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diffContext: context } });
+    const options = getState().historyViewOptions;
+    if (!options.fullFileDiff) {
+      let commitHash = options.commitHash;
+      dispatch(loadDiff(commitHash));
+    }
+  };
+}
+
+export function toggleIgnoreWhiteSpace() {
+  return (dispatch, getState: () => AppState) => {
+    dispatch({ type: 'toggleIgnoreWhiteSpace' });
+    let commitHash = getState().historyViewOptions.commitHash;
+    dispatch(loadDiff(commitHash));
+  };
+}
+
+export function toggleShowFullFile() {
+  return (dispatch, getState: () => AppState) => {
+    dispatch({ type: 'toggleShowFullFile' });
+    let commitHash = getState().historyViewOptions.commitHash;
+    dispatch(loadDiff(commitHash));
   };
 }
 
@@ -228,3 +247,14 @@ export function initState() {
       });
   };
 }
+
+export default {
+  commitSelected,
+  itemSelected,
+  initState,
+  selectDiffViewMode,
+  loadNode,
+  setDiffContext,
+  toggleIgnoreWhiteSpace,
+  toggleShowFullFile
+};

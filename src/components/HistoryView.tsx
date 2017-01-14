@@ -27,6 +27,7 @@ export interface HistoryViewDataProps {
   diff: string;
   ignoreWhitespace: boolean;
   diffContext: number;
+  fullFile: boolean;
   diffViewMode: DiffViewMode;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
@@ -42,6 +43,7 @@ export interface HistoryViewDispatchProps {
   toggleIgnoreWhiteSpace();
   selectDiffViewMode(mode: DiffViewMode);
   onNodeSelected(node: FileInfo);
+  toggleShowFullFile();
 }
 
 interface HistoryViewProps extends HistoryViewDataProps, HistoryViewDispatchProps { }
@@ -63,7 +65,13 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
       path,
       files,
       gitFile,
-      commitHash
+      commitHash,
+      fullFile,
+      toggleShowFullFile,
+      selectDiffViewMode,
+      setDiffContext,
+      toggleIgnoreWhiteSpace,
+      onNodeSelected
     } = this.props;
 
     return <div id='history-view'>
@@ -71,8 +79,8 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
           <ul className='nav nav-pills nav-justified' role='tablList'>
-            <li onClick={() => this.props.selectDiffViewMode(DiffViewMode.Diff)} className={diffViewMode === DiffViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
-            <li onClick={() => this.props.selectDiffViewMode(DiffViewMode.Tree)} className={diffViewMode === DiffViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
+            <li onClick={() => selectDiffViewMode(DiffViewMode.Diff)} className={diffViewMode === DiffViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
+            <li onClick={() => selectDiffViewMode(DiffViewMode.Tree)} className={diffViewMode === DiffViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
           </ul>
         </div>
         <CommitView buttons={[]}
@@ -83,11 +91,13 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
           ignoreWhitespace={ignoreWhitespace}
           diffContext={diffContext}
           gitDiffOpts={gitDiffOpts}
+          fullFileDiff={fullFile}
           gitFile={gitFile}
           diffViewMode={diffViewMode}
-          updateDiffContext={(n) => this.props.setDiffContext(n)}
-          toggleIgnoreWhieSpace={this.props.toggleIgnoreWhiteSpace}
-          onNodeSelected={this.props.onNodeSelected}
+          updateDiffContext={(n) => setDiffContext(n)}
+          toggleIgnoreWhiteSpace={toggleIgnoreWhiteSpace}
+          toggleShowFullFile={toggleShowFullFile}
+          onNodeSelected={onNodeSelected}
           path={path}
           files={files} />
       </div>

@@ -35,64 +35,73 @@ interface CommitViewProps {
   diff: string;
   ignoreWhitespace: boolean;
   diffContext: number;
+  fullFileDiff: boolean;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
   diffViewMode: DiffViewMode;
   path: Array<FileInfo>;
   files: Array<FileInfo>;
-  toggleIgnoreWhieSpace();
+  toggleIgnoreWhiteSpace();
   updateDiffContext(diffContext: number);
   onNodeSelected(node: FileInfo);
+  toggleShowFullFile();
 }
 
 export default class CommitView extends React.PureComponent<CommitViewProps, undefined>{
 
   render() {
-
-    let buttons = this.props.buttons ? this.renderButtons() : '';
+    const {diff, path, files, diffViewMode, buttons, onNodeSelected} = this.props;
+    let renderedButtons = buttons ? this.renderButtons() : null;
     return <div className='diff-view-container panel panel-default'>
-      {buttons}
+      {renderedButtons}
       <div className='panel-body'>
-        {this.props.diffViewMode === DiffViewMode.Diff ?
-          <DiffView diff={this.props.diff} /> :
-            <TreeView path={this.props.path}
-              files={this.props.files}
-              onNodeSelected={this.props.onNodeSelected} />}
+        {diffViewMode === DiffViewMode.Diff ?
+          <DiffView diff={diff} /> :
+          <TreeView path={path}
+            files={files}
+            onNodeSelected={onNodeSelected} />}
       </div>
     </div>;
   }
 
   renderButtons = () => {
+    const {ignoreWhitespace,
+      fullFileDiff,
+      diffContext,
+      sideBySide,
+      toggleIgnoreWhiteSpace,
+      toggleShowFullFile,
+      updateDiffContext} = this.props;
     const ignoreWhitespaceClass = 'btn btn-sm btn-default diff-ignore-whitespace' +
-      (this.props.ignoreWhitespace ? ' active' : '');
-    const allFile = this.props.diffContext === 99999999;
+      (ignoreWhitespace ? ' active' : '');
+    const allFile = fullFileDiff;
     const completeFileClass = 'btn btn-sm btn-default diff-context-all' + (allFile ? ' active' : '');
 
     return <div className='panel-heading btn-toolbar' role='toolbar'>
       <button type='button'
         className={ignoreWhitespaceClass}
         data-toggle='button'
-        aria-pressed={this.props.ignoreWhitespace}
-        onClick={this.props.toggleIgnoreWhieSpace}>
+        aria-pressed={ignoreWhitespace}
+        onClick={toggleIgnoreWhiteSpace}>
         Ignore Whitespace
       </button>
       <button type='button'
         className={completeFileClass}
         data-toggle='button'
         aria-pressed={allFile}
-        onClick={() => this.props.updateDiffContext(99999999)}>
+        onClick={() => toggleShowFullFile()}>
         Complete file
       </button>
       <div className='btn-group btn-group-sm'>
-        <span>{'Context:\u00A0' + this.props.diffContext}</span>{'\u00A0'}
+        <span>{'Context:\u00A0' + diffContext}</span>{'\u00A0'}
         <button type='button'
           className='btn btn-default diff-context-remove'
-          onClick={() => this.props.updateDiffContext(this.props.diffContext - 1)}>
+          onClick={() => updateDiffContext(diffContext - 1)}>
           -
         </button>
         <button type='button'
           className='btn btn-default diff-context-add'
-          onClick={() => this.props.updateDiffContext(this.props.diffContext + 1)}>
+          onClick={() => updateDiffContext(diffContext + 1)}>
           +
         </button>
       </div>
@@ -113,7 +122,7 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
           Unstage
         </button>
       </div>
-      {this.props.sideBySide ? '' :
+      {sideBySide ? '' :
         <button type='button' className='btn btn-sm btn-default diff-explore'>Explore</button>}
     </div>;
   }
