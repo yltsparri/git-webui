@@ -19,14 +19,15 @@ import assign from 'lodash/object/assign';
 import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
 import { HistoryViewOptions, BaseData, AppMode, DiffViewMode } from '../actions/AppState';
+import Actions from './Actions';
 
 export function historyViewOptionsReducer(state: HistoryViewOptions, action): HistoryViewOptions {
   switch (action.type) {
-    case 'UPDATE_COMMIT_VIEW_DATA':
+    case Actions.UPDATE_COMMIT_VIEW_DATA:
       return assign({}, state, action.data);
-    case 'toggleShowFullFile':
-      return assign({}, state, { fullFile: !state.fullFileDiff });
-    case 'toggleIgnoreWhiteSpace':
+    case Actions.TOGGLE_SHOW_FULL_FILE:
+      return assign({}, state, { fullFileDiff: !state.fullFileDiff });
+    case Actions.TOGGLE_IGNORE_WHITESPACE:
       return assign({}, state, { ignoreWhitespace: !state.ignoreWhitespace });
   }
   return state || {
@@ -43,11 +44,11 @@ export function historyViewOptionsReducer(state: HistoryViewOptions, action): Hi
 
 export function baseDataReducer(state: BaseData, action): BaseData {
   switch (action.type) {
-    case 'UPDATE_BASEDATA':
+    case Actions.UPDATE_BASEDATA:
       return assign({}, state, action.data);
-    case 'ADD_MESSAGE':
+    case Actions.ADD_MESSAGE:
       return assign({}, state, { messages: (state.messages ? state.messages + '\n' : '') + action.message });
-    case 'CLOSE_MESSAGE':
+    case Actions.CLOSE_MESSAGE:
       return assign({}, state, { messages: null });
   }
   return state || {
@@ -62,7 +63,7 @@ export function baseDataReducer(state: BaseData, action): BaseData {
 export function getBranchDataReducer(key: string) {
   return (state: Array<GitBranch>, action): Array<GitBranch> => {
     switch (action.type) {
-      case 'SET_' + key + '_BRANCHES':
+      case key:
         return action.data || [];
       default:
         return state || [];

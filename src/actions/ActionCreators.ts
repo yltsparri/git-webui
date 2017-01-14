@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';
 import FileInfo from './git/FileInfo';
 import Git from './git/Git';
 import { AppMode, AppState, DiffViewMode } from './AppState';
+import Actions from './Actions';
+import GitResponse from './git/GitResponse';
 
 const git = new Git();
 const loadDiff = (commit: string) => {
@@ -33,10 +35,10 @@ const loadDiff = (commit: string) => {
       diffContext = 99999999;
     }
     return git.getDiff(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)
-      .then(diff => {
-        dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diff: diff.data } });
-        if (diff.message) {
-          dispatch({ type: 'ADD_MESSAGE', message: diff.message });
+      .then(response => {
+        dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diff: response.data } });
+        if (response.message) {
+          dispatch(addResponseMessage(response));
         }
       });
   };
@@ -48,19 +50,19 @@ export function loadNode(node: FileInfo) {
     let index = state.historyViewOptions.path.findIndex(item => item.objectId === node.objectId);
     if (index >= 0) {
       if (index < state.historyViewOptions.path.length - 1) {
-        dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { path: state.historyViewOptions.path.slice(0, index + 1), files: [] } });
+        dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { path: state.historyViewOptions.path.slice(0, index + 1), files: [] } });
       }
     }
     else {
-      dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { path: state.historyViewOptions.path.concat(node), files: [] } });
+      dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { path: state.historyViewOptions.path.concat(node), files: [] } });
     }
     if (node.type === 'tree') {
       return git.listFiles(node.objectId)
         .then(response => {
           state = getState() as AppState;
-          dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { files: response.data } });
+          dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { files: response.data } });
           if (response.message) {
-            dispatch({ type: 'ADD_MESSAGE', message: response.message });
+            dispatch(addResponseMessage(response));
           }
         });
     }
@@ -79,7 +81,7 @@ export function commitSelected(commit: CommitInfo) {
       type: 'tree',
       parent: null
     };
-    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { commitHash: commit.hash, path: [root], files: [] } });
+    dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { commitHash: commit.hash, path: [root], files: [] } });
     state = getState();
     if (state.historyViewOptions.diffViewMode === DiffViewMode.Diff) {
       dispatch(loadDiff(commit.hash));
@@ -92,7 +94,7 @@ export function commitSelected(commit: CommitInfo) {
 
 export function selectDiffViewMode(mode: DiffViewMode) {
   return (dispatch, getState: () => AppState) => {
-    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diffViewMode: mode } });
+    dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diffViewMode: mode } });
     let state = getState() as AppState;
     let opts = state.historyViewOptions;
     if (mode === DiffViewMode.Tree && opts.path.length < 2 && !opts.files.length) {
@@ -118,7 +120,7 @@ export function selectDiffViewMode(mode: DiffViewMode) {
 
 export function setDiffContext(context: number) {
   return (dispatch, getState: () => AppState) => {
-    dispatch({ type: 'UPDATE_COMMIT_VIEW_DATA', data: { diffContext: context } });
+    dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diffContext: context } });
     const options = getState().historyViewOptions;
     if (!options.fullFileDiff) {
       let commitHash = options.commitHash;
@@ -129,7 +131,7 @@ export function setDiffContext(context: number) {
 
 export function toggleIgnoreWhiteSpace() {
   return (dispatch, getState: () => AppState) => {
-    dispatch({ type: 'toggleIgnoreWhiteSpace' });
+    dispatch({ type: Actions.TOGGLE_IGNORE_WHITESPACE });
     let commitHash = getState().historyViewOptions.commitHash;
     dispatch(loadDiff(commitHash));
   };
@@ -137,7 +139,7 @@ export function toggleIgnoreWhiteSpace() {
 
 export function toggleShowFullFile() {
   return (dispatch, getState: () => AppState) => {
-    dispatch({ type: 'toggleShowFullFile' });
+    dispatch({ type: Actions.TOGGLE_SHOW_FULL_FILE });
     let commitHash = getState().historyViewOptions.commitHash;
     dispatch(loadDiff(commitHash));
   };
@@ -145,23 +147,23 @@ export function toggleShowFullFile() {
 
 export function itemSelected(b) {
   return (dispatch) => {
-    dispatch({ type: 'UPDATE_BASEDATA', data: b });
+    dispatch({ type: Actions.UPDATE_BASEDATA, data: b });
     if (b.mode === AppMode.LocalBranches || b.mode === AppMode.RemoteBranches || b.mode === AppMode.Tags) {
       dispatch(dispatch => git.getCommits(1000, b.selectedItem)
-        .then((commits) => {
-          if (commits.returnCode === 0) {
-            dispatch({ type: 'SET_COMMITS', commits: commits.data });
-            if (commits.data.length) {
-              dispatch(commitSelected(commits.data[0]));
+        .then((response) => {
+          if (response.returnCode === 0) {
+            dispatch({ type: Actions.SET_COMMITS, commits: response.data });
+            if (response.data.length) {
+              dispatch(commitSelected(response.data[0]));
             }
           }
-          if (commits.message) {
-            dispatch({ type: 'ADD_MESSAGE', message: commits.message });
+          if (response.message) {
+            dispatch(addResponseMessage(response));
           }
         })
         .catch((error) => {
           console.log(error);
-          dispatch({ type: 'ADD_MESSAGE', message: error.message });
+          dispatch(addMessage(error.message));
         }));
     }
   };
@@ -170,82 +172,90 @@ export function itemSelected(b) {
 export function initState() {
   return (dispatch) => {
     return git.getDirName()
-      .then(dirName => {
-        if (dirName.returnCode === 0) {
+      .then(response => {
+        if (response.returnCode === 0) {
           dispatch({
-            type: 'UPDATE_BASEDATA',
+            type: Actions.UPDATE_BASEDATA,
             data: {
-              dirName: dirName.data
+              dirName: response.data
             }
           });
-          if (dirName.message) {
-            dispatch({ type: 'ADD_MESSAGE', message: dirName.message });
+          if (response.message) {
+            dispatch(addResponseMessage(response));
           }
           dispatch((dispatch) => git.getViewOnly()
-            .then(viewOnly => {
+            .then(response => {
               dispatch({
-                type: 'UPDATE_BASEDATA',
+                type: Actions.UPDATE_BASEDATA,
                 data: {
-                  viewOnly: viewOnly.data === "1"
+                  viewOnly: response.data === "1"
                 }
               });
-              if (viewOnly.message) {
-                dispatch({ type: 'ADD_MESSAGE', message: viewOnly.message });
+              if (response.message) {
+                dispatch(addResponseMessage(response));
               }
             }));
 
           dispatch((dispatch) => git.getLocalBranches()
-            .then((branches: GitBrancesResponse) => {
+            .then((response: GitBrancesResponse) => {
               dispatch({
-                type: 'SET_LOCAL_BRANCHES',
-                data: branches.data
+                type: Actions.SET_LOCAL_BRANCHES,
+                data: response.data
               });
-              if (branches.message) {
-                dispatch({ type: 'ADD_MESSAGE', message: branches.message });
+              if (response.message) {
+                dispatch(addResponseMessage(response));
               }
 
-              let active: GitBranch = branches.data.find(b => b.status === BranchStatus.Current);
+              let active: GitBranch = response.data.find(b => b.status === BranchStatus.Current);
               if (active) {
                 dispatch(itemSelected({ selectedItem: active.name, mode: AppMode.LocalBranches }));
               }
-              if (branches.message) {
-                dispatch({ type: 'ADD_MESSAGE', message: branches.message });
+              if (response.message) {
+                dispatch(addResponseMessage(response));
               }
             }).catch((error) => {
               console.log(error);
-              dispatch({ type: 'ADD_MESSAGE', message: error.message });
+              dispatch(addMessage(error.message));
             }));
 
           dispatch((dispatch) => git.getRemoteBranches()
-            .then((branches: GitBrancesResponse) => {
+            .then((response: GitBrancesResponse) => {
               dispatch({
-                type: 'SET_REMOTE_BRANCHES',
-                data: branches.data
+                type: Actions.SET_REMOTE_BRANCHES,
+                data: response.data
               });
-              if (branches.message) {
-                dispatch({ type: 'ADD_MESSAGE', message: branches.message });
+              if (response.message) {
+                dispatch(addResponseMessage(response));
               }
             }).catch((error) => {
               console.log(error);
-              dispatch({ type: 'ADD_MESSAGE', message: error.message });
+              dispatch(addMessage(error.message));
             }));
 
           dispatch((dispatch) => git.getTags()
-            .then((tags: GitBrancesResponse) => {
+            .then((response: GitBrancesResponse) => {
               dispatch({
-                type: 'SET_TAGS_BRANCHES',
-                data: tags.data
+                type: Actions.SET_TAGS_BRANCHES,
+                data: response.data
               });
-              if (tags.message) {
-                dispatch({ type: 'ADD_MESSAGE', message: tags.message });
+              if (response.message) {
+                dispatch(addResponseMessage(response));
               }
             }).catch((error) => {
               console.log(error);
-              dispatch({ type: 'ADD_MESSAGE', message: error.message });
+              dispatch(addMessage(error.message));
             }));
         }
       });
   };
+}
+
+function addMessage(message: string) {
+  return { type: Actions.ADD_MESSAGE, message: message };
+}
+
+function addResponseMessage<T>(response: GitResponse<T>) {
+  return { type: Actions.ADD_MESSAGE, message: response.message };
 }
 
 export default {

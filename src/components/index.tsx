@@ -29,13 +29,14 @@ import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from './H
 import RemoteView from './RemoteView';
 import ModalMessage from './ModalMessage';
 import FileInfo from '../actions/git/FileInfo';
+import Actions from '../actions/Actions';
 
 let reducer = combineReducers({
   baseData: baseDataReducer,
   historyViewOptions: historyViewOptionsReducer,
-  localBranches: getBranchDataReducer("LOCAL"),
-  remoteBrances: getBranchDataReducer('REMOTE'),
-  tags: getBranchDataReducer('TAGS'),
+  localBranches: getBranchDataReducer(Actions.SET_LOCAL_BRANCHES),
+  remoteBrances: getBranchDataReducer(Actions.SET_REMOTE_BRANCHES),
+  tags: getBranchDataReducer(Actions.SET_TAGS_BRANCHES),
   commits: commitsReducer
 });
 let store = createStore(reducer, applyMiddleware(
