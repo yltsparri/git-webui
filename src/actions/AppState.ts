@@ -18,15 +18,19 @@
 import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
 import FileInfo from './git/FileInfo';
+import { Diff } from './git/Diff';
+
+export { Diff, FileInfo, CommitInfo, GitBranch };
 
 export enum DiffViewMode {
   Diff = 0,
-  Tree = 1
+  Tree = 1,
+  Explore = 2
 }
 
 export interface HistoryViewOptions {
   commitHash: string;
-  diff: string;
+  diff: Diff;
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFileDiff: boolean;

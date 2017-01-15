@@ -21,6 +21,8 @@ import GitBrancesResponse from './GitBrancesResponse';
 import GitResponse from './GitResponse';
 import CommitInfoResponseParser from './CommitInfoResponseParser';
 import CommitInfo from './CommitInfo';
+import DiffParser from './DiffParser';
+import { Diff } from './Diff';
 
 export default class Git {
 
@@ -78,7 +80,7 @@ export default class Git {
     diffContext: number,
     ignoreWhitespace: boolean,
     gitDiffOpts?: Array<string>,
-    gitFile?: string): Promise<GitResponse<string>> => {
+    gitFile?: string): Promise<GitResponse<Diff>> => {
     let fullCmd = 'show ' + commit;
     if (diffContext) {
       fullCmd += " --unified=" + diffContext.toString();
@@ -93,12 +95,11 @@ export default class Git {
       fullCmd += " -- " + gitFile;
     }
     return this.runGit(fullCmd, null)
-      .catch((error) => {
-        console.log(error);
+      .then(response => {
         return {
-          data: undefined,
-          returnCode: error.code,
-          message: error.message
+          data: DiffParser.parse(response.data),
+          message: response.message,
+          returnCode: response.returnCode
         };
       });
   }

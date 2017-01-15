@@ -19,12 +19,12 @@ import { CommitInfo } from '../actions/git/CommitInfo';
 import React from 'react';
 import LogView from './LogView';
 import CommitView from './CommitView';
-import { DiffViewMode } from '../actions/AppState';
+import { DiffViewMode, Diff } from '../actions/AppState';
 import FileInfo from '../actions/git/FileInfo';
 
 export interface HistoryViewDataProps {
   commitHash: string;
-  diff: string;
+  diff: Diff;
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFile: boolean;
@@ -75,7 +75,10 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
     } = this.props;
 
     return <div id='history-view'>
-      <LogView commits={commits} onCommitClicked={this.commitClicked} active={commitHash} />
+      {
+        diffViewMode !== DiffViewMode.Explore ?
+          <LogView commits={commits} onCommitClicked={this.commitClicked} active={commitHash} /> : null
+      }
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
           <ul className='nav nav-pills nav-justified' role='tablList'>
@@ -83,9 +86,9 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
             <li onClick={() => selectDiffViewMode(DiffViewMode.Tree)} className={diffViewMode === DiffViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
           </ul>
         </div>
-        <CommitView buttons={[]}
+        <CommitView
           hunkSelectionAllowed={true}
-          diff={diff} sideBySide={false}
+          diff={diff}
           contextButtons={true}
           onClicked={e => e}
           ignoreWhitespace={ignoreWhitespace}
@@ -98,6 +101,7 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
           toggleIgnoreWhiteSpace={toggleIgnoreWhiteSpace}
           toggleShowFullFile={toggleShowFullFile}
           onNodeSelected={onNodeSelected}
+          onExloreClicked={() => selectDiffViewMode(DiffViewMode.Explore)}
           path={path}
           files={files} />
       </div>

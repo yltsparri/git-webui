@@ -18,7 +18,7 @@
 import React from 'react';
 import DiffView from './DiffView';
 import TreeView from './TreeView';
-import { DiffViewMode } from '../actions/AppState';
+import { DiffViewMode, Diff } from '../actions/AppState';
 import FileInfo from '../actions/git/FileInfo';
 
 interface Button {
@@ -27,12 +27,10 @@ interface Button {
 }
 
 interface CommitViewProps {
-  buttons: Array<Button>;
   onClicked(button: Button);
-  sideBySide: boolean;
   hunkSelectionAllowed: boolean;
   contextButtons: boolean;
-  diff: string;
+  diff: Diff;
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFileDiff: boolean;
@@ -45,13 +43,15 @@ interface CommitViewProps {
   updateDiffContext(diffContext: number);
   onNodeSelected(node: FileInfo);
   toggleShowFullFile();
+  onExloreClicked();
 }
 
 export default class CommitView extends React.PureComponent<CommitViewProps, undefined>{
-
   render() {
-    const {diff, path, files, diffViewMode, buttons, onNodeSelected} = this.props;
-    let renderedButtons = buttons ? this.renderButtons() : null;
+    const {diff, path, files, diffViewMode, onNodeSelected} = this.props;
+    let renderedButtons = diffViewMode === DiffViewMode.Explore ?
+      null :
+      this.renderButtons();
     return <div className='diff-view-container panel panel-default'>
       {renderedButtons}
       <div className='panel-body'>
@@ -65,13 +65,15 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
   }
 
   renderButtons = () => {
-    const {ignoreWhitespace,
+    const {
+      ignoreWhitespace,
       fullFileDiff,
       diffContext,
-      sideBySide,
+      diffViewMode,
       toggleIgnoreWhiteSpace,
       toggleShowFullFile,
-      updateDiffContext} = this.props;
+      updateDiffContext,
+      onExloreClicked} = this.props;
     const ignoreWhitespaceClass = 'btn btn-sm btn-default diff-ignore-whitespace' +
       (ignoreWhitespace ? ' active' : '');
     const allFile = fullFileDiff;
@@ -122,8 +124,12 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
           Unstage
         </button>
       </div>
-      {sideBySide ? '' :
-        <button type='button' className='btn btn-sm btn-default diff-explore'>Explore</button>}
+      {
+        diffViewMode === DiffViewMode.Explore ? '' :
+          <button type='button' className='btn btn-sm btn-default diff-explore' onClick={onExloreClicked}>
+            Explore
+        </button>
+      }
     </div>;
   }
 }
