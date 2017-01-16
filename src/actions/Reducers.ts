@@ -18,7 +18,7 @@
 import assign from 'lodash/object/assign';
 import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
-import { HistoryViewOptions, BaseData, AppMode, DiffViewMode } from '../actions/AppState';
+import { HistoryViewOptions, BaseData, AppMode, CommitViewMode } from '../actions/AppState';
 import Actions from './Actions';
 
 export function historyViewOptionsReducer(state: HistoryViewOptions, action): HistoryViewOptions {
@@ -36,7 +36,7 @@ export function historyViewOptionsReducer(state: HistoryViewOptions, action): Hi
     diffContext: 3,
     fullFileDiff: false,
     ignoreWhitespace: false,
-    diffViewMode: DiffViewMode.Diff,
+    diffViewMode: CommitViewMode.Diff,
     path: [],
     files: []
   };

@@ -5,7 +5,7 @@ module.exports = function (ENV) {
     cache: false,
     debug: false,
     devtool: 'source-map',
-    entry: ['components/index.tsx'],
+    entry: ['containers/index.tsx'],
     target: 'web',
     output: {
       filename: '[name].js',

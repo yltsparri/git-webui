@@ -5,9 +5,10 @@ export interface Diff {
 
 export interface FileDiff {
   header: string;
-  modeLine: string;
-  initialFileLine: string;
-  resultingFileLine: string;
+  newFileModeLine: string;
+  indexLine: string;
+  initialFile: string;
+  resultingFile: string;
   hunks: Array<Hunk>;
 }
 
@@ -26,3 +27,5 @@ export interface Hunk {
   header: string;
   parts: Array<HunkPart>;
 }
+
+export default Diff;

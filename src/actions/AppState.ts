@@ -22,7 +22,7 @@ import { Diff } from './git/Diff';
 
 export { Diff, FileInfo, CommitInfo, GitBranch };
 
-export enum DiffViewMode {
+export enum CommitViewMode {
   Diff = 0,
   Tree = 1,
   Explore = 2
@@ -36,7 +36,7 @@ export interface HistoryViewOptions {
   fullFileDiff: boolean;
   gitDiffOpts?: Array<string>;
   gitFile?: string;
-  diffViewMode: DiffViewMode;
+  diffViewMode: CommitViewMode;
   path: Array<FileInfo>;
   files: Array<FileInfo>;
 }

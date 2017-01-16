@@ -17,7 +17,7 @@
 
 import React from 'react';
 import GitBranch from '../actions/git/GitBranch';
-import BranchStatus  from '../actions/git/BranchStatus';
+import BranchStatus from '../actions/git/BranchStatus';
 import { AppMode } from '../actions/AppState';
 
 export interface SelectedItem {

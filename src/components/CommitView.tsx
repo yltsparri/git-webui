@@ -16,29 +16,22 @@
  */
 
 import React from 'react';
-import DiffView from './DiffView';
+import DiffView, { DiffViewMode } from './DiffView';
 import TreeView from './TreeView';
-import { DiffViewMode, Diff } from '../actions/AppState';
+import { CommitViewMode, Diff } from '../actions/AppState';
 import FileInfo from '../actions/git/FileInfo';
 
-interface Button {
-  name: string;
-  id: string;
-}
-
-interface CommitViewProps {
-  onClicked(button: Button);
-  hunkSelectionAllowed: boolean;
-  contextButtons: boolean;
+export interface CommitViewStateProps {
   diff: Diff;
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFileDiff: boolean;
-  gitDiffOpts?: Array<string>;
-  gitFile?: string;
-  diffViewMode: DiffViewMode;
+  diffViewMode: CommitViewMode;
   path: Array<FileInfo>;
   files: Array<FileInfo>;
+}
+
+export interface CommitViewActionProps {
   toggleIgnoreWhiteSpace();
   updateDiffContext(diffContext: number);
   onNodeSelected(node: FileInfo);
@@ -46,17 +39,18 @@ interface CommitViewProps {
   onExloreClicked();
 }
 
+interface CommitViewProps extends CommitViewStateProps, CommitViewActionProps { }
+
 export default class CommitView extends React.PureComponent<CommitViewProps, undefined>{
   render() {
     const {diff, path, files, diffViewMode, onNodeSelected} = this.props;
-    let renderedButtons = diffViewMode === DiffViewMode.Explore ?
-      null :
-      this.renderButtons();
+    let renderedButtons = diffViewMode === CommitViewMode.Diff ?
+      this.renderButtons() : null;
     return <div className='diff-view-container panel panel-default'>
       {renderedButtons}
       <div className='panel-body'>
-        {diffViewMode === DiffViewMode.Diff ?
-          <DiffView diff={diff} /> :
+        {diffViewMode === CommitViewMode.Diff ?
+          <DiffView diff={diff} diffViewMode={DiffViewMode.Full} /> :
           <TreeView path={path}
             files={files}
             onNodeSelected={onNodeSelected} />}
@@ -125,7 +119,7 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
         </button>
       </div>
       {
-        diffViewMode === DiffViewMode.Explore ? '' :
+        diffViewMode === CommitViewMode.Explore ? null :
           <button type='button' className='btn btn-sm btn-default diff-explore' onClick={onExloreClicked}>
             Explore
         </button>

@@ -18,93 +18,50 @@
 import { CommitInfo } from '../actions/git/CommitInfo';
 import React from 'react';
 import LogView from './LogView';
-import CommitView from './CommitView';
-import { DiffViewMode, Diff } from '../actions/AppState';
-import FileInfo from '../actions/git/FileInfo';
+import { CommitViewMode, Diff } from '../actions/AppState';
 
 export interface HistoryViewDataProps {
   commitHash: string;
   diff: Diff;
-  ignoreWhitespace: boolean;
-  diffContext: number;
-  fullFile: boolean;
-  diffViewMode: DiffViewMode;
-  gitDiffOpts?: Array<string>;
-  gitFile?: string;
+  diffViewMode: CommitViewMode;
   commits: Array<CommitInfo>;
-
-  path: Array<FileInfo>;
-  files: Array<FileInfo>;
+  CommitView: React.ComponentClass<any>;
 }
 
 export interface HistoryViewDispatchProps {
-  onCommitClicked(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile);
-  setDiffContext(n);
-  toggleIgnoreWhiteSpace();
-  selectDiffViewMode(mode: DiffViewMode);
-  onNodeSelected(node: FileInfo);
-  toggleShowFullFile();
+  onCommitClicked(commit);
+  selectDiffViewMode(mode: CommitViewMode);
 }
 
 interface HistoryViewProps extends HistoryViewDataProps, HistoryViewDispatchProps { }
 export default class HistoryView extends React.PureComponent<HistoryViewProps, undefined> {
-
-  commitClicked = (commit) => {
-    const {diffContext, ignoreWhitespace, gitDiffOpts, gitFile} = this.props;
-    this.props.onCommitClicked(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile);
-  }
-
   render() {
     const {
       commits,
-      diff,
-      ignoreWhitespace,
       diffViewMode,
-      diffContext,
-      gitDiffOpts,
-      path,
-      files,
-      gitFile,
       commitHash,
-      fullFile,
-      toggleShowFullFile,
       selectDiffViewMode,
-      setDiffContext,
-      toggleIgnoreWhiteSpace,
-      onNodeSelected
     } = this.props;
 
     return <div id='history-view'>
       {
-        diffViewMode !== DiffViewMode.Explore ?
-          <LogView commits={commits} onCommitClicked={this.commitClicked} active={commitHash} /> : null
+        diffViewMode !== CommitViewMode.Explore ?
+          <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} /> : null
       }
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
           <ul className='nav nav-pills nav-justified' role='tablList'>
-            <li onClick={() => selectDiffViewMode(DiffViewMode.Diff)} className={diffViewMode === DiffViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
-            <li onClick={() => selectDiffViewMode(DiffViewMode.Tree)} className={diffViewMode === DiffViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
+            <li onClick={() => selectDiffViewMode(CommitViewMode.Diff)} className={diffViewMode === CommitViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
+            <li onClick={() => selectDiffViewMode(CommitViewMode.Tree)} className={diffViewMode === CommitViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
           </ul>
         </div>
-        <CommitView
-          hunkSelectionAllowed={true}
-          diff={diff}
-          contextButtons={true}
-          onClicked={e => e}
-          ignoreWhitespace={ignoreWhitespace}
-          diffContext={diffContext}
-          gitDiffOpts={gitDiffOpts}
-          fullFileDiff={fullFile}
-          gitFile={gitFile}
-          diffViewMode={diffViewMode}
-          updateDiffContext={(n) => setDiffContext(n)}
-          toggleIgnoreWhiteSpace={toggleIgnoreWhiteSpace}
-          toggleShowFullFile={toggleShowFullFile}
-          onNodeSelected={onNodeSelected}
-          onExloreClicked={() => selectDiffViewMode(DiffViewMode.Explore)}
-          path={path}
-          files={files} />
+        { this.getCommitView()}
       </div>
     </div>;
+  }
+
+  getCommitView = () => {
+    const {CommitView} = this.props;
+    return <CommitView />;
   }
 }

@@ -21,7 +21,7 @@ import GitBrancesResponse from './git/GitBrancesResponse';
 import BranchStatus from './git/BranchStatus';
 import FileInfo from './git/FileInfo';
 import Git from './git/Git';
-import { AppMode, AppState, DiffViewMode } from './AppState';
+import { AppMode, AppState, CommitViewMode } from './AppState';
 import Actions from './Actions';
 import GitResponse from './git/GitResponse';
 
@@ -83,21 +83,21 @@ export function commitSelected(commit: CommitInfo) {
     };
     dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { commitHash: commit.hash, path: [root], files: [] } });
     state = getState();
-    if (state.historyViewOptions.diffViewMode === DiffViewMode.Diff) {
+    if (state.historyViewOptions.diffViewMode === CommitViewMode.Diff) {
       dispatch(loadDiff(commit.hash));
     }
-    else if (state.historyViewOptions.diffViewMode === DiffViewMode.Tree) {
+    else if (state.historyViewOptions.diffViewMode === CommitViewMode.Tree) {
       dispatch(loadNode(root));
     }
   };
 }
 
-export function selectDiffViewMode(mode: DiffViewMode) {
+export function selectDiffViewMode(mode: CommitViewMode) {
   return (dispatch, getState: () => AppState) => {
     dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diffViewMode: mode } });
     let state = getState() as AppState;
     let opts = state.historyViewOptions;
-    if (mode === DiffViewMode.Tree && opts.path.length < 2 && !opts.files.length) {
+    if (mode === CommitViewMode.Tree && opts.path.length < 2 && !opts.files.length) {
       let root: FileInfo;
       if (opts.path.length) {
         root = opts.path[opts.path.length - 1];
@@ -258,6 +258,9 @@ function addResponseMessage<T>(response: GitResponse<T>) {
   return { type: Actions.ADD_MESSAGE, message: response.message };
 }
 
+function closeMessage() {
+  return { type: 'CLOSE_MESSAGE' };
+}
 export default {
   commitSelected,
   itemSelected,
@@ -266,5 +269,6 @@ export default {
   loadNode,
   setDiffContext,
   toggleIgnoreWhiteSpace,
-  toggleShowFullFile
+  toggleShowFullFile,
+  closeMessage
 };

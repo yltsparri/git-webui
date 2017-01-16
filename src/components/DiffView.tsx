@@ -18,15 +18,25 @@
 import React from 'react';
 import { Diff, HunkPartType, FileDiff, Hunk } from '../actions/git/Diff';
 
+export enum DiffViewMode {
+  Full = 0,
+  Removed = 1,
+  Added = 2
+}
+
 interface DiffViewProps {
   diff: Diff;
+  diffViewMode: DiffViewMode;
+  linesViewProps?: Array<any>;
 }
+
 export default class DiffView extends React.PureComponent<DiffViewProps, undefined> {
 
   render() {
+    const linesViewProps = this.props.linesViewProps;
     return <div className='panel-body'>
       <div className='diff-view'>
-        <div className='diff-view-lines'>
+        <div className='diff-view-lines' {...linesViewProps}>
           {this.getDiffLines(this.props.diff)}
         </div>
       </div>
@@ -53,15 +63,22 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
     lines.push(<pre className='diff-view-line diff-line-header diff-section-start' key={'fileHeader_' + key}>
       {fileDiff.header}
     </pre>);
+    lines.push(<pre className='diff-view-line diff-line-header' key={'fileHeader_index' + key}>
+      {fileDiff.indexLine}
+    </pre>);
     lines.push(<pre className='diff-view-line diff-line-header' key={'fileHeader_mode' + key}>
-      {fileDiff.modeLine}
+      {fileDiff.newFileModeLine}
     </pre>);
-    lines.push(<pre className='diff-view-line diff-line-del diff-line-header' key={'fileHeader_del' + key}>
-      {fileDiff.initialFileLine}
-    </pre>);
-    lines.push(<pre className='diff-view-line diff-line-add diff-line-header' key={'fileHeader_add' + key}>
-      {fileDiff.resultingFileLine}
-    </pre>);
+    if (this.props.diffViewMode !== DiffViewMode.Added) {
+      lines.push(<pre className='diff-view-line diff-line-del diff-line-header' key={'fileHeader_del' + key}>
+        {'--- a/' + fileDiff.initialFile}
+      </pre>);
+    }
+    if (this.props.diffViewMode !== DiffViewMode.Removed) {
+      lines.push(<pre className='diff-view-line diff-line-add diff-line-header' key={'fileHeader_add' + key}>
+        {'+++ b/' + fileDiff.resultingFile}
+      </pre>);
+    }
   }
 
   addHunks = (hunks: Array<Hunk>, lines, key) => {
@@ -76,21 +93,40 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
   addHunkPartLines = (hunk: Hunk, lines: Array<JSX.Element>, key: string) => {
     for (let hunkPartIndex = 0; hunkPartIndex < hunk.parts.length; hunkPartIndex++) {
       let part = hunk.parts[hunkPartIndex];
-      let className = 'diff-view-line';
-      if (part.type === HunkPartType.Add) {
-        className += ' diff-line-add';
-      }
-      else if (part.type === HunkPartType.Remove) {
-        className += ' diff-line-del';
-      }
+      let className = this.getHunkPartClassName(part.type);
       let partKey = key + '_' + hunkPartIndex;
+      let shouldShowLine = this.shouldShowLine(part.type);
       for (let contentIndex = 0; contentIndex < part.content.length; contentIndex++) {
-        let line = part.content[contentIndex];
+        let line = shouldShowLine ? part.content[contentIndex] : '\u00a0';
         lines.push(this.getDiffLine(line, className, partKey + '_' + hunkPartIndex + '_' + contentIndex));
       }
     }
   }
 
+  getHunkPartClassName = (hunkPartType: HunkPartType) => {
+    let className = 'diff-view-line';
+    if (!this.shouldShowLine(hunkPartType)) {
+      className += ' diff-line-phantom';
+    }
+    else if (hunkPartType === HunkPartType.Add) {
+      className += ' diff-line-add';
+    }
+    else if (hunkPartType === HunkPartType.Remove) {
+      className += ' diff-line-del';
+    }
+    return className;
+  }
+
+  shouldShowLine = (hunkPartType: HunkPartType) => {
+    const mode = this.props.diffViewMode;
+    if (mode === DiffViewMode.Added && hunkPartType === HunkPartType.Remove) {
+      return false;
+    }
+    else if (mode === DiffViewMode.Removed && hunkPartType === HunkPartType.Add) {
+      return false;
+    }
+    return true;
+  }
   getDiffLine = (line, className, key) => {
     return <pre className={className} key={key}>
       {line}

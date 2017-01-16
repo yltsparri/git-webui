@@ -30,11 +30,14 @@ export class DiffParser {
   parseFileDiff = (lines: Array<string>, index: number): ParseFileDiffResult => {
     let fileDiff = {
       header: lines[index],
-      modeLine: lines[++index],
-      initialFileLine: lines[++index],
-      resultingFileLine: lines[++index],
+      newFileModeLine: lines[index + 1].startsWith('new file mode ') ? lines[++index] : null,
+      indexLine: lines[++index],
+      //skip --- a/ and +++ b/ parts
+      initialFile: lines[++index].substring(6),
+      resultingFile: lines[++index].substring(6),
       hunks: []
     };
+
     let hunk: Hunk = { header: lines[++index], parts: [] };
     let hunkPart: HunkPart = {
       content: [],
