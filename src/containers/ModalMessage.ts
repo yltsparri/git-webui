@@ -1,4 +1,4 @@
-import ActionCreators from '../actions/ActionCreators';
+import Messages from '../actions/actioncreators/Messages';
 import {AppState} from '../actions/AppState';
 import {connect} from 'react-redux';
 import ModalMessage from '../components/ModalMessage';
@@ -8,6 +8,6 @@ export default connect<any, any, any>((state: AppState) => {
 },
   dispatch => {
     return {
-      close: () => dispatch(ActionCreators.closeMessage())
+      close: () => dispatch(Messages.closeMessage())
     };
   })(ModalMessage);

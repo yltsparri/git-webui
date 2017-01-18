@@ -1,4 +1,5 @@
-import ActionCreators from '../actions/ActionCreators';
+import DiffActions from '../actions/actioncreators/Diff';
+import CommitActions from '../actions/actioncreators/Commit';
 import { AppState, CommitViewMode } from '../actions/AppState';
 import { connect } from 'react-redux';
 import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from '../components/HistoryView';
@@ -21,10 +22,10 @@ const mapStateToProps = (state: AppState): HistoryViewDataProps => {
 const mapDispatchToProps = (dispatch) => {
   return {
     onCommitClicked: (commit) => {
-      dispatch(ActionCreators.commitSelected(commit));
+      dispatch(CommitActions.commitSelected(commit));
     },
     selectDiffViewMode: (mode: CommitViewMode) => {
-      dispatch(ActionCreators.selectDiffViewMode(mode));
+      dispatch(DiffActions.selectDiffViewMode(mode));
     }
   };
 };

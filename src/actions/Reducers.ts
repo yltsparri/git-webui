@@ -26,7 +26,7 @@ export function diffOptionsReducer(state: DiffOptions, action): DiffOptions {
     case Actions.UPDATE_COMMIT_VIEW_DATA:
       return Object.assign({}, state, action.data);
     case Actions.TOGGLE_SHOW_FULL_FILE:
-      return Object.assign({}, state, { fullFileDiff: !state.fullFile });
+      return Object.assign({}, state, { fullFile: !state.fullFile });
     case Actions.TOGGLE_IGNORE_WHITESPACE:
       return Object.assign({}, state, { ignoreWhitespace: !state.ignoreWhitespace });
   }
@@ -40,6 +40,12 @@ export function diffOptionsReducer(state: DiffOptions, action): DiffOptions {
 
 export function baseDataReducer(state: AppData, action): AppData {
   switch (action.type) {
+    case Actions.SET_DIRNAME:
+      const dirName = action.dirName;
+      return Object.assign({}, state, { dirName });
+    case Actions.SET_VIEW_ONLY:
+      const viewOnly = action.viewOnly;
+      return Object.assign({}, state, { viewOnly });
     case Actions.UPDATE_BASEDATA:
       let item = action.data.selectedItem as SelectedItem;
       if (action.data.selectedItem) {
@@ -129,9 +135,9 @@ const filter = (hunks: Array<Hunk>) => {
           else {
             leftHunk.parts.push(part);
             rightHunk.parts.push({
-                type: null,
-                content: new Array<string>(part.content.length)
-              });
+              type: null,
+              content: new Array<string>(part.content.length)
+            });
           }
         }
         else {
@@ -194,15 +200,15 @@ export function commitDiff(state: CommitDiff, action): CommitDiff {
 
 export function commitTree(state: CommitTree, action): CommitTree {
   switch (action.type) {
-    case Actions.UPDATE_BASEDATA:
-      if (action.data.dirName) {
+    case Actions.SET_DIRNAME:
+      if (action.dirName) {
         let root;
         if (state.path.length) {
           root = Object.assign({}, state.path[0], { name: action.data.dirName });
         }
         else {
           root = {
-            name: action.data.dirName,
+            name: action.dirName,
             size: NaN,
             objectId: null,
             isSymbolicLink: false,

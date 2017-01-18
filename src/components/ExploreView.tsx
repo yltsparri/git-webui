@@ -11,7 +11,6 @@ export interface ExploreViewStateProps {
 }
 
 export interface ExploreViewActions {
-  onFileSelected(file: FileDiff);
   onScroll: (event: React.UIEvent<HTMLDivElement>) => any;
 }
 

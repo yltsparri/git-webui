@@ -1,9 +1,8 @@
-import { FileDiff } from '../actions/git/Diff';
 import ExploreView, { ExploreViewStateProps, ExploreViewActions } from '../components/ExploreView';
 import { connect } from 'react-redux';
 import { AppState } from '../actions/AppState';
 import ExploreNavigation from './ExploreNavigation';
-
+import Offsets from '../actions/actioncreators/Offsets';
 
 const mapStateToProps = (state: AppState) => {
   return {
@@ -16,21 +15,9 @@ const mapStateToProps = (state: AppState) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onFileSelected: (_file: FileDiff) => {
-    },
-
     onScroll: (ev: React.UIEvent<HTMLDivElement>) => {
       const target: HTMLDivElement = ev.target as HTMLDivElement;
-      dispatch({
-        type: 'SET_OFFSET',
-        key: 'EXPLORE_DIFF',
-        offset: {
-          top: target.scrollTop,
-          left: target.scrollLeft
-        }
-      });
-      console.log(ev);
-      console.log(ev.target);
+      dispatch(Offsets.setOffset('EXPLORE_DIFF', target.scrollTop, target.scrollLeft));
     }
   };
 };

@@ -25,7 +25,7 @@ import Sidebar from './Sidebar';
 import ModalMessage from './ModalMessage';
 import { baseDataReducer, diffOptionsReducer, getBranchDataReducer, commitsReducer, commitDiff, commitTree } from '../actions/Reducers';
 import { AppState, AppMode } from '../actions/AppState';
-import ActionCreators from '../actions/ActionCreators';
+import Init from '../actions/actioncreators/Init';
 import HistoryView from './History';
 import RemoteView from '../components/RemoteView';
 import Actions from '../actions/Actions';
@@ -53,7 +53,7 @@ let store = createStore(reducer, applyMiddleware(
   thunkMiddleware, // lets us dispatch() functions
 ));
 
-store.dispatch(ActionCreators.initState());
+store.dispatch(Init.initState());
 
 interface IndexProps {
   mode: AppMode;

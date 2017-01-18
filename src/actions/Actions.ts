@@ -15,4 +15,6 @@ export default class {
   public static readonly SELECT_COMMIT_VIEW_MODE = 'SELECT_COMMIT_VIEW_MODE';
   public static readonly SELECT_COMMIT_TREE_FILE = 'SELECT_COMMIT_TREE_FILE';
   public static readonly SELECT_COMMIT_DIFF_FILE = 'SELECT_COMMIT_DIFF_FILE';
+  public static readonly SET_DIRNAME = 'SET_DIRNAME';
+  public static readonly SET_VIEW_ONLY = 'SET_VIEW_ONLY';
 };

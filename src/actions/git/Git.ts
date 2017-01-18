@@ -24,7 +24,7 @@ import CommitInfo from './CommitInfo';
 import DiffParser from './DiffParser';
 import { Diff } from './Diff';
 
-export default class Git {
+export class Git {
 
   getViewOnly = (): Promise<GitResponse<string>> => {
 
@@ -249,3 +249,5 @@ export default class Git {
     });
   }
 }
+
+export default new Git();

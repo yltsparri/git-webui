@@ -1,7 +1,7 @@
 import SidebarView, { SidebarViewDataProps, SidebarViewDispatchProps } from '../components/SidebarView';
-import ActionCreators from '../actions/ActionCreators';
 import { AppState, SelectedItem } from '../actions/AppState';
 import { connect } from 'react-redux';
+import NavigationActions from '../actions/actioncreators/Navigation';
 
 export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
   (state: AppState) => {
@@ -17,7 +17,7 @@ export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
   }, (dispatch): SidebarViewDispatchProps => {
     return {
       onItemClicked: (b: SelectedItem) => {
-        dispatch(ActionCreators.itemSelected(b));
+        dispatch(NavigationActions.itemSelected(b));
       }
     };
   })(SidebarView);
