@@ -2,6 +2,8 @@
 
 This git extension is a standalone web based user interface for git repositories.
 
+**Main purpose of this fork is getting familiar with [TypeScript](https://www.typescriptlang.org/) and [React](https://facebook.github.io/react/)**
+
 It comes with history and tree browsing. You may also use it to commit
 as it comes with an UI to review local changes and the ability to stage / unstage code.
 
