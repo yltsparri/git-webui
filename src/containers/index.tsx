@@ -23,30 +23,37 @@ import { Provider, connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import Sidebar from './Sidebar';
 import ModalMessage from './ModalMessage';
-import { baseDataReducer, historyViewOptionsReducer, getBranchDataReducer, commitsReducer } from '../actions/Reducers';
+import { baseDataReducer, diffOptionsReducer, getBranchDataReducer, commitsReducer, commitDiff, commitTree } from '../actions/Reducers';
 import { AppState, AppMode } from '../actions/AppState';
 import ActionCreators from '../actions/ActionCreators';
 import HistoryView from './History';
 import RemoteView from '../components/RemoteView';
 import Actions from '../actions/Actions';
+import Explore from './Explore';
 
 let reducer = combineReducers({
   baseData: baseDataReducer,
-  historyViewOptions: historyViewOptionsReducer,
+  diffOptions: diffOptionsReducer,
   localBranches: getBranchDataReducer(Actions.SET_LOCAL_BRANCHES),
   remoteBrances: getBranchDataReducer(Actions.SET_REMOTE_BRANCHES),
   tags: getBranchDataReducer(Actions.SET_TAGS_BRANCHES),
-  commits: commitsReducer
+  commits: commitsReducer,
+  offsets: (state, action) => {
+    if (action.type === 'SET_OFFSET') {
+      const toSet = {};
+      toSet[action.key] = action.offset;
+      return Object.assign({}, state, toSet);
+    }
+    return state || {};
+  },
+  commitDiff: commitDiff,
+  commitTree: commitTree,
 });
 let store = createStore(reducer, applyMiddleware(
   thunkMiddleware, // lets us dispatch() functions
 ));
 
 store.dispatch(ActionCreators.initState());
-
-
-
-
 
 interface IndexProps {
   mode: AppMode;
@@ -72,6 +79,8 @@ class Index extends React.Component<IndexProps, undefined> {
         return <RemoteView repo={this.props.repo} />;
       case AppMode.Workspace:
         return <div />;
+      case AppMode.Explore:
+        return <Explore />;
       default:
         return <HistoryView />;
     }

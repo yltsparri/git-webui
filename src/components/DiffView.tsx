@@ -16,7 +16,9 @@
  */
 
 import React from 'react';
-import { Diff, HunkPartType, FileDiff, Hunk } from '../actions/git/Diff';
+import { Offset } from '../actions/AppState';
+import { HunkPartType, FileDiff, Hunk } from '../actions/git/Diff';
+import ReactDOM from 'react-dom';
 
 export enum DiffViewMode {
   Full = 0,
@@ -25,33 +27,58 @@ export enum DiffViewMode {
 }
 
 interface DiffViewProps {
-  diff: Diff;
+  diff: Array<FileDiff>;
+  headerLines: Array<string>;
   diffViewMode: DiffViewMode;
-  linesViewProps?: Array<any>;
+  offset?: Offset;
+  onScroll?: (event: React.UIEvent<HTMLDivElement>) => any;
 }
 
 export default class DiffView extends React.PureComponent<DiffViewProps, undefined> {
 
+  componentDidMount() {
+    const offset = this.props.offset;
+    if (offset) {
+      this.setOffset(offset);
+    }
+  }
+
+  componentDidUpdate(prevProps: DiffViewProps) {
+    const offset = this.props.offset;
+    const prevOffset = prevProps.offset || { left: 0, top: 0 };
+    if (offset && (prevOffset.left !== offset.left || offset.top !== prevOffset.top)) {
+      this.setOffset(offset);
+    }
+  }
+
   render() {
-    const linesViewProps = this.props.linesViewProps;
     return <div className='panel-body'>
-      <div className='diff-view'>
-        <div className='diff-view-lines' {...linesViewProps}>
+      <div className='diff-view' onScroll={this.props.onScroll}>
+        <div className='diff-view-lines' >
+          {
+            this.props.headerLines.map((comm, index) => {
+              return this.getDiffLine(comm, 'diff-view-line diff-line-header', 'comm_' + index);
+            })
+          }
           {this.getDiffLines(this.props.diff)}
         </div>
       </div>
     </div>;
   }
 
-  getDiffLines = (diff: Diff) => {
+  setOffset = (offset: Offset) => {
+    let node = ReactDOM.findDOMNode(this);
+    node = node.querySelector('.diff-view');
+    node.scrollTop = offset.top;
+    node.scrollLeft = offset.left;
+  }
+
+  getDiffLines = (diff: Array<FileDiff>) => {
     if (diff === null) {
       return null;
     }
     let lines: Array<JSX.Element> = [];
-    diff.headerLines.forEach((comm, index) => {
-      lines.push(this.getDiffLine(comm, 'diff-view-line diff-line-header', 'comm_' + index));
-    });
-    let fileDiffs: Array<FileDiff> = diff.fileDiffs;
+    let fileDiffs: Array<FileDiff> = diff;
     fileDiffs.forEach((fileDiff, index) => {
       this.addHeaders(fileDiff, lines, index);
       this.addHunks(fileDiff.hunks, lines, index);
@@ -67,7 +94,7 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
       {fileDiff.indexLine}
     </pre>);
     lines.push(<pre className='diff-view-line diff-line-header' key={'fileHeader_mode' + key}>
-      {fileDiff.newFileModeLine}
+      {fileDiff.fileModeLine}
     </pre>);
     if (this.props.diffViewMode !== DiffViewMode.Added) {
       lines.push(<pre className='diff-view-line diff-line-del diff-line-header' key={'fileHeader_del' + key}>
@@ -95,9 +122,8 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
       let part = hunk.parts[hunkPartIndex];
       let className = this.getHunkPartClassName(part.type);
       let partKey = key + '_' + hunkPartIndex;
-      let shouldShowLine = this.shouldShowLine(part.type);
       for (let contentIndex = 0; contentIndex < part.content.length; contentIndex++) {
-        let line = shouldShowLine ? part.content[contentIndex] : '\u00a0';
+        let line = part.content[contentIndex] || '\n';
         lines.push(this.getDiffLine(line, className, partKey + '_' + hunkPartIndex + '_' + contentIndex));
       }
     }
@@ -105,7 +131,7 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
 
   getHunkPartClassName = (hunkPartType: HunkPartType) => {
     let className = 'diff-view-line';
-    if (!this.shouldShowLine(hunkPartType)) {
+    if (hunkPartType === null) {
       className += ' diff-line-phantom';
     }
     else if (hunkPartType === HunkPartType.Add) {
@@ -117,16 +143,6 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
     return className;
   }
 
-  shouldShowLine = (hunkPartType: HunkPartType) => {
-    const mode = this.props.diffViewMode;
-    if (mode === DiffViewMode.Added && hunkPartType === HunkPartType.Remove) {
-      return false;
-    }
-    else if (mode === DiffViewMode.Removed && hunkPartType === HunkPartType.Add) {
-      return false;
-    }
-    return true;
-  }
   getDiffLine = (line, className, key) => {
     return <pre className={className} key={key}>
       {line}

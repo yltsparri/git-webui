@@ -19,29 +19,18 @@ import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
 import FileInfo from './git/FileInfo';
 import { Diff } from './git/Diff';
+import {CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions} from './Commit';
 
-export { Diff, FileInfo, CommitInfo, GitBranch };
-
-export enum CommitViewMode {
-  Diff = 0,
-  Tree = 1,
-  Explore = 2
-}
-
-export interface HistoryViewOptions {
-  commitHash: string;
-  diff: Diff;
-  ignoreWhitespace: boolean;
-  diffContext: number;
-  fullFileDiff: boolean;
-  gitDiffOpts?: Array<string>;
-  gitFile?: string;
-  diffViewMode: CommitViewMode;
-  path: Array<FileInfo>;
-  files: Array<FileInfo>;
-}
+export { Diff, FileInfo, CommitInfo, GitBranch, CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions };
 
 export enum AppMode {
+  Workspace = 0,
+  RemoteAccess = 1,
+  History = 2,
+  Explore = 3
+}
+
+export enum NavigationType {
   Workspace = 0,
   RemoteAccess = 1,
   LocalBranches = 2,
@@ -49,19 +38,32 @@ export enum AppMode {
   Tags = 4
 }
 
-export interface BaseData {
+export interface SelectedItem {
+  name: string;
+  type: NavigationType;
+}
+
+export interface AppData {
   dirName: string;
   viewOnly: boolean;
   mode: AppMode;
-  selectedItem: string;
+  selectedItem: SelectedItem;
   messages: string;
 }
 
+export interface Offset {
+  top: number;
+  left; number;
+}
+
 export interface AppState {
-  baseData: BaseData;
+  baseData: AppData;
   localBranches: Array<GitBranch>;
   remoteBrances: Array<GitBranch>;
   tags: Array<GitBranch>;
-  commits: Array<CommitInfo>;
-  historyViewOptions: HistoryViewOptions;
+  commitDiff: CommitDiff;
+  commits: Commits;
+  commitTree: CommitTree;
+  diffOptions: DiffOptions;
+  offsets: Map<string, Offset>;
 }

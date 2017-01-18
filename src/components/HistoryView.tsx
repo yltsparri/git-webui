@@ -18,14 +18,14 @@
 import { CommitInfo } from '../actions/git/CommitInfo';
 import React from 'react';
 import LogView from './LogView';
-import { CommitViewMode, Diff } from '../actions/AppState';
+import { CommitViewMode } from '../actions/AppState';
 
 export interface HistoryViewDataProps {
   commitHash: string;
-  diff: Diff;
   diffViewMode: CommitViewMode;
   commits: Array<CommitInfo>;
   CommitView: React.ComponentClass<any>;
+  ExploreView: React.ComponentClass<any>;
 }
 
 export interface HistoryViewDispatchProps {
@@ -41,13 +41,11 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
       diffViewMode,
       commitHash,
       selectDiffViewMode,
+      CommitView
     } = this.props;
 
     return <div id='history-view'>
-      {
-        diffViewMode !== CommitViewMode.Explore ?
-          <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} /> : null
-      }
+      <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} />
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
           <ul className='nav nav-pills nav-justified' role='tablList'>
@@ -55,13 +53,8 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
             <li onClick={() => selectDiffViewMode(CommitViewMode.Tree)} className={diffViewMode === CommitViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
           </ul>
         </div>
-        { this.getCommitView()}
+        <CommitView />
       </div>
     </div>;
-  }
-
-  getCommitView = () => {
-    const {CommitView} = this.props;
-    return <CommitView />;
   }
 }

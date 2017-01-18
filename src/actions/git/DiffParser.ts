@@ -28,15 +28,21 @@ export class DiffParser {
   }
 
   parseFileDiff = (lines: Array<string>, index: number): ParseFileDiffResult => {
+    const hasFileModeLine = lines[index + 1].startsWith('new file mode ') || lines[index + 1].startsWith('deleted file mode ');
     let fileDiff = {
       header: lines[index],
-      newFileModeLine: lines[index + 1].startsWith('new file mode ') ? lines[++index] : null,
+      fileModeLine: hasFileModeLine ? lines[++index] : null,
       indexLine: lines[++index],
-      //skip --- a/ and +++ b/ parts
-      initialFile: lines[++index].substring(6),
-      resultingFile: lines[++index].substring(6),
+      initialFile: '',
+      resultingFile: '',
       hunks: []
     };
+
+    //skip --- a/ and +++ b/ parts
+    let initialFile = lines[++index];
+    let resultingFile = lines[++index];
+    fileDiff.initialFile = initialFile.substring(initialFile.indexOf('/') + 1);
+    fileDiff.resultingFile = resultingFile.substring(resultingFile.indexOf('/') + 1);
 
     let hunk: Hunk = { header: lines[++index], parts: [] };
     let hunkPart: HunkPart = {

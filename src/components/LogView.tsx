@@ -17,7 +17,6 @@
 
 import React from 'react';
 import { CommitInfo, RefType } from '../actions/git/CommitInfo';
-import { assign } from 'lodash';
 
 interface LogViewProps {
   commits: Array<CommitInfo>;
@@ -85,7 +84,7 @@ export default class LogView extends React.PureComponent<LogViewProps, undefined
     }
     const circles = [];
     const paths = [];
-    const commits = this.props.commits.map(commit => assign({}, commit, { webuiLeft: 0 }));
+    const commits = this.props.commits.map(commit => Object.assign({}, commit, { webuiLeft: 0 }));
     for (var i = startAt; i < commits.length; ++i) {
       var entry = commits[i];
       if (!entry) {

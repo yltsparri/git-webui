@@ -119,42 +119,43 @@ export default class Git {
           };
         }
         let lines = response.data.split('\n');
-        let data = lines.map(line => {
-          // line format
-          // {mode} {type} {objectId} {size} {name}
-          let start = 0;
+        let data = lines.filter(line => line !== '')
+          .map(line => {
+            // line format
+            // {mode} {type} {objectId} {size} {name}
+            let start = 0;
 
-          // mode
-          let substr = readToNext(line, ' ', start);
-          start += substr.length + 1;
-          let mode = parseInt(substr);
+            // mode
+            let substr = readToNext(line, ' ', start);
+            start += substr.length + 1;
+            let mode = parseInt(substr);
 
-          // type
-          let type = readToNext(line, ' ', start);
-          start += type.length + 1;
+            // type
+            let type = readToNext(line, ' ', start);
+            start += type.length + 1;
 
-          // objectId
-          let objectId = readToNext(line, ' ', start);
-          start += objectId.length + 1;
+            // objectId
+            let objectId = readToNext(line, ' ', start);
+            start += objectId.length + 1;
 
-          // size
-          substr = readToNext(line, '\t', start);
-          start += substr.length + 1;
-          let size = parseInt(substr.trim());
+            // size
+            substr = readToNext(line, '\t', start);
+            start += substr.length + 1;
+            let size = parseInt(substr.trim());
 
-          // name
-          let name = line.substring(start);
+            // name
+            let name = line.substring(start);
 
-          return {
-            mode: mode,
-            objectId: objectId,
-            size: size,
-            isSymbolicLink: (mode & 120000) === 120000,
-            type: type,
-            name: name,
-            parent: parent
-          };
-        });
+            return {
+              mode: mode,
+              objectId: objectId,
+              size: size,
+              isSymbolicLink: (mode & 120000) === 120000,
+              type: type,
+              name: name,
+              parent: parent
+            };
+          });
         return {
           data: data,
           message: response.message,

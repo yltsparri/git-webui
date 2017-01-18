@@ -5,7 +5,7 @@ export interface Diff {
 
 export interface FileDiff {
   header: string;
-  newFileModeLine: string;
+  fileModeLine: string;
   indexLine: string;
   initialFile: string;
   resultingFile: string;

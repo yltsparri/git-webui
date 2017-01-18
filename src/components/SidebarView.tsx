@@ -18,17 +18,12 @@
 import React from 'react';
 import GitBranch from '../actions/git/GitBranch';
 import BranchStatus from '../actions/git/BranchStatus';
-import { AppMode } from '../actions/AppState';
-
-export interface SelectedItem {
-  selectedItem: string;
-  mode: AppMode;
-}
+import { SelectedItem, NavigationType } from '../actions/AppState';
 
 export interface SidebarViewDataProps {
   dirName: string;
   viewOnly: boolean;
-  mode: AppMode;
+  mode: NavigationType;
   selectedItem: string;
   localBranches: Array<GitBranch>;
   remoteBrances: Array<GitBranch>;
@@ -54,33 +49,33 @@ export default class SidebarView extends React.PureComponent<SidebarViewProps, u
           this.props.viewOnly ?
             null :
             <section id="sidebar-workspace"
-              className={mode === AppMode.Workspace ? ' active' : ''}
-              onClick={() => this.props.onItemClicked({ selectedItem: 'Workspace', mode: AppMode.Workspace })}>
+              className={mode === NavigationType.Workspace ? ' active' : ''}
+              onClick={() => this.props.onItemClicked({ name: 'Workspace', type: NavigationType.Workspace })}>
               <h4>Workspace</h4>
             </section>
         }
         <section id="sidebar-remote"
-          className={mode === AppMode.RemoteAccess ? ' active' : ''}
-          onClick={() => this.props.onItemClicked({ selectedItem: 'Remote access', mode: AppMode.RemoteAccess })}>
+          className={mode === NavigationType.RemoteAccess ? ' active' : ''}
+          onClick={() => this.props.onItemClicked({ name: 'Remote access', type: NavigationType.RemoteAccess })}>
           <h4>Remote access</h4>
         </section>
         <section id="sidebar-local-branches">
           <h4>Local Branches</h4>
-          {this.renderItems(this.props.localBranches, AppMode.LocalBranches)}
+          {this.renderItems(this.props.localBranches, NavigationType.LocalBranches)}
         </section>
         <section id="sidebar-remote-branches">
           <h4>Remote Branches</h4>
-          {this.renderItems(this.props.remoteBrances, AppMode.RemoteBranches)}
+          {this.renderItems(this.props.remoteBrances, NavigationType.RemoteBranches)}
         </section>
         <section id="sidebar-tags">
           <h4>Tags</h4>
-          {this.renderItems(this.props.tags, AppMode.Tags)}
+          {this.renderItems(this.props.tags, NavigationType.Tags)}
         </section>
       </div>
     </div>;
   }
 
-  renderItems = (items: Array<GitBranch>, type: AppMode) => {
+  renderItems = (items: Array<GitBranch>, type: NavigationType) => {
     return <ul>
       {
         items.map((item: GitBranch) => this.getItem(item, type))
@@ -88,7 +83,7 @@ export default class SidebarView extends React.PureComponent<SidebarViewProps, u
     </ul>;
   }
 
-  private getItem = (item: GitBranch, type: AppMode) => {
+  private getItem = (item: GitBranch, type: NavigationType) => {
     const {selectedItem, mode} = this.props;
     let className = item.status & BranchStatus.Current ? 'branch-current' : '';
 
@@ -102,6 +97,6 @@ export default class SidebarView extends React.PureComponent<SidebarViewProps, u
     return <li className={'sidebar-ref ' + className}
       title={item.name}
       key={item.name}
-      onClick={() => this.props.onItemClicked({ selectedItem: item.name, mode: type })}>{item.name} </li>;
+      onClick={() => this.props.onItemClicked({ name: item.name, type: type })}>{item.name} </li>;
   }
 }

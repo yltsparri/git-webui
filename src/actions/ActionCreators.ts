@@ -21,7 +21,7 @@ import GitBrancesResponse from './git/GitBrancesResponse';
 import BranchStatus from './git/BranchStatus';
 import FileInfo from './git/FileInfo';
 import Git from './git/Git';
-import { AppMode, AppState, CommitViewMode } from './AppState';
+import { AppMode, AppState, CommitViewMode, SelectedItem, NavigationType } from './AppState';
 import Actions from './Actions';
 import GitResponse from './git/GitResponse';
 
@@ -29,14 +29,14 @@ const git = new Git();
 const loadDiff = (commit: string) => {
   return (dispatch, getState: () => AppState) => {
     const state = getState() as AppState;
-    const { ignoreWhitespace, gitDiffOpts, gitFile, fullFileDiff } = state.historyViewOptions;
-    let diffContext = state.historyViewOptions.diffContext;
-    if (fullFileDiff) {
+    const { ignoreWhitespace, options, context, fullFile } = state.diffOptions;
+    let diffContext = context;
+    if (fullFile) {
       diffContext = 99999999;
     }
-    return git.getDiff(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)
+    return git.getDiff(commit, diffContext, ignoreWhitespace, options, null)
       .then(response => {
-        dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diff: response.data } });
+        dispatch({ type: Actions.UPDATE_COMMIT_DIFF_DATA, data: response.data });
         if (response.message) {
           dispatch(addResponseMessage(response));
         }
@@ -44,23 +44,15 @@ const loadDiff = (commit: string) => {
   };
 };
 
-export function loadNode(node: FileInfo) {
+export function selectNode(node: FileInfo) {
   return (dispatch, getState: () => AppState) => {
     let state = getState() as AppState;
-    let index = state.historyViewOptions.path.findIndex(item => item.objectId === node.objectId);
-    if (index >= 0) {
-      if (index < state.historyViewOptions.path.length - 1) {
-        dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { path: state.historyViewOptions.path.slice(0, index + 1), files: [] } });
-      }
-    }
-    else {
-      dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { path: state.historyViewOptions.path.concat(node), files: [] } });
-    }
+    dispatch({ type: Actions.SELECT_COMMIT_TREE_FILE, objectId: node.objectId });
     if (node.type === 'tree') {
       return git.listFiles(node.objectId)
         .then(response => {
           state = getState() as AppState;
-          dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { files: response.data } });
+          dispatch({ type: Actions.SET_COMMIT_TREE_FILES, files: response.data });
           if (response.message) {
             dispatch(addResponseMessage(response));
           }
@@ -81,22 +73,24 @@ export function commitSelected(commit: CommitInfo) {
       type: 'tree',
       parent: null
     };
+    dispatch({ type: Actions.SELECT_COMMIT, selectedCommit: commit.hash });
+
     dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { commitHash: commit.hash, path: [root], files: [] } });
     state = getState();
-    if (state.historyViewOptions.diffViewMode === CommitViewMode.Diff) {
+    if (state.commits.viewMode === CommitViewMode.Diff) {
       dispatch(loadDiff(commit.hash));
     }
-    else if (state.historyViewOptions.diffViewMode === CommitViewMode.Tree) {
-      dispatch(loadNode(root));
+    else if (state.commits.viewMode === CommitViewMode.Tree) {
+      dispatch(selectNode(root));
     }
   };
 }
 
 export function selectDiffViewMode(mode: CommitViewMode) {
   return (dispatch, getState: () => AppState) => {
-    dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diffViewMode: mode } });
+    dispatch({ type: Actions.SELECT_COMMIT_VIEW_MODE, viewMode: mode });
     let state = getState() as AppState;
-    let opts = state.historyViewOptions;
+    let opts = state.commitTree;
     if (mode === CommitViewMode.Tree && opts.path.length < 2 && !opts.files.length) {
       let root: FileInfo;
       if (opts.path.length) {
@@ -106,14 +100,14 @@ export function selectDiffViewMode(mode: CommitViewMode) {
         root = {
           name: state.baseData.dirName,
           size: NaN,
-          objectId: opts.commitHash,
+          objectId: state.commits.selectedCommit,
           isSymbolicLink: false,
           mode: 0,
           type: 'tree',
           parent: null
         };
       }
-      dispatch(loadNode(root));
+      dispatch(selectNode(root));
     }
   };
 }
@@ -121,9 +115,9 @@ export function selectDiffViewMode(mode: CommitViewMode) {
 export function setDiffContext(context: number) {
   return (dispatch, getState: () => AppState) => {
     dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { diffContext: context } });
-    const options = getState().historyViewOptions;
-    if (!options.fullFileDiff) {
-      let commitHash = options.commitHash;
+    const state = getState();
+    if (!state.diffOptions.fullFile) {
+      let commitHash = state.commits.selectedCommit;
       dispatch(loadDiff(commitHash));
     }
   };
@@ -132,7 +126,7 @@ export function setDiffContext(context: number) {
 export function toggleIgnoreWhiteSpace() {
   return (dispatch, getState: () => AppState) => {
     dispatch({ type: Actions.TOGGLE_IGNORE_WHITESPACE });
-    let commitHash = getState().historyViewOptions.commitHash;
+    let commitHash = getState().commits.selectedCommit;
     dispatch(loadDiff(commitHash));
   };
 }
@@ -140,16 +134,18 @@ export function toggleIgnoreWhiteSpace() {
 export function toggleShowFullFile() {
   return (dispatch, getState: () => AppState) => {
     dispatch({ type: Actions.TOGGLE_SHOW_FULL_FILE });
-    let commitHash = getState().historyViewOptions.commitHash;
+    let commitHash = getState().commits.selectedCommit;
     dispatch(loadDiff(commitHash));
   };
 }
 
-export function itemSelected(b) {
+export function itemSelected(item: SelectedItem) {
   return (dispatch) => {
-    dispatch({ type: Actions.UPDATE_BASEDATA, data: b });
-    if (b.mode === AppMode.LocalBranches || b.mode === AppMode.RemoteBranches || b.mode === AppMode.Tags) {
-      dispatch(dispatch => git.getCommits(1000, b.selectedItem)
+    dispatch({ type: Actions.UPDATE_BASEDATA, data: { selectedItem: item } });
+    if (item.type === NavigationType.LocalBranches ||
+      item.type === NavigationType.RemoteBranches ||
+      item.type === NavigationType.Tags) {
+      dispatch(dispatch => git.getCommits(1000, item.name)
         .then((response) => {
           if (response.returnCode === 0) {
             dispatch({ type: Actions.SET_COMMITS, commits: response.data });
@@ -208,7 +204,7 @@ export function initState() {
 
               let active: GitBranch = response.data.find(b => b.status === BranchStatus.Current);
               if (active) {
-                dispatch(itemSelected({ selectedItem: active.name, mode: AppMode.LocalBranches }));
+                dispatch(itemSelected({ name: active.name, type: NavigationType.LocalBranches }));
               }
               if (response.message) {
                 dispatch(addResponseMessage(response));
@@ -266,9 +262,12 @@ export default {
   itemSelected,
   initState,
   selectDiffViewMode,
-  loadNode,
+  selectNode,
   setDiffContext,
   toggleIgnoreWhiteSpace,
   toggleShowFullFile,
-  closeMessage
+  closeMessage,
+  changeAppMode: (mode: AppMode) => {
+    return { type: Actions.UPDATE_BASEDATA, data: { mode } };
+  }
 };

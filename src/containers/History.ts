@@ -3,17 +3,18 @@ import { AppState, CommitViewMode } from '../actions/AppState';
 import { connect } from 'react-redux';
 import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from '../components/HistoryView';
 import Commit from './Commit';
+import ExploreView from './Explore';
 
 export { HistoryViewDataProps, HistoryViewDispatchProps }
 
-const mapStateToProps = (state: AppState) => {
-  const options = state.historyViewOptions;
+const mapStateToProps = (state: AppState): HistoryViewDataProps => {
+  const commits = state.commits;
   return {
-    commitHash: options.commitHash,
-    diff: options.diff,
-    commits: state.commits,
-    diffViewMode: options.diffViewMode,
-    CommitView: Commit
+    commitHash: commits.selectedCommit,
+    commits: state.commits.commits,
+    diffViewMode: state.commits.viewMode,
+    CommitView: Commit,
+    ExploreView: ExploreView
   };
 };
 

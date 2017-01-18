@@ -18,11 +18,13 @@
 import React from 'react';
 import DiffView, { DiffViewMode } from './DiffView';
 import TreeView from './TreeView';
-import { CommitViewMode, Diff } from '../actions/AppState';
+import { FileDiff } from '../actions/git/Diff';
+import { CommitViewMode } from '../actions/AppState';
 import FileInfo from '../actions/git/FileInfo';
 
 export interface CommitViewStateProps {
-  diff: Diff;
+  diff: Array<FileDiff>;
+  headerLines: Array<string>;
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFileDiff: boolean;
@@ -50,7 +52,7 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
       {renderedButtons}
       <div className='panel-body'>
         {diffViewMode === CommitViewMode.Diff ?
-          <DiffView diff={diff} diffViewMode={DiffViewMode.Full} /> :
+          <DiffView diff={diff} headerLines={this.props.headerLines} diffViewMode={DiffViewMode.Full} /> :
           <TreeView path={path}
             files={files}
             onNodeSelected={onNodeSelected} />}
@@ -63,7 +65,6 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
       ignoreWhitespace,
       fullFileDiff,
       diffContext,
-      diffViewMode,
       toggleIgnoreWhiteSpace,
       toggleShowFullFile,
       updateDiffContext,
@@ -118,12 +119,9 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
           Unstage
         </button>
       </div>
-      {
-        diffViewMode === CommitViewMode.Explore ? null :
-          <button type='button' className='btn btn-sm btn-default diff-explore' onClick={onExloreClicked}>
-            Explore
+      <button type='button' className='btn btn-sm btn-default diff-explore' onClick={onExloreClicked}>
+        Explore
         </button>
-      }
     </div>;
   }
 }

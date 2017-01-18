@@ -1,6 +1,6 @@
-import SidebarView, { SidebarViewDataProps, SidebarViewDispatchProps, SelectedItem } from '../components/SidebarView';
+import SidebarView, { SidebarViewDataProps, SidebarViewDispatchProps } from '../components/SidebarView';
 import ActionCreators from '../actions/ActionCreators';
-import { AppState } from '../actions/AppState';
+import { AppState, SelectedItem } from '../actions/AppState';
 import { connect } from 'react-redux';
 
 export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
@@ -11,8 +11,8 @@ export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
       localBranches: state.localBranches,
       remoteBrances: state.remoteBrances,
       tags: state.tags,
-      selectedItem: state.baseData.selectedItem,
-      mode: state.baseData.mode
+      mode: state.baseData.selectedItem.type,
+      selectedItem: state.baseData.selectedItem.name
     };
   }, (dispatch): SidebarViewDispatchProps => {
     return {

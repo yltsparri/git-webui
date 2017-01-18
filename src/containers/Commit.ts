@@ -1,20 +1,21 @@
 import ActionCreators from '../actions/ActionCreators';
-import { AppState } from '../actions/AppState';
+import { AppState, AppMode } from '../actions/AppState';
 import { connect } from 'react-redux';
 import CommitView, { CommitViewActionProps, CommitViewStateProps } from '../components/CommitView';
 import FileInfo from '../actions/git/FileInfo';
 
 
 
-const mapStateToProps = (state: AppState) => {
+const mapStateToProps = (state: AppState): CommitViewStateProps => {
   return {
-    diff: state.historyViewOptions.diff,
-    ignoreWhitespace: state.historyViewOptions.ignoreWhitespace,
-    diffContext: state.historyViewOptions.diffContext,
-    fullFileDiff: state.historyViewOptions.fullFileDiff,
-    diffViewMode: state.historyViewOptions.diffViewMode,
-    path: state.historyViewOptions.path,
-    files: state.historyViewOptions.files,
+    diff: state.commitDiff.fileDiffs,
+    headerLines: state.commitDiff.headerLines,
+    ignoreWhitespace: state.diffOptions.ignoreWhitespace,
+    diffContext: state.diffOptions.context,
+    fullFileDiff: state.diffOptions.fullFile,
+    diffViewMode: state.commits.viewMode,
+    path: state.commitTree.path,
+    files: state.commitTree.files,
   };
 };
 
@@ -27,13 +28,13 @@ const mapDispatchToProps = (dispatch) => {
       dispatch(ActionCreators.setDiffContext(diffContext));
     },
     onNodeSelected: (node: FileInfo) => {
-      dispatch(ActionCreators.loadNode(node));
+      dispatch(ActionCreators.selectNode(node));
     },
     toggleShowFullFile: () => {
       dispatch(ActionCreators.toggleShowFullFile());
     },
     onExloreClicked: () => {
-
+      dispatch(ActionCreators.changeAppMode(AppMode.Explore));
     }
   };
 };
