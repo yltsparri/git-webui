@@ -101,13 +101,13 @@ const getRemoteBranches = (dispatch) => {
 
 const setTags = (tags: Array<GitBranch>) => {
   return {
-    type: Actions.SET_REMOTE_BRANCHES,
+    type: Actions.SET_TAGS,
     data: tags
   };
 };
 
 const getTags = (dispatch) => {
-  return Git.getRemoteBranches()
+  return Git.getTags()
     .then((response: GitBrancesResponse) => {
       dispatch(setTags(response.data));
       if (response.message) {

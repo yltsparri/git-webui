@@ -14,7 +14,7 @@ let reducer = combineReducers({
   diffOptions: diffOptions,
   localBranches: getBranchDataReducer(Actions.SET_LOCAL_BRANCHES),
   remoteBrances: getBranchDataReducer(Actions.SET_REMOTE_BRANCHES),
-  tags: getBranchDataReducer(Actions.SET_TAGS_BRANCHES),
+  tags: getBranchDataReducer(Actions.SET_TAGS),
   commits,
   offsets,
   commitDiff: commitDiff,

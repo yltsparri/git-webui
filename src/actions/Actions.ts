@@ -8,7 +8,7 @@ export default class {
   public static readonly CLOSE_MESSAGE = 'CLOSE_MESSAGE';
   public static readonly SET_LOCAL_BRANCHES = 'SET_LOCAL_BRANCHES';
   public static readonly SET_REMOTE_BRANCHES = 'SET_REMOTE_BRANCHES';
-  public static readonly SET_TAGS_BRANCHES = 'SET_TAGS_BRANCHES';
+  public static readonly SET_TAGS = 'SET_TAGS';
   public static readonly SET_COMMITS = 'SET_COMMITS';
   public static readonly SELECT_COMMIT = 'SELECT_COMMIT';
   public static readonly SET_COMMIT_TREE_FILES = 'SET_COMMIT_TREE_FILES';
