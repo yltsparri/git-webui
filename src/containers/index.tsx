@@ -16,42 +16,15 @@
  */
 
 import React from 'react';
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk';
-import { combineReducers } from 'redux';
 import { Provider, connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import Sidebar from './Sidebar';
-import ModalMessage from './ModalMessage';
-import { baseDataReducer, diffOptionsReducer, getBranchDataReducer, commitsReducer, commitDiff, commitTree } from '../actions/Reducers';
-import { AppState, AppMode } from '../actions/AppState';
+import ModalMessage from './ModalMessage';import { AppState, AppMode } from '../actions/AppState';
 import Init from '../actions/actioncreators/Init';
 import HistoryView from './History';
 import RemoteView from '../components/RemoteView';
-import Actions from '../actions/Actions';
+import store from '../actions/Store';
 import Explore from './Explore';
-
-let reducer = combineReducers({
-  baseData: baseDataReducer,
-  diffOptions: diffOptionsReducer,
-  localBranches: getBranchDataReducer(Actions.SET_LOCAL_BRANCHES),
-  remoteBrances: getBranchDataReducer(Actions.SET_REMOTE_BRANCHES),
-  tags: getBranchDataReducer(Actions.SET_TAGS_BRANCHES),
-  commits: commitsReducer,
-  offsets: (state, action) => {
-    if (action.type === 'SET_OFFSET') {
-      const toSet = {};
-      toSet[action.key] = action.offset;
-      return Object.assign({}, state, toSet);
-    }
-    return state || {};
-  },
-  commitDiff: commitDiff,
-  commitTree: commitTree,
-});
-let store = createStore(reducer, applyMiddleware(
-  thunkMiddleware, // lets us dispatch() functions
-));
 
 store.dispatch(Init.initState());
 
