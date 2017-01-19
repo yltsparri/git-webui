@@ -24,7 +24,7 @@ export interface CommitDiff {
   fileDiffs: Array<FileDiff>;
   selectedFile: number;
   headerLines: Array<string>;
-
+  useSplitDiff: boolean;
   removedLinesDiff: FileDiff;
   addedLinesDiff: FileDiff;
 }

@@ -73,12 +73,11 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
     node.scrollLeft = offset.left;
   }
 
-  getDiffLines = (diff: Array<FileDiff>) => {
-    if (diff === null) {
+  getDiffLines = (fileDiffs: Array<FileDiff>) => {
+    if (fileDiffs === null) {
       return null;
     }
     let lines: Array<JSX.Element> = [];
-    let fileDiffs: Array<FileDiff> = diff;
     fileDiffs.forEach((fileDiff, index) => {
       this.addHeaders(fileDiff, lines, index);
       this.addHunks(fileDiff.hunks, lines, index);
@@ -87,6 +86,9 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
   }
 
   addHeaders = (fileDiff: FileDiff, lines: Array<JSX.Element>, key) => {
+    if(fileDiff === null){
+      return;
+    }
     lines.push(<pre className='diff-view-line diff-line-header diff-section-start' key={'fileHeader_' + key}>
       {fileDiff.header}
     </pre>);
@@ -109,6 +111,9 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
   }
 
   addHunks = (hunks: Array<Hunk>, lines, key) => {
+    if(!hunks){
+      return;
+    }
     hunks.forEach((hunk, hunkIndex) => {
       lines.push(<pre className='diff-view-line diff-line-offset' key={'hunkHeader_' + key + '_' + hunkIndex}>
         {hunk.header}

@@ -18,6 +18,7 @@
 import { CommitDiff } from '../AppState';
 import Actions from '../Actions';
 import { Hunk, HunkPart, HunkPartType, FileDiff } from '../git/Diff';
+import { CommitViewMode } from '../Commit';
 
 const filter = (hunks: Array<Hunk>) => {
   const removedHunks = [];
@@ -88,6 +89,9 @@ const filter = (hunks: Array<Hunk>) => {
 };
 
 const getSplitDiff = (fileDiffs, selectedFile) => {
+  if (selectedFile === null || !fileDiffs[selectedFile]) {
+    return { removedLinesDiff: null, addedLinesDiff: null };
+  }
   const file = fileDiffs[selectedFile];
   var filtered = file && file.hunks ? filter(file.hunks) : { removedHunks: [], addedHunks: [] };
   let removedLinesDiff: FileDiff = {
@@ -112,7 +116,16 @@ const getSplitDiff = (fileDiffs, selectedFile) => {
 export function commitDiff(state: CommitDiff, action): CommitDiff {
   switch (action.type) {
     case Actions.UPDATE_COMMIT_DIFF_DATA:
-      return Object.assign({}, state, action.data, getSplitDiff(action.data.fileDiffs, state.selectedFile));
+      let splitDiff = getSplitDiff(action.data.fileDiffs, state.selectedFile || 0);
+      return Object.assign({}, state, action.data, splitDiff, { selectedFile: action.selectedFile || 0 });
+    case Actions.SELECT_COMMIT:
+      return Object.assign({}, state, {
+        selectedFile: null,
+        removedLinesDiff: null,
+        addedLinesDiff: null
+      });
+    case Actions.SELECT_COMMIT_VIEW_MODE:
+      return Object.assign({}, state, { useSplitDiff: action.mode === CommitViewMode.SidebySideDiff });
     case Actions.SELECT_COMMIT_DIFF_FILE:
       return Object.assign({}, state, { selectedFile: action.selectedFile },
         getSplitDiff(state.fileDiffs, action.selectedFile));
@@ -122,6 +135,7 @@ export function commitDiff(state: CommitDiff, action): CommitDiff {
     selectedFile: 0,
     headerLines: new Array<string>(),
     removedLinesDiff: null,
-    addedLinesDiff: null
+    addedLinesDiff: null,
+    useSplitDiff: false
   };
 }
