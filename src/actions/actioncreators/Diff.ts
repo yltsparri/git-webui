@@ -34,7 +34,7 @@ const loadDiff = (commit: string) => {
       .then(response => {
         dispatch({ type: Actions.UPDATE_COMMIT_DIFF_DATA, data: response.data });
         if (response.message) {
-          dispatch(Messages.addResponseMessage(response));
+          dispatch(Messages.addMessage(response.message));
         }
       });
   };

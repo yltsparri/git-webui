@@ -43,7 +43,7 @@ const getViewOnly = (dispatch) =>
     .then(response => {
       dispatch(setViewOnly(response.data === "1"));
       if (response.message) {
-        dispatch(Message.addResponseMessage(response));
+        dispatch(Message.addMessage(response.message));
       }
     });
 
@@ -67,7 +67,7 @@ const getLocalBranches = (dispatch) =>
     .then((response: GitBrancesResponse) => {
       dispatch(setLocalBranches(response.data));
       if (response.message) {
-        dispatch(Message.addResponseMessage(response));
+        dispatch(Message.addMessage(response.message));
       }
       let action = selectActiveBranch(response.data);
       if (action) {
@@ -75,7 +75,7 @@ const getLocalBranches = (dispatch) =>
       }
     }).catch((error) => {
       console.log(error);
-      dispatch(Message.addResponseMessage(error.message));
+      dispatch(Message.addMessage(error.message));
     });
 
 const setRemoteBranches = (branches: Array<GitBranch>) => {
@@ -90,11 +90,11 @@ const getRemoteBranches = (dispatch) => {
     .then((response: GitBrancesResponse) => {
       dispatch(setRemoteBranches(response.data));
       if (response.message) {
-        dispatch(Message.addResponseMessage(response));
+        dispatch(Message.addMessage(response.message));
       }
     }).catch((error) => {
       console.log(error);
-      dispatch(Message.addResponseMessage(error.message));
+      dispatch(Message.addMessage(error.message));
     });
 };
 
@@ -111,11 +111,11 @@ const getTags = (dispatch) => {
     .then((response: GitBrancesResponse) => {
       dispatch(setTags(response.data));
       if (response.message) {
-        dispatch(Message.addResponseMessage(response));
+        dispatch(Message.addMessage(response.message));
       }
     }).catch((error) => {
       console.log(error);
-      dispatch(Message.addResponseMessage(error.message));
+      dispatch(Message.addMessage(error.message));
     });
 };
 
@@ -131,7 +131,7 @@ export function initState() {
           dispatch(getTags);
         }
         if (response.message) {
-          dispatch(Message.addResponseMessage(response));
+          dispatch(Message.addMessage(response.message));
         }
       });
   };

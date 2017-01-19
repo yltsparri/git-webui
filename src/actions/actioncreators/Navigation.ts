@@ -36,11 +36,11 @@ export function itemSelected(item: SelectedItem) {
             }
           }
           if (response.message) {
-            dispatch(Messages.addResponseMessage(response));
+            dispatch(Messages.addMessage(response.message));
           }
         })
         .catch((error) => {
-          dispatch(Messages.addResponseMessage(error.message));
+          dispatch(Messages.addMessage(error.message));
         }));
     }
   };

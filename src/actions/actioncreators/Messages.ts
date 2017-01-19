@@ -16,10 +16,9 @@
  */
 
 import Actions from '../Actions';
-import GitResponse from '../git/GitResponse';
 
-function addResponseMessage<T>(response: GitResponse<T>) {
-  return { type: Actions.ADD_MESSAGE, message: response.message };
+function addMessage(message: string) {
+  return { type: Actions.ADD_MESSAGE, message };
 }
 
 function closeMessage() {
@@ -27,6 +26,6 @@ function closeMessage() {
 }
 
 export default {
-  addResponseMessage,
+  addMessage,
   closeMessage
 };

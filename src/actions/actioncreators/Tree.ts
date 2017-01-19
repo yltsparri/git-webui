@@ -31,7 +31,7 @@ export function selectNode(node: FileInfo) {
           state = getState() as AppState;
           dispatch({ type: Actions.SET_COMMIT_TREE_FILES, files: response.data });
           if (response.message) {
-            dispatch(Messages.addResponseMessage(response));
+            dispatch(Messages.addMessage(response.message));
           }
         });
     }
