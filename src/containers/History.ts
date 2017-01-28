@@ -15,6 +15,7 @@ const mapStateToProps = (state: AppState): HistoryViewDataProps => {
     commits: state.commits.commits,
     diffViewMode: state.commits.viewMode,
     CommitView: Commit,
+    graph: state.commits.graph,
     ExploreView: ExploreView
   };
 };

@@ -29,10 +29,28 @@ export interface CommitDiff {
   addedLinesDiff: FileDiff;
 }
 
+export interface Path {
+  key: string;
+  commands: Array<{ type: string, x: number, y: number }>;
+}
+
+export interface Graph {
+   paths: Array<Path>;
+   circles: Array<Circle>;
+}
+
+export interface Circle {
+  cx: number;
+  cy: number;
+  r: number;
+  key: string;
+}
+
 export interface Commits {
   commits: Array<CommitInfo>;
   selectedCommit: string;
   viewMode: CommitViewMode;
+  graph: Graph;
 }
 
-export default CommitDiff;
+export default Commits;

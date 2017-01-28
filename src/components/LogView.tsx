@@ -17,10 +17,12 @@
 
 import React from 'react';
 import { CommitInfo, RefType } from '../actions/git/CommitInfo';
+import { Graph } from '../actions/Commit';
 
 interface LogViewProps {
   commits: Array<CommitInfo>;
   active?: string;
+  graph: Graph;
   onCommitClicked(commit: CommitInfo);
 }
 
@@ -30,6 +32,7 @@ const classNames = {
   [RefType.Remote]: 'label label-danger ref',
   [RefType.Tag]: 'label label-info ref'
 };
+
 const COLORS = ["#ffab1d", "#fd8c25", "#f36e4a", "#fc6148", "#d75ab6", "#b25ade", "#6575ff", "#7b77e9", "#4ea8ec", "#00d0f5", "#4eb94e", "#51af23", "#8b9f1c", "#d0b02f", "#d0853a", "#a4a4a4",
   "#ffc51f", "#fe982c", "#fd7854", "#ff705f", "#e467c3", "#bd65e9", "#7183ff", "#8985f7", "#55b6ff", "#10dcff", "#51cd51", "#5cba2e", "#9eb22f", "#debe3d", "#e19344", "#b8b8b8",
   "#ffd03b", "#ffae38", "#ff8a6a", "#ff7e7e", "#ef72ce", "#c56df1", "#8091ff", "#918dff", "#69caff", "#3ee1ff", "#72da72", "#71cf43", "#abbf3c", "#e6c645", "#eda04e", "#c5c5c5",
@@ -51,6 +54,7 @@ export default class LogView extends React.PureComponent<LogViewProps, undefined
     const xOffset = (left * 12) + 'px';
     return <div id='log-view'>
       <div>
+        {graph.svg}
         {
           this.props.commits.map((commit, index) => {
             let refs = commit.refs.map((tag) => {
@@ -72,120 +76,28 @@ export default class LogView extends React.PureComponent<LogViewProps, undefined
   }
 
   updateGraph = (startAt) => {
+    const graph = this.props.graph;
+    const commits = this.props.commits;
+    const xOffset = 12;
+    const yOffset = (startAt + 0.5) * lineHeight;
+    let maxLeft = 0;
     // Draw the graph
-    var currentY = (startAt + 0.5) * lineHeight;
-    var maxLeft = 0;
-    let streamColor = 0;
-    let streams = [];
-    if (startAt === 0) {
-      streamColor = 0;
-    }
-    const circles = [];
-    const paths = [];
-    const commits = this.props.commits.map(commit => Object.assign({}, commit, { webuiLeft: 0 }));
-    for (var i = startAt; i < commits.length; ++i) {
-      var entry = commits[i];
-      if (!entry) {
-        break;
-      }
-      var index = 0;
-      entry.webuiLeft = streams.length;
-
-      // Find streams to join
-      var childCount = 0;
-      var xOffset = 12;
-      var removedStreams = 0;
-      for (var j = 0; j < streams.length;) {
-        var stream = streams[j];
-        if (stream.sha1 === entry.hash) {
-          if (childCount === 0) {
-            // Replace the stream
-            stream.cmds[stream.cmds.length - 1].y = currentY;
-            if (entry.parents.length === 0) {
-              streams.splice(j, 1);
-            } else {
-              stream.sha1 = entry.parents[0];
-            }
-            index = j;
-            ++j;
-          } else {
-            // Join the stream
-            var x = (index + 1) * xOffset;
-            stream.cmds[stream.cmds.length - 1].y = (currentY - lineHeight / 2);
-            stream.cmds.push({ type: 'L', x: x, y: currentY });
-            streams.splice(j, 1);
-            ++removedStreams;
-          }
-          ++childCount;
-        } else {
-          if (removedStreams !== 0) {
-            var x = (j + 1) * xOffset;
-            stream.cmds[stream.cmds.length - 1].y = (currentY - lineHeight / 2);
-          }
-          ++j;
-        }
-      }
-
-      // Add new streams
-      for (var j = 0; j < entry.parents.length; ++j) {
-        var parent = entry.parents[j];
-        var x = (index + j + 1) * xOffset;
-        if (j !== 0 || streams.length === 0) {
-
-          ++streamColor;
-          if (streamColor === COLORS.length) {
-            streamColor = 0;
-          }
-          var origX = (index + 1) * xOffset;
-
-          var obj = {
-            sha1: parent,
-            stroke: COLORS[streamColor],
-            key: entry.hash + '_' + parent,
-            cmds: [{
-              type: 'M',
-              x: origX,
-              y: currentY
-            },
-            {
-              type: 'L',
-              x: x,
-              y: (currentY + lineHeight / 2)
-            },
-            {
-              type: 'L',
-              x: x,
-              y: (currentY + lineHeight / 2)
-            }]
-          };
-          paths.push(obj);
-          streams.splice(index + j, 0, obj);
-        }
-      }
-      for (var j = index + j; j < streams.length; ++j) {
-        var stream = streams[j];
-        var x = (j + 1) * xOffset;
-        stream.cmds[stream.cmds.length - 1].y = (currentY - lineHeight / 2);
-        stream.cmds.push({ type: "L", x: x, y: currentY });
-        stream.cmds.push({ type: "L", x: x + " " });
-      }
-
-      circles.push(<circle cx={(index + 1) * xOffset} cy={currentY} r='4' key={entry.hash + 'c'}></circle>);
-      entry.webuiLeft = Math.max(entry.webuiLeft, streams.length);
-      maxLeft = Math.max(maxLeft, entry.webuiLeft);
-      currentY += lineHeight;
-    }
-    for (var idx = 0; idx < streams.length; ++idx) {
-      var stream = streams[idx];
-      stream.cmds[stream.cmds.length - 1].y = lineHeight * commits.length - lineHeight / 2;
-    }
-    let lines = paths.map(stream => {
-      const d = stream.cmds.map(cmd => cmd.type + ' ' + cmd.x + ' ' + cmd.y).join(' ');
-      return <path style={{ stroke: stream.stroke }} key={stream.key} d={d}></path>;
+    let circles = graph.circles.map(entry => {
+      maxLeft = Math.max(maxLeft, entry.cx);
+      return <circle
+        cx={entry.cx * xOffset}
+        cy={entry.cy * lineHeight + yOffset}
+        r={entry.r}
+        key={entry.key}></circle>;
+    });
+    let lines = graph.paths.map((stream, index) => {
+      const d = stream.commands.map(cmd => cmd.type + ' ' + (cmd.x * xOffset) + ' ' + (cmd.y * lineHeight)).join(' ');
+      const colorIndex = index < COLORS.length ? index : index % COLORS.length;
+      return <path style={{ stroke: COLORS[colorIndex] }} key={stream.key} d={d}></path>;
     });
     return {
       svg: <svg height={lineHeight * commits.length}>{lines}{circles}</svg>,
-      maxLeft
+      maxLeft: maxLeft
     };
   }
 

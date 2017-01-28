@@ -19,11 +19,13 @@ import { CommitInfo } from '../actions/git/CommitInfo';
 import React from 'react';
 import LogView from './LogView';
 import { CommitViewMode } from '../actions/AppState';
+import {Graph} from '../actions/Commit';
 
 export interface HistoryViewDataProps {
   commitHash: string;
   diffViewMode: CommitViewMode;
   commits: Array<CommitInfo>;
+  graph: Graph;
   CommitView: React.ComponentClass<any>;
   ExploreView: React.ComponentClass<any>;
 }
@@ -40,12 +42,13 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps, u
       commits,
       diffViewMode,
       commitHash,
+      graph,
       selectDiffViewMode,
       CommitView
     } = this.props;
 
     return <div id='history-view'>
-      <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} />
+      <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} graph={graph}/>
       <div id='commit-view' style={{ display: 'flex' }}>
         <div id='commit-view-header'>
           <ul className='nav nav-pills nav-justified' role='tablList'>

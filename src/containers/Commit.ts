@@ -17,7 +17,7 @@ const mapStateToProps = (state: AppState): CommitViewStateProps => {
     fullFileDiff: state.diffOptions.fullFile,
     diffViewMode: state.commits.viewMode,
     path: state.commitTree.path,
-    files: state.commitTree.files,
+    files: state.commitTree.files
   };
 };
 
