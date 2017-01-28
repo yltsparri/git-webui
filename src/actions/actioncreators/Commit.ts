@@ -26,7 +26,7 @@ export function commitSelected(commit: CommitInfo) {
   return (dispatch, getState: () => AppState) => {
     let state = getState();
     let root: FileInfo = {
-      name: state.baseData.dirName,
+      name: state.appData.dirName,
       size: NaN,
       objectId: commit.hash,
       isSymbolicLink: false,

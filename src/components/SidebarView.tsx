@@ -16,87 +16,105 @@
  */
 
 import React from 'react';
-import GitBranch from '../actions/git/GitBranch';
-import BranchStatus from '../actions/git/BranchStatus';
-import { SelectedItem, NavigationType } from '../actions/AppState';
+import Modal from 'react-overlays/lib/Modal';
+
+export interface NavNode {
+  text: string;
+  children: Array<NavNode>;
+  id: string;
+  parentId: string;
+  props: { [key: string]: any };
+}
 
 export interface SidebarViewDataProps {
   dirName: string;
   viewOnly: boolean;
-  mode: NavigationType;
   selectedItem: string;
-  localBranches: Array<GitBranch>;
-  remoteBrances: Array<GitBranch>;
-  tags: Array<GitBranch>;
+  nodes: Array<NavNode>;
+  showAll?: string;
 }
 
 export interface SidebarViewDispatchProps {
-  onItemClicked(button: SelectedItem);
+  onItemClicked(button: NavNode);
+  moreClicked(id: string);
 }
 
 export interface SidebarViewProps extends SidebarViewDataProps, SidebarViewDispatchProps { }
 
 export default class SidebarView extends React.PureComponent<SidebarViewProps, undefined>{
   render() {
-    const {mode} = this.props;
+    const {nodes} = this.props;
 
     return <div id="sidebar">
       <a href="#" data-toggle="modal" data-target="#help-modal">
         <img id="sidebar-logo" src="/img/git-logo.png" />
       </a>
+      {this.renderModal()}
       <div id="sidebar-content" >
         {
-          this.props.viewOnly ?
-            null :
-            <section id="sidebar-workspace"
-              className={mode === NavigationType.Workspace ? ' active' : ''}
-              onClick={() => this.props.onItemClicked({ name: 'Workspace', type: NavigationType.Workspace })}>
-              <h4>Workspace</h4>
-            </section>
+          nodes.map(node => {
+            return <section id={'sidebar-' + node.id}>
+              <h4 onClick={() => this.props.onItemClicked(node)} {...node.props}>{node.text}</h4>
+              <ul>
+                {this.renderItems(node.children, node)}
+              </ul>
+            </section>;
+          })
         }
-        <section id="sidebar-remote"
-          className={mode === NavigationType.RemoteAccess ? ' active' : ''}
-          onClick={() => this.props.onItemClicked({ name: 'Remote access', type: NavigationType.RemoteAccess })}>
-          <h4>Remote access</h4>
-        </section>
-        <section id="sidebar-local-branches">
-          <h4>Local Branches</h4>
-          {this.renderItems(this.props.localBranches, NavigationType.LocalBranches)}
-        </section>
-        <section id="sidebar-remote-branches">
-          <h4>Remote Branches</h4>
-          {this.renderItems(this.props.remoteBrances, NavigationType.RemoteBranches)}
-        </section>
-        <section id="sidebar-tags">
-          <h4>Tags</h4>
-          {this.renderItems(this.props.tags, NavigationType.Tags)}
-        </section>
       </div>
     </div>;
   }
 
-  renderItems = (items: Array<GitBranch>, type: NavigationType) => {
-    return <ul>
-      {
-        items.map((item: GitBranch) => this.getItem(item, type))
-      }
-    </ul>;
+  renderItems = (items: Array<NavNode>, parentNode: NavNode) => {
+    if (items.length > 6) {
+      const showMoreLink = <li className={'sidebar-ref'}
+        title='More ...'
+        key={'$more$' + parentNode.id}
+        onClick={() => this.props.moreClicked(parentNode.id)}>More ...</li>;
+      return items.slice(0, 5)
+        .map((item: NavNode) => this.getItem(item))
+        .concat([showMoreLink]);
+    }
+    return items.slice(0, 6).map((item: NavNode) => this.getItem(item));
   }
 
-  private getItem = (item: GitBranch, type: NavigationType) => {
-    const {selectedItem, mode} = this.props;
-    let className = item.status & BranchStatus.Current ? 'branch-current' : '';
+  private getItem = (item: NavNode) => {
+    const {selectedItem} = this.props;
+    let className = '';
 
-    if (selectedItem) {
-      let sameName = selectedItem === item.name;
-      let sameType = mode === type;
-      if (sameName && sameType) {
-        className += ' active';
-      }
+    if (selectedItem && selectedItem === item.id) {
+      className += ' active';
     }
     return <li className={'sidebar-ref ' + className}
-      title={item.name}
-      key={item.name}
-      onClick={() => this.props.onItemClicked({ name: item.name, type: type })}>{item.name} </li>;
+      title={item.text}
+      key={item.id}
+      onClick={() => this.props.onItemClicked(item)}
+      {...item.props}>{item.text}</li>;
+  }
+
+  private renderModal = () => {
+    const {showAll, nodes} = this.props;
+    const allNode = nodes.find(n => n.id === showAll);
+    return showAll ? <Modal onHide={() => this.props.moreClicked(null)}
+      show={true}
+      containerClassName='modal-open'
+      backdropClassName='modal fade in modal-backdrop'
+      backdropStyle={{ display: 'block' }}>
+      <div className="modal fade in" style={{ display: 'block' }} id="error-modal" tabIndex={-1} role="dialog">
+        <div className="modal-dialog modal-sm">
+          <div className="modal-content">
+            <div className="modal-header">
+              <button type="button" className="close" data-dismiss="modal" onClick={() => this.props.moreClicked(null)}>
+                <span aria-hidden="true">×</span>
+                <span className="sr-only">Close</span>
+              </button><h4 className="modal-title">{allNode.text}</h4>
+            </div>
+            <div className="modal-body">
+              <ul className='modal-list'>{allNode.children.map((item: NavNode) => this.getItem(item))}</ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Modal> : null;
   }
 }

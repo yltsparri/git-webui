@@ -52,7 +52,7 @@ export function selectDiffViewMode(mode: CommitViewMode) {
       }
       else {
         root = {
-          name: state.baseData.dirName,
+          name: state.appData.dirName,
           size: NaN,
           objectId: state.commits.selectedCommit,
           isSymbolicLink: false,

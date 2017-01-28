@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import ModalMessage from '../components/ModalMessage';
 
 export default connect<any, any, any>((state: AppState) => {
-  return { message: state.baseData.messages };
+  return { message: state.appData.messages };
 },
   dispatch => {
     return {

@@ -47,7 +47,7 @@ class GitBranchesResponseParser {
     } else if (b.name[0] === "*") {
       return 1;
     } else {
-      return a.name.localeCompare(b.name);
+      return -a.name.localeCompare(b.name);
     }
 
   }

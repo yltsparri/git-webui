@@ -19,7 +19,7 @@ import GitBranch from './git/GitBranch';
 import { CommitInfo } from '../actions/git/CommitInfo';
 import FileInfo from './git/FileInfo';
 import { Diff } from './git/Diff';
-import {CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions} from './Commit';
+import { CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions } from './Commit';
 
 export { Diff, FileInfo, CommitInfo, GitBranch, CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions };
 
@@ -30,37 +30,45 @@ export enum AppMode {
   Explore = 3
 }
 
-export enum NavigationType {
-  Workspace = 0,
-  RemoteAccess = 1,
-  LocalBranches = 2,
-  RemoteBranches = 3,
-  Tags = 4
-}
-
-export interface SelectedItem {
-  name: string;
-  type: NavigationType;
+export class NavigationType {
+  public static readonly Workspace = 'workspace';
+  public static readonly RemoteAccess = 'remote-access';
+  public static readonly LocalBranches = 'local-branches';
+  public static readonly RemoteBranches = 'remote-branches';
+  public static readonly Tags = 'tags';
 }
 
 export interface AppData {
   dirName: string;
   viewOnly: boolean;
   mode: AppMode;
-  selectedItem: SelectedItem;
   messages: string;
+  showAll: string;
 }
 
 export interface Offset {
   top: number;
-  left; number;
+  left: number;
+}
+
+export interface NavigationNode {
+  id: string;
+  text: string;
+  parentId: string;
+  children: Array<string>;
+  props: { [key: string]: any };
+}
+
+export interface Navigation {
+  rootNodes: Array<string>;
+  nodes: { [id: string]: NavigationNode; };
+  showAll: string;
+  selected: string;
 }
 
 export interface AppState {
-  baseData: AppData;
-  localBranches: Array<GitBranch>;
-  remoteBrances: Array<GitBranch>;
-  tags: Array<GitBranch>;
+  appData: AppData;
+  navigation: Navigation;
   commitDiff: CommitDiff;
   commits: Commits;
   commitTree: CommitTree;

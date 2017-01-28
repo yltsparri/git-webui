@@ -18,9 +18,9 @@
 import GitBranch from '../git/GitBranch';
 import GitBrancesResponse from '../git/GitBrancesResponse';
 import BranchStatus from '../git/BranchStatus';
+import { NavigationType } from '../AppState';
 import Git from '../git/Git';
 import Message from './Messages';
-import { NavigationType } from '../AppState';
 import Actions from '../Actions';
 import { itemSelected } from './Navigation';
 
@@ -56,10 +56,11 @@ const setLocalBranches = (branches) => {
 
 const selectActiveBranch = (branches: Array<GitBranch>) => {
   let active: GitBranch = branches.find(b => b.status === BranchStatus.Current);
+  if(!active){
+    active = branches[0];
+  }
   return active ?
-    itemSelected({ name: active.name, type: NavigationType.LocalBranches }) :
-    null;
-
+    itemSelected(NavigationType.LocalBranches + '_' + active.name) : null;
 };
 
 const getLocalBranches = (dispatch) =>

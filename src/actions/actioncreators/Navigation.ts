@@ -16,38 +16,55 @@
  */
 
 import Git from '../git/Git';
-import { AppMode, SelectedItem, NavigationType } from '../AppState';
+import { AppMode, AppState, NavigationNode, NavigationType } from '../AppState';
 import Actions from '../Actions';
 import Commit from './Commit';
 import Messages from './Messages';
 
-export function itemSelected(item: SelectedItem) {
-  return (dispatch) => {
-    dispatch({ type: Actions.UPDATE_BASEDATA, data: { selectedItem: item } });
-    if (item.type === NavigationType.LocalBranches ||
-      item.type === NavigationType.RemoteBranches ||
-      item.type === NavigationType.Tags) {
-      dispatch(dispatch => Git.getCommits(1000, item.name)
-        .then((response) => {
-          if (response.returnCode === 0) {
-            dispatch({ type: Actions.SET_COMMITS, commits: response.data });
-            if (response.data.length) {
-              dispatch(Commit.commitSelected(response.data[0]));
-            }
-          }
-          if (response.message) {
-            dispatch(Messages.addMessage(response.message));
-          }
-        })
-        .catch((error) => {
-          dispatch(Messages.addMessage(error.message));
-        }));
+const loadCommits = (dispatch, item) => Git.getCommits(1000, item.text)
+  .then((response) => {
+    if (response.returnCode === 0) {
+      dispatch({ type: Actions.SET_COMMITS, commits: response.data });
+      if (response.data.length) {
+        dispatch(Commit.commitSelected(response.data[0]));
+      }
+    }
+    if (response.message) {
+      dispatch(Messages.addMessage(response.message));
+    }
+  })
+  .catch((error) => {
+    dispatch(Messages.addMessage(error.message));
+  });
+
+export function itemSelected(itemId: string) {
+  return (dispatch, getState: () => AppState) => {
+    dispatch({ type: Actions.NODE_SELECTED, data: { selected: itemId } });
+    const state = getState();
+    const nav = state.navigation;
+    const item: NavigationNode = nav.nodes[itemId];
+    if (!item) {
+      return;
+    }
+    let parent: NavigationNode = nav.nodes[item.parentId];
+    while (parent && parent.parentId) {
+      parent = nav.nodes[parent.parentId];
+    }
+    if (parent && (parent.id === NavigationType.LocalBranches ||
+      parent.id === NavigationType.RemoteBranches ||
+      parent.id === NavigationType.Tags)) {
+      dispatch(dispatch => loadCommits(dispatch, item));
     }
   };
 }
 
+const showMore = (id: string) => {
+  return { type: Actions.SHOW_ALL, data: { id: id } };
+};
+
 export default {
   itemSelected,
+  showMore,
   changeAppMode: (mode: AppMode) => {
     return { type: Actions.UPDATE_BASEDATA, data: { mode } };
   }

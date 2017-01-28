@@ -62,8 +62,8 @@ class Index extends React.Component<IndexProps, undefined> {
 
 let ConnectedIndex = connect<IndexProps, any, any>((state: AppState) => {
   return {
-    repo: state.baseData.dirName,
-    mode: state.baseData.mode
+    repo: state.appData.dirName,
+    mode: state.appData.mode
   };
 })(Index);
 
