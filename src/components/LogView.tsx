@@ -45,23 +45,20 @@ const COLORS = ["#ffab1d", "#fd8c25", "#f36e4a", "#fc6148", "#d75ab6", "#b25ade"
 
 const lineHeight = 54;
 export default class LogView extends React.PureComponent<LogViewProps, undefined> {
-
   render() {
-
     let graph = this.updateGraph(0);
     var left = Math.max(3, graph.maxLeft) + 1;
     const xOffset = (left * 12) + 'px';
     return <div id='log-view'>
-      {graph.svg}
       <div>
         {
-          this.props.commits.map(commit => {
+          this.props.commits.map((commit, index) => {
             let refs = commit.refs.map((tag) => {
               return <span key={RefType[tag.type] + "_" + tag.text} className={classNames[tag.type]}>{tag.text}</span>;
             });
             const className = this.props.active === commit.hash ? "log-entry list-group-item active" : "log-entry list-group-item";
-            return <span key={commit.hash} onClick={() => this.props.onCommitClicked(commit)} className={className} style={{ paddingLeft: xOffset, height: lineHeight + 'px' }}>
-              <header>
+            return <span data-index={index.toString()} onClick={this.handleCommitClick} key={commit.hash} className={className} style={{ paddingLeft: xOffset, height: lineHeight + 'px' }}>
+              <header >
                 <h6><a target="_blank" href={"mailto:" + commit.author.email}>{commit.author.name}</a></h6>
                 {refs}
                 <span className="log-entry-date">{commit.author.date.toLocaleString()}&nbsp;</span>
@@ -73,6 +70,7 @@ export default class LogView extends React.PureComponent<LogViewProps, undefined
         }</div>
     </div>;
   }
+
   updateGraph = (startAt) => {
     // Draw the graph
     var currentY = (startAt + 0.5) * lineHeight;
@@ -189,5 +187,15 @@ export default class LogView extends React.PureComponent<LogViewProps, undefined
       svg: <svg height={lineHeight * commits.length}>{lines}{circles}</svg>,
       maxLeft
     };
+  }
+
+  private handleCommitClick = (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.currentTarget as HTMLElement;
+    if (target.dataset['index']) {
+      const index = parseInt(target.dataset['index']);
+      if (Number.isInteger(index)) {
+        this.props.onCommitClicked(this.props.commits[index]);
+      }
+    }
   }
 }
