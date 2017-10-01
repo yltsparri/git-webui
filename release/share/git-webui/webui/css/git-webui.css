@@ -65,7 +65,7 @@ body {
   height: 2em;
   text-align: center;
 }
-#sidebar .branch-current {
+#sidebar [data-status='current'] {
   font-weight: bold;
 }
 #sidebar #sidebar-content {
@@ -96,7 +96,7 @@ body {
 #sidebar #sidebar-content #sidebar-workspace h4:before {
   content: url(/img/computer.svg);
 }
-#sidebar #sidebar-content #sidebar-remote h4:before {
+#sidebar #sidebar-content #sidebar-remote-access h4:before {
   content: url(/img/daemon.svg);
 }
 #sidebar #sidebar-content #sidebar-local-branches h4:before,
@@ -126,6 +126,18 @@ body {
 }
 #sidebar .modal-dialog .list-group-item {
   border: 0;
+}
+ul.modal-list {
+  padding-left: 0px;
+  list-style: none;
+}
+ul.modal-list li {
+  position: relative;
+  display: block;
+  margin-bottom: -1px;
+  background-color: #fff;
+  padding: 10px 15px;
+  cursor: pointer;
 }
 #main-view {
   display: flex;
