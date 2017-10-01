@@ -5,4 +5,4 @@ bower_components/
 dist/
 .directory
 ts-build
-
+.vscode/
