@@ -36,6 +36,6 @@ export function selectNode(node: FileInfo) {
         });
     }
   };
-};
+}
 
 export default { selectNode };

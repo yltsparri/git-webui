@@ -60,7 +60,6 @@ const updateGraph = (commits, startAt) => {
         ++childCount;
       } else {
         if (removedStreams !== 0) {
-          var x = j + 1;
           stream.commands[stream.commands.length - 1].y = currentY;
         }
         ++j;
@@ -68,9 +67,9 @@ const updateGraph = (commits, startAt) => {
     }
 
     // Add new streams
-    for (var j = 0; j < entry.parents.length; ++j) {
+    for (j = 0; j < entry.parents.length; ++j) {
       var parent = entry.parents[j];
-      var x = (index + j + 1);
+      const x = (index + j + 1);
       if (j !== 0 || streams.length === 0) {
         var obj = {
           sha1: parent,
@@ -95,9 +94,9 @@ const updateGraph = (commits, startAt) => {
         streams.splice(index + j, 0, obj);
       }
     }
-    for (var j = index + j; j < streams.length; ++j) {
-      var stream = streams[j];
-      var x = (j + 1);
+    for (j = index + j; j < streams.length; ++j) {
+      const stream = streams[j];
+      const x = (j + 1);
       stream.commands[stream.commands.length - 1].y = currentY;
       stream.commands.push({ type: "L", x, y: currentY + 0.5});
       stream.commands.push({ type: "L", x});
@@ -107,7 +106,7 @@ const updateGraph = (commits, startAt) => {
     currentY++;
   }
   for (var idx = 0; idx < streams.length; ++idx) {
-    var stream = streams[idx];
+    const stream = streams[idx];
     stream.commands[stream.commands.length - 1].y = commits.length;
   }
   return {
@@ -141,4 +140,4 @@ export function commits(state: Commits, action): Commits {
         graph: { paths: [], circles: [] }
       };
   }
-};
+}

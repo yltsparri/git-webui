@@ -52,4 +52,4 @@ export function appData(state: AppData, action): AppData {
     messages: null,
     showAll: null
   };
-};
+}

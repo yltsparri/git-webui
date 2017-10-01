@@ -6,7 +6,7 @@ import HistoryView, { HistoryViewDataProps, HistoryViewDispatchProps } from '../
 import Commit from './Commit';
 import ExploreView from './Explore';
 
-export { HistoryViewDataProps, HistoryViewDispatchProps }
+export { HistoryViewDataProps, HistoryViewDispatchProps };
 
 const mapStateToProps = (state: AppState): HistoryViewDataProps => {
   const commits = state.commits;

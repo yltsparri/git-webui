@@ -33,4 +33,4 @@ export function diffOptions(state: DiffOptions, action): DiffOptions {
     fullFile: false,
     options: null
   };
-};
+}

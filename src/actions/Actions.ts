@@ -19,4 +19,4 @@ export default class {
   public static readonly SET_DIRNAME = 'SET_DIRNAME';
   public static readonly SET_VIEW_ONLY = 'SET_VIEW_ONLY';
   public static readonly SHOW_ALL = 'SHOW_ALL';
-};
+}

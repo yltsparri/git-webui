@@ -50,7 +50,7 @@ export class Git {
           returnCode: error.code,
           message: error.message
         };
-      });;
+      });
   }
 
   getLocalBranches = (): Promise<GitBrancesResponse> => {
@@ -206,7 +206,7 @@ export class Git {
     var fIndex = data.length;
     while (true) {
       var oldFIndex = fIndex;
-      var fIndex = data.lastIndexOf("\r\n", fIndex - 1);
+      fIndex = data.lastIndexOf("\r\n", fIndex - 1);
       var line = data.substring(fIndex + 2, oldFIndex);
       if (line.length > 0) {
         var footer = line.split(": ");

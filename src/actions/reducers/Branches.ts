@@ -26,5 +26,5 @@ export function getBranchDataReducer(key: string) {
         return state || [];
     }
   };
-};
+}
 
