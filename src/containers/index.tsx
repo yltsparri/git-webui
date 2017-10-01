@@ -35,7 +35,7 @@ interface IndexProps {
 
 class Index extends React.Component<IndexProps, undefined> {
   render() {
-    return <div>
+    return <div className='root'>
       <Sidebar />
       <div id='main-view'>
         <ModalMessage />
