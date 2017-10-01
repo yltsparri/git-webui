@@ -6,7 +6,10 @@ module.exports = function (grunt) {
       react: {
         expand: true,
         flatten: true,
-        src: ['node_modules/react/dist/react.min.js'],
+        rename: function(dest, src) {
+            return dest + 'react.min.js';          
+        },
+        src: ['node_modules/react/umd/react.production.min.js'],
         dest: 'dist/share/git-webui/webui/js/',
       },
       redux: {
@@ -24,7 +27,10 @@ module.exports = function (grunt) {
       reactDOM: {
         expand: true,
         flatten: true,
-        src: ['node_modules/react-dom/dist/react-dom.min.js'],
+        rename: function(dest, src) {
+            return dest + 'react-dom.min.js';
+        },
+        src: ['node_modules/react-dom/umd/react-dom.production.min.js'],
         dest: 'dist/share/git-webui/webui/js/',
       },
       git_webui: {

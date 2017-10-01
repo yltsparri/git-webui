@@ -3,9 +3,8 @@ var webpack = require('webpack')
 module.exports = function (ENV) {
   return {
     cache: false,
-    debug: false,
     devtool: 'source-map',
-    entry: ['containers/index.tsx'],
+    entry: ['./src/containers/index.tsx'],
     target: 'web',
     output: {
       filename: '[name].js',
@@ -13,8 +12,7 @@ module.exports = function (ENV) {
       path: path.resolve('dist/share/git-webui/webui/js/')
     },
     resolve: {
-      extensions: ['', '.ts', '.tsx', '.js', '.jsx'],
-      modulesDirectories: ['src', 'node_modules']
+      extensions: ['.ts', '.tsx', '.js']
     },
     externals: {
       'react': 'React',
@@ -23,38 +21,35 @@ module.exports = function (ENV) {
       'react-redux': 'ReactRedux'
     },
     module: {
-      preLoaders: [
+      rules: [
         {
-          test: /\.js$/,
-          exclude: /node_modules/,
-          loader: 'eslint-loader'
+            enforce: 'pre',
+            test: /\.tsx?$/,
+            loader: 'tslint-loader',
+            exclude: /(node_modules)/,
         },
         {
-          test: /\.ts$/,
-          exclude: /node_modules/,
-          loader: 'tslint-loader'
+            test: /\.tsx?$/,
+            loaders: ['babel-loader', 'ts-loader'],
+            exclude: /(node_modules)/
         }
-      ],
-      loaders: [
-        {
-          test: /\.tsx?$/,
-          loaders: ['babel', 'ts-loader']
-        }
-      ]
+    ]
     },
     plugins: ENV === 'production' ? [
       new webpack.optimize.UglifyJsPlugin({
+        ie8: false,
         minimize: true,
         beautify: false,
         mangle: {
-          screw_ie8: true,
+          
           keep_fnames: false
-        },
-        compress: {
-          screw_ie8: true
         },
         comments: false
       }),
-      new webpack.optimize.DedupePlugin()] : []
+      new webpack.optimize.DedupePlugin()] : [ 
+        new webpack.LoaderOptionsPlugin({
+          debug: true
+        })
+      ]
   };
 }
