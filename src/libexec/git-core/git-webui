@@ -221,7 +221,7 @@ def auto_update():
         return
     fetch_head = os.path.join(dot_git, "FETCH_HEAD")
     if not os.path.exists(fetch_head):
-        fetch_head_mtime = 0.0
+        fetch_head_mtime = 86400.0
     else:
         fetch_head_mtime = os.stat(fetch_head).st_mtime
     delta = datetime.datetime.now() - datetime.datetime.fromtimestamp(fetch_head_mtime)
