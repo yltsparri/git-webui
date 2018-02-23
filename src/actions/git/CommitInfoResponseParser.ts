@@ -8,10 +8,8 @@ export class CommitInfoResponseParser {
       throw { message: response.message, returnCode: response.returnCode };
     }
     var start = 0;
-    var count = 0;
     let commits: Array<CommitInfo> = [];
     const data = response.data;
-    let next: string;
     while (true) {
       var end = data.indexOf("\ncommit ", start);
       if (end !== -1) {
@@ -19,16 +17,12 @@ export class CommitInfoResponseParser {
         if (commits.length < rows) {
           commits.push(commit);
         }
-        else {
-          next = commit.hash;
-        }
       }
       else {
         commits.push(this.parseCommit(data.substr(start)));
         break;
       }
       start = end + 1;
-      ++count;
     }
     return { data: commits, message: null, returnCode: 0 };
   }
