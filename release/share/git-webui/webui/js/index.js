@@ -423,41 +423,6 @@ exports.default = {
 /* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(process) {/**
- * Copyright (c) 2013-present, Facebook, Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-
-if (process.env.NODE_ENV !== 'production') {
-  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
-    Symbol.for &&
-    Symbol.for('react.element')) ||
-    0xeac7;
-
-  var isValidElement = function(object) {
-    return typeof object === 'object' &&
-      object !== null &&
-      object.$$typeof === REACT_ELEMENT_TYPE;
-  };
-
-  // By explicitly using `prop-types` you are opting into new development behavior.
-  // http://fb.me/prop-types-in-prod
-  var throwOnDirectAccess = true;
-  module.exports = __webpack_require__(40)(isValidElement, throwOnDirectAccess);
-} else {
-  // By explicitly using `prop-types` you are opting into new production behavior.
-  // http://fb.me/prop-types-in-prod
-  module.exports = __webpack_require__(43)();
-}
-
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -466,15 +431,15 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Git = undefined;
 
-var _GitBranchesResponseParser = __webpack_require__(69);
+var _GitBranchesResponseParser = __webpack_require__(66);
 
 var _GitBranchesResponseParser2 = _interopRequireDefault(_GitBranchesResponseParser);
 
-var _CommitInfoResponseParser = __webpack_require__(70);
+var _CommitInfoResponseParser = __webpack_require__(67);
 
 var _CommitInfoResponseParser2 = _interopRequireDefault(_CommitInfoResponseParser);
 
-var _DiffParser = __webpack_require__(71);
+var _DiffParser = __webpack_require__(68);
 
 var _DiffParser2 = _interopRequireDefault(_DiffParser);
 
@@ -706,7 +671,7 @@ var Git = exports.Git = function Git() {
 exports.default = new Git();
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -721,7 +686,7 @@ exports.toggleIgnoreWhiteSpace = toggleIgnoreWhiteSpace;
 exports.toggleShowFullFile = toggleShowFullFile;
 exports.selectFile = selectFile;
 
-var _Git = __webpack_require__(9);
+var _Git = __webpack_require__(8);
 
 var _Git2 = _interopRequireDefault(_Git);
 
@@ -735,7 +700,7 @@ var _Messages = __webpack_require__(7);
 
 var _Messages2 = _interopRequireDefault(_Messages);
 
-var _Tree = __webpack_require__(21);
+var _Tree = __webpack_require__(17);
 
 var _Tree2 = _interopRequireDefault(_Tree);
 
@@ -838,7 +803,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -854,7 +819,7 @@ function ownerDocument(node) {
 module.exports = exports["default"];
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -896,7 +861,7 @@ emptyFunction.thatReturnsArgument = function (arg) {
 module.exports = emptyFunction;
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -956,7 +921,7 @@ module.exports = invariant;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -975,95 +940,7 @@ module.exports = ReactPropTypesSecret;
 
 
 /***/ }),
-/* 15 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _createChainableTypeChecker = __webpack_require__(25);
-
-var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validate(props, propName, componentName, location, propFullName) {
-  var propValue = props[propName];
-  var propType = typeof propValue === 'undefined' ? 'undefined' : _typeof(propValue);
-
-  if (_react2.default.isValidElement(propValue)) {
-    return new Error('Invalid ' + location + ' `' + propFullName + '` of type ReactElement ' + ('supplied to `' + componentName + '`, expected a ReactComponent or a ') + 'DOMElement. You can usually obtain a ReactComponent or DOMElement ' + 'from a ReactElement by attaching a ref to it.');
-  }
-
-  if ((propType !== 'object' || typeof propValue.render !== 'function') && propValue.nodeType !== 1) {
-    return new Error('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected a ReactComponent or a ') + 'DOMElement.');
-  }
-
-  return null;
-}
-
-exports.default = (0, _createChainableTypeChecker2.default)(validate);
-module.exports = exports['default'];
-
-/***/ }),
-/* 16 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-exports.default = getContainer;
-
-var _reactDom = __webpack_require__(4);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getContainer(container, defaultContainer) {
-  container = typeof container === 'function' ? container() : container;
-  return _reactDom2.default.findDOMNode(container) || defaultContainer;
-}
-module.exports = exports['default'];
-
-/***/ }),
-/* 17 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-exports.default = function (componentOrElement) {
-  return (0, _ownerDocument2.default)(_reactDom2.default.findDOMNode(componentOrElement));
-};
-
-var _reactDom = __webpack_require__(4);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _ownerDocument = __webpack_require__(11);
-
-var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-module.exports = exports['default'];
-
-/***/ }),
-/* 18 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1074,7 +951,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.itemSelected = itemSelected;
 
-var _Git = __webpack_require__(9);
+var _Git = __webpack_require__(8);
 
 var _Git2 = _interopRequireDefault(_Git);
 
@@ -1156,7 +1033,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 19 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1174,7 +1051,7 @@ var BranchStatus = exports.BranchStatus = undefined;
 exports.default = BranchStatus;
 
 /***/ }),
-/* 20 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1191,7 +1068,7 @@ var HunkPartType = exports.HunkPartType = undefined;
 })(HunkPartType || (exports.HunkPartType = HunkPartType = {}));
 
 /***/ }),
-/* 21 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1202,7 +1079,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.selectNode = selectNode;
 
-var _Git = __webpack_require__(9);
+var _Git = __webpack_require__(8);
 
 var _Git2 = _interopRequireDefault(_Git);
 
@@ -1217,10 +1094,12 @@ var _Messages2 = _interopRequireDefault(_Messages);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function selectNode(node) {
-    return function (dispatch) {
+    return function (dispatch, getState) {
+        var state = getState();
         dispatch({ type: _Actions2.default.SELECT_COMMIT_TREE_FILE, objectId: node.objectId });
         if (node.type === 'tree') {
             return _Git2.default.listFiles(node.objectId).then(function (response) {
+                state = getState();
                 dispatch({ type: _Actions2.default.SET_COMMIT_TREE_FILES, files: response.data });
                 if (response.message) {
                     dispatch(_Messages2.default.addMessage(response.message));
@@ -1247,7 +1126,7 @@ function selectNode(node) {
 exports.default = { selectNode: selectNode };
 
 /***/ }),
-/* 22 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1270,7 +1149,7 @@ function setOffset(key, top, left) {
 exports.default = { setOffset: setOffset };
 
 /***/ }),
-/* 23 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1280,11 +1159,11 @@ exports.__esModule = true;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _activeElement = __webpack_require__(38);
+var _activeElement = __webpack_require__(37);
 
 var _activeElement2 = _interopRequireDefault(_activeElement);
 
-var _contains = __webpack_require__(39);
+var _contains = __webpack_require__(38);
 
 var _contains2 = _interopRequireDefault(_contains);
 
@@ -1292,19 +1171,19 @@ var _inDOM = __webpack_require__(5);
 
 var _inDOM2 = _interopRequireDefault(_inDOM);
 
-var _propTypes = __webpack_require__(8);
+var _propTypes = __webpack_require__(20);
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _componentOrElement = __webpack_require__(15);
+var _componentOrElement = __webpack_require__(22);
 
 var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
 
-var _deprecated = __webpack_require__(44);
+var _deprecated = __webpack_require__(43);
 
 var _deprecated2 = _interopRequireDefault(_deprecated);
 
-var _elementType = __webpack_require__(45);
+var _elementType = __webpack_require__(44);
 
 var _elementType2 = _interopRequireDefault(_elementType);
 
@@ -1312,39 +1191,31 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactDom = __webpack_require__(4);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _warning = __webpack_require__(26);
+var _warning = __webpack_require__(24);
 
 var _warning2 = _interopRequireDefault(_warning);
+
+var _Portal = __webpack_require__(45);
+
+var _Portal2 = _interopRequireDefault(_Portal);
 
 var _ModalManager = __webpack_require__(46);
 
 var _ModalManager2 = _interopRequireDefault(_ModalManager);
 
-var _Portal = __webpack_require__(62);
-
-var _Portal2 = _interopRequireDefault(_Portal);
-
-var _RefHolder = __webpack_require__(64);
-
-var _RefHolder2 = _interopRequireDefault(_RefHolder);
-
-var _addEventListener = __webpack_require__(65);
+var _addEventListener = __webpack_require__(62);
 
 var _addEventListener2 = _interopRequireDefault(_addEventListener);
 
-var _addFocusListener = __webpack_require__(68);
+var _addFocusListener = __webpack_require__(65);
 
 var _addFocusListener2 = _interopRequireDefault(_addFocusListener);
 
-var _getContainer = __webpack_require__(16);
+var _getContainer = __webpack_require__(25);
 
 var _getContainer2 = _interopRequireDefault(_getContainer);
 
-var _ownerDocument = __webpack_require__(17);
+var _ownerDocument = __webpack_require__(26);
 
 var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
@@ -1354,7 +1225,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /* eslint-disable react/prop-types */
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /*eslint-disable react/prop-types */
 
 var modalManager = new _ModalManager2.default();
 
@@ -1465,24 +1336,19 @@ var Modal = function (_React$Component) {
       _Portal2.default,
       {
         ref: this.setMountNode,
-        container: container,
-        onRendered: this.onPortalRendered
+        container: container
       },
       _react2.default.createElement(
         'div',
         _extends({
-          ref: this.setModalNodeRef,
+          ref: this.setModalNode,
           role: role || 'dialog'
         }, filteredProps, {
           style: style,
           className: className
         }),
         backdrop && this.renderBackdrop(),
-        _react2.default.createElement(
-          _RefHolder2.default,
-          { ref: this.setDialogRef },
-          dialog
-        )
+        dialog
       )
     );
   };
@@ -1534,42 +1400,8 @@ var Modal = function (_React$Component) {
     }
   };
 
-  Modal.prototype.autoFocus = function autoFocus() {
-    if (!this.props.autoFocus) {
-      return;
-    }
+  //instead of a ref, which might conflict with one the parent applied.
 
-    var dialogElement = this.getDialogElement();
-    var currentActiveElement = (0, _activeElement2.default)((0, _ownerDocument2.default)(this));
-
-    if (dialogElement && !(0, _contains2.default)(dialogElement, currentActiveElement)) {
-      this.lastFocus = currentActiveElement;
-
-      if (!dialogElement.hasAttribute('tabIndex')) {
-        (0, _warning2.default)(false, 'The modal content node does not accept focus. For the benefit of ' + 'assistive technologies, the tabIndex of the node is being set ' + 'to "-1".');
-
-        dialogElement.setAttribute('tabIndex', -1);
-      }
-
-      dialogElement.focus();
-    }
-  };
-
-  Modal.prototype.restoreLastFocus = function restoreLastFocus() {
-    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
-    if (this.lastFocus && this.lastFocus.focus) {
-      this.lastFocus.focus();
-      this.lastFocus = null;
-    }
-  };
-
-  Modal.prototype.getDialogElement = function getDialogElement() {
-    return _reactDom2.default.findDOMNode(this.dialog);
-  };
-
-  Modal.prototype.isTopModal = function isTopModal() {
-    return this.props.manager.isTopModal(this);
-  };
 
   return Modal;
 }(_react2.default.Component);
@@ -1779,14 +1611,6 @@ var _initialiseProps = function _initialiseProps() {
     return backdrop;
   };
 
-  this.onPortalRendered = function () {
-    _this2.autoFocus();
-
-    if (_this2.props.onShow) {
-      _this2.props.onShow();
-    }
-  };
-
   this.onShow = function () {
     var doc = (0, _ownerDocument2.default)(_this2);
     var container = (0, _getContainer2.default)(_this2.props.container, doc.body);
@@ -1798,6 +1622,12 @@ var _initialiseProps = function _initialiseProps() {
     _this2._onDocumentKeyupListener = (0, _addEventListener2.default)(doc, 'keyup', _this2.handleDocumentKeyUp);
 
     _this2._onFocusinListener = (0, _addFocusListener2.default)(_this2.enforceFocus);
+
+    _this2.focus();
+
+    if (_this2.props.onShow) {
+      _this2.props.onShow();
+    }
   };
 
   this.onHide = function () {
@@ -1818,12 +1648,8 @@ var _initialiseProps = function _initialiseProps() {
     _this2.mountNode = ref ? ref.getMountNode() : ref;
   };
 
-  this.setModalNodeRef = function (ref) {
+  this.setModalNode = function (ref) {
     _this2.modalNode = ref;
-  };
-
-  this.setDialogRef = function (ref) {
-    _this2.dialog = ref;
   };
 
   this.handleHidden = function () {
@@ -1852,7 +1678,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.handleDocumentKeyDown = function (e) {
-    if (_this2.props.keyboard && e.keyCode === 27 && _this2.isTopModal()) {
+    if (_this2.props.keyboard && e.key === 'Escape' && _this2.isTopModal()) {
       if (_this2.props.onEscapeKeyDown) {
         _this2.props.onEscapeKeyDown(e);
       }
@@ -1862,7 +1688,7 @@ var _initialiseProps = function _initialiseProps() {
   };
 
   this.handleDocumentKeyUp = function (e) {
-    if (_this2.props.keyboard && e.keyCode === 27 && _this2.isTopModal()) {
+    if (_this2.props.keyboard && e.key === 'Escape' && _this2.isTopModal()) {
       if (_this2.props.onEscapeKeyUp) {
         _this2.props.onEscapeKeyUp(e);
       }
@@ -1875,17 +1701,55 @@ var _initialiseProps = function _initialiseProps() {
     }
   };
 
+  this.focus = function () {
+    var autoFocus = _this2.props.autoFocus;
+    var modalContent = _this2.getDialogElement();
+    var current = (0, _activeElement2.default)((0, _ownerDocument2.default)(_this2));
+    var focusInModal = current && (0, _contains2.default)(modalContent, current);
+
+    if (modalContent && autoFocus && !focusInModal) {
+      _this2.lastFocus = current;
+
+      if (!modalContent.hasAttribute('tabIndex')) {
+        modalContent.setAttribute('tabIndex', -1);
+        (0, _warning2.default)(false, 'The modal content node does not accept focus. ' + 'For the benefit of assistive technologies, the tabIndex of the node is being set to "-1".');
+      }
+
+      modalContent.focus();
+    }
+  };
+
+  this.restoreLastFocus = function () {
+    // Support: <=IE11 doesn't support `focus()` on svg elements (RB: #917)
+    if (_this2.lastFocus && _this2.lastFocus.focus) {
+      _this2.lastFocus.focus();
+      _this2.lastFocus = null;
+    }
+  };
+
   this.enforceFocus = function () {
-    if (!_this2.props.enforceFocus || !_this2._isMounted || !_this2.isTopModal()) {
+    var enforceFocus = _this2.props.enforceFocus;
+
+
+    if (!enforceFocus || !_this2._isMounted || !_this2.isTopModal()) {
       return;
     }
 
-    var dialogElement = _this2.getDialogElement();
-    var currentActiveElement = (0, _activeElement2.default)((0, _ownerDocument2.default)(_this2));
+    var active = (0, _activeElement2.default)((0, _ownerDocument2.default)(_this2));
+    var modal = _this2.getDialogElement();
 
-    if (dialogElement && !(0, _contains2.default)(dialogElement, currentActiveElement)) {
-      dialogElement.focus();
+    if (modal && modal !== active && !(0, _contains2.default)(modal, active)) {
+      modal.focus();
     }
+  };
+
+  this.getDialogElement = function () {
+    var node = _this2.modalNode;
+    return node && node.lastChild;
+  };
+
+  this.isTopModal = function () {
+    return _this2.props.manager.isTopModal(_this2);
   };
 };
 
@@ -1895,7 +1759,42 @@ exports.default = Modal;
 module.exports = exports['default'];
 
 /***/ }),
-/* 24 */
+/* 20 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function(process) {/**
+ * Copyright (c) 2013-present, Facebook, Inc.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+if (process.env.NODE_ENV !== 'production') {
+  var REACT_ELEMENT_TYPE = (typeof Symbol === 'function' &&
+    Symbol.for &&
+    Symbol.for('react.element')) ||
+    0xeac7;
+
+  var isValidElement = function(object) {
+    return typeof object === 'object' &&
+      object !== null &&
+      object.$$typeof === REACT_ELEMENT_TYPE;
+  };
+
+  // By explicitly using `prop-types` you are opting into new development behavior.
+  // http://fb.me/prop-types-in-prod
+  var throwOnDirectAccess = true;
+  module.exports = __webpack_require__(39)(isValidElement, throwOnDirectAccess);
+} else {
+  // By explicitly using `prop-types` you are opting into new production behavior.
+  // http://fb.me/prop-types-in-prod
+  module.exports = __webpack_require__(42)();
+}
+
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ }),
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1909,7 +1808,7 @@ module.exports = exports['default'];
 
 
 
-var emptyFunction = __webpack_require__(12);
+var emptyFunction = __webpack_require__(11);
 
 /**
  * Similar to invariant but only logs a warning if the condition is not met.
@@ -1964,7 +1863,48 @@ module.exports = warning;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 25 */
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _createChainableTypeChecker = __webpack_require__(23);
+
+var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function validate(props, propName, componentName, location, propFullName) {
+  var propValue = props[propName];
+  var propType = typeof propValue === 'undefined' ? 'undefined' : _typeof(propValue);
+
+  if (_react2.default.isValidElement(propValue)) {
+    return new Error('Invalid ' + location + ' `' + propFullName + '` of type ReactElement ' + ('supplied to `' + componentName + '`, expected a ReactComponent or a ') + 'DOMElement. You can usually obtain a ReactComponent or DOMElement ' + 'from a ReactElement by attaching a ref to it.');
+  }
+
+  if ((propType !== 'object' || typeof propValue.render !== 'function') && propValue.nodeType !== 1) {
+    return new Error('Invalid ' + location + ' `' + propFullName + '` of value `' + propValue + '` ' + ('supplied to `' + componentName + '`, expected a ReactComponent or a ') + 'DOMElement.');
+  }
+
+  return null;
+}
+
+exports.default = (0, _createChainableTypeChecker2.default)(validate);
+module.exports = exports['default'];
+
+/***/ }),
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2013,7 +1953,7 @@ function createChainableTypeChecker(validate) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 26 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2079,6 +2019,53 @@ if (process.env.NODE_ENV !== 'production') {
 module.exports = warning;
 
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+exports.default = getContainer;
+
+var _reactDom = __webpack_require__(4);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function getContainer(container, defaultContainer) {
+  container = typeof container === 'function' ? container() : container;
+  return _reactDom2.default.findDOMNode(container) || defaultContainer;
+}
+module.exports = exports['default'];
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+exports.default = function (componentOrElement) {
+  return (0, _ownerDocument2.default)(_reactDom2.default.findDOMNode(componentOrElement));
+};
+
+var _reactDom = __webpack_require__(4);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _ownerDocument = __webpack_require__(10);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = exports['default'];
 
 /***/ }),
 /* 27 */
@@ -2193,11 +2180,11 @@ var _Actions = __webpack_require__(1);
 
 var _Actions2 = _interopRequireDefault(_Actions);
 
-var _Tree = __webpack_require__(21);
+var _Tree = __webpack_require__(17);
 
 var _Tree2 = _interopRequireDefault(_Tree);
 
-var _Diff = __webpack_require__(10);
+var _Diff = __webpack_require__(9);
 
 var _Diff2 = _interopRequireDefault(_Diff);
 
@@ -2259,11 +2246,15 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-var _Diff = __webpack_require__(20);
+var _Diff = __webpack_require__(16);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _reactDom = __webpack_require__(4);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2303,7 +2294,8 @@ var DiffView = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (DiffView.__proto__ || Object.getPrototypeOf(DiffView)).apply(this, arguments));
 
         _this.setOffset = function (offset) {
-            var node = _this.diffView;
+            var node = _reactDom2.default.findDOMNode(_this);
+            node = node.querySelector('.diff-view');
             node.scrollTop = offset.top;
             node.scrollLeft = offset.left;
         };
@@ -2322,14 +2314,34 @@ var DiffView = function (_React$PureComponent) {
             if (fileDiff === null) {
                 return;
             }
-            lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-header diff-section-start', key: 'fileHeader_' + key }, fileDiff.header));
-            lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-header', key: 'fileHeader_index' + key }, fileDiff.indexLine));
-            lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-header', key: 'fileHeader_mode' + key }, fileDiff.fileModeLine));
+            lines.push(_react2.default.createElement(
+                'pre',
+                { className: 'diff-view-line diff-line-header diff-section-start', key: 'fileHeader_' + key },
+                fileDiff.header
+            ));
+            lines.push(_react2.default.createElement(
+                'pre',
+                { className: 'diff-view-line diff-line-header', key: 'fileHeader_index' + key },
+                fileDiff.indexLine
+            ));
+            lines.push(_react2.default.createElement(
+                'pre',
+                { className: 'diff-view-line diff-line-header', key: 'fileHeader_mode' + key },
+                fileDiff.fileModeLine
+            ));
             if (_this.props.diffViewMode !== DiffViewMode.Added) {
-                lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-del diff-line-header', key: 'fileHeader_del' + key }, '--- a/' + fileDiff.initialFile));
+                lines.push(_react2.default.createElement(
+                    'pre',
+                    { className: 'diff-view-line diff-line-del diff-line-header', key: 'fileHeader_del' + key },
+                    '--- a/' + fileDiff.initialFile
+                ));
             }
             if (_this.props.diffViewMode !== DiffViewMode.Removed) {
-                lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-add diff-line-header', key: 'fileHeader_add' + key }, '+++ b/' + fileDiff.resultingFile));
+                lines.push(_react2.default.createElement(
+                    'pre',
+                    { className: 'diff-view-line diff-line-add diff-line-header', key: 'fileHeader_add' + key },
+                    '+++ b/' + fileDiff.resultingFile
+                ));
             }
         };
         _this.addHunks = function (hunks, lines, key) {
@@ -2337,7 +2349,11 @@ var DiffView = function (_React$PureComponent) {
                 return;
             }
             hunks.forEach(function (hunk, hunkIndex) {
-                lines.push(React.createElement("pre", { className: 'diff-view-line diff-line-offset', key: 'hunkHeader_' + key + '_' + hunkIndex }, hunk.header));
+                lines.push(_react2.default.createElement(
+                    'pre',
+                    { className: 'diff-view-line diff-line-offset', key: 'hunkHeader_' + key + '_' + hunkIndex },
+                    hunk.header
+                ));
                 _this.addHunkPartLines(hunk, lines, 'hunkPart_' + key + '_' + hunkIndex);
             });
         };
@@ -2364,7 +2380,11 @@ var DiffView = function (_React$PureComponent) {
             return className;
         };
         _this.getDiffLine = function (line, className, key) {
-            return React.createElement("pre", { className: className, key: key }, line);
+            return _react2.default.createElement(
+                'pre',
+                { className: className, key: key },
+                line
+            );
         };
         return _this;
     }
@@ -2391,16 +2411,27 @@ var DiffView = function (_React$PureComponent) {
         value: function render() {
             var _this2 = this;
 
-            return React.createElement("div", { className: 'panel-body' }, React.createElement("div", { className: 'diff-view', ref: function ref(diffView) {
-                    return _this2.diffView = diffView;
-                }, onScroll: this.props.onScroll }, React.createElement("div", { className: 'diff-view-lines' }, this.props.headerLines.map(function (comm, index) {
-                return _this2.getDiffLine(comm, 'diff-view-line diff-line-header', 'comm_' + index);
-            }), this.getDiffLines(this.props.diff))));
+            return _react2.default.createElement(
+                'div',
+                { className: 'panel-body' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'diff-view', onScroll: this.props.onScroll },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'diff-view-lines' },
+                        this.props.headerLines.map(function (comm, index) {
+                            return _this2.getDiffLine(comm, 'diff-view-line diff-line-header', 'comm_' + index);
+                        }),
+                        this.getDiffLines(this.props.diff)
+                    )
+                )
+            );
         }
     }]);
 
     return DiffView;
-}(React.PureComponent);
+}(_react2.default.PureComponent);
 
 exports.default = DiffView;
 
@@ -2415,17 +2446,17 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _ExploreView = __webpack_require__(81);
+var _ExploreView = __webpack_require__(78);
 
 var _ExploreView2 = _interopRequireDefault(_ExploreView);
 
 var _reactRedux = __webpack_require__(3);
 
-var _ExploreNavigation = __webpack_require__(82);
+var _ExploreNavigation = __webpack_require__(79);
 
 var _ExploreNavigation2 = _interopRequireDefault(_ExploreNavigation);
 
-var _Offsets = __webpack_require__(22);
+var _Offsets = __webpack_require__(18);
 
 var _Offsets2 = _interopRequireDefault(_Offsets);
 
@@ -2453,13 +2484,6 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 /* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(35);
-
-
-/***/ }),
-/* 35 */
-/***/ (function(module, exports, __webpack_require__) {
-
 "use strict";
 
 
@@ -2467,7 +2491,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(3);
 
@@ -2475,29 +2499,29 @@ var _reactDom = __webpack_require__(4);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
-var _Sidebar = __webpack_require__(36);
+var _Sidebar = __webpack_require__(35);
 
 var _Sidebar2 = _interopRequireDefault(_Sidebar);
 
-var _ModalMessage = __webpack_require__(72);
+var _ModalMessage = __webpack_require__(69);
 
 var _ModalMessage2 = _interopRequireDefault(_ModalMessage);
 
 var _AppState = __webpack_require__(2);
 
-var _Init = __webpack_require__(74);
+var _Init = __webpack_require__(71);
 
 var _Init2 = _interopRequireDefault(_Init);
 
-var _History = __webpack_require__(75);
+var _History = __webpack_require__(72);
 
 var _History2 = _interopRequireDefault(_History);
 
-var _RemoteView = __webpack_require__(84);
+var _RemoteView = __webpack_require__(81);
 
 var _RemoteView2 = _interopRequireDefault(_RemoteView);
 
-var _Store = __webpack_require__(85);
+var _Store = __webpack_require__(82);
 
 var _Store2 = _interopRequireDefault(_Store);
 
@@ -2506,8 +2530,6 @@ var _Explore = __webpack_require__(33);
 var _Explore2 = _interopRequireDefault(_Explore);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2544,13 +2566,13 @@ var Index = function (_React$Component) {
         _this.getMainViewContents = function () {
             switch (_this.props.mode) {
                 case _AppState.AppMode.RemoteAccess:
-                    return React.createElement(_RemoteView2.default, { repo: _this.props.repo });
+                    return _react2.default.createElement(_RemoteView2.default, { repo: _this.props.repo });
                 case _AppState.AppMode.Workspace:
-                    return React.createElement("div", null);
+                    return _react2.default.createElement('div', null);
                 case _AppState.AppMode.Explore:
-                    return React.createElement(_Explore2.default, null);
+                    return _react2.default.createElement(_Explore2.default, null);
                 default:
-                    return React.createElement(_History2.default, null);
+                    return _react2.default.createElement(_History2.default, null);
             }
         };
         return _this;
@@ -2559,12 +2581,22 @@ var Index = function (_React$Component) {
     _createClass(Index, [{
         key: 'render',
         value: function render() {
-            return React.createElement("div", { className: 'root' }, React.createElement(_Sidebar2.default, null), React.createElement("div", { id: 'main-view' }, React.createElement(_ModalMessage2.default, null), this.getMainViewContents()));
+            return _react2.default.createElement(
+                'div',
+                { className: 'root' },
+                _react2.default.createElement(_Sidebar2.default, null),
+                _react2.default.createElement(
+                    'div',
+                    { id: 'main-view' },
+                    _react2.default.createElement(_ModalMessage2.default, null),
+                    this.getMainViewContents()
+                )
+            );
         }
     }]);
 
     return Index;
-}(React.Component);
+}(_react2.default.Component);
 
 var ConnectedIndex = (0, _reactRedux.connect)(function (state) {
     return {
@@ -2572,10 +2604,14 @@ var ConnectedIndex = (0, _reactRedux.connect)(function (state) {
         mode: state.appData.mode
     };
 })(Index);
-_reactDom2.default.render(React.createElement(_reactRedux.Provider, { store: _Store2.default }, React.createElement(ConnectedIndex, null)), document.getElementById('global-container'));
+_reactDom2.default.render(_react2.default.createElement(
+    _reactRedux.Provider,
+    { store: _Store2.default },
+    _react2.default.createElement(ConnectedIndex, null)
+), document.getElementById('global-container'));
 
 /***/ }),
-/* 36 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2585,17 +2621,17 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _SidebarView = __webpack_require__(37);
+var _SidebarView = __webpack_require__(36);
 
 var _SidebarView2 = _interopRequireDefault(_SidebarView);
 
 var _reactRedux = __webpack_require__(3);
 
-var _Navigation = __webpack_require__(18);
+var _Navigation = __webpack_require__(14);
 
 var _Navigation2 = _interopRequireDefault(_Navigation);
 
-var _Offsets = __webpack_require__(22);
+var _Offsets = __webpack_require__(18);
 
 var _Offsets2 = _interopRequireDefault(_Offsets);
 
@@ -2645,29 +2681,29 @@ exports.default = (0, _reactRedux.connect)(function (state) {
 })(_SidebarView2.default);
 
 /***/ }),
-/* 37 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-var _Modal = __webpack_require__(23);
+var _Modal = __webpack_require__(19);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -2692,78 +2728,160 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var SidebarView = function (_React$PureComponent) {
-    _inherits(SidebarView, _React$PureComponent);
+  _inherits(SidebarView, _React$PureComponent);
 
-    function SidebarView() {
-        _classCallCheck(this, SidebarView);
+  function SidebarView() {
+    _classCallCheck(this, SidebarView);
 
-        var _this = _possibleConstructorReturn(this, (SidebarView.__proto__ || Object.getPrototypeOf(SidebarView)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (SidebarView.__proto__ || Object.getPrototypeOf(SidebarView)).apply(this, arguments));
 
-        _this.renderItems = function (items, parentNode) {
-            if (items.length > 6) {
-                var showMoreLink = React.createElement("li", { className: 'sidebar-ref', title: 'More ...', key: '$more$' + parentNode.id, onClick: function onClick() {
-                        return _this.props.moreClicked(parentNode.id);
-                    } }, "More ...");
-                return items.slice(0, 5).map(function (item) {
+    _this.renderItems = function (items, parentNode) {
+      if (items.length > 6) {
+        var showMoreLink = _react2.default.createElement(
+          'li',
+          { className: 'sidebar-ref', title: 'More ...', key: '$more$' + parentNode.id, onClick: function onClick() {
+              return _this.props.moreClicked(parentNode.id);
+            } },
+          'More ...'
+        );
+        return items.slice(0, 5).map(function (item) {
+          return _this.getItem(item);
+        }).concat([showMoreLink]);
+      }
+      return items.slice(0, 6).map(function (item) {
+        return _this.getItem(item);
+      });
+    };
+    _this.getItem = function (item) {
+      var selectedItem = _this.props.selectedItem;
+
+      var className = '';
+      if (selectedItem && selectedItem === item.id) {
+        className += ' active';
+      }
+      return _react2.default.createElement(
+        'li',
+        _extends({ className: 'sidebar-ref ' + className, title: item.text, key: item.id, onClick: function onClick() {
+            return _this.props.onItemClicked(item);
+          } }, item.props),
+        item.text
+      );
+    };
+    _this.renderModal = function () {
+      var _this$props = _this.props,
+          showAll = _this$props.showAll,
+          nodes = _this$props.nodes;
+
+      var allNode = nodes.find(function (n) {
+        return n.id === showAll;
+      });
+      return showAll ? _react2.default.createElement(
+        _Modal2.default,
+        { onHide: function onHide() {
+            return _this.props.moreClicked(null);
+          }, show: true, containerClassName: 'modal-open', backdropClassName: 'modal fade in modal-backdrop', backdropStyle: { display: 'block' } },
+        _react2.default.createElement(
+          'div',
+          { className: 'modal fade in', style: { display: 'block' }, id: 'error-modal', tabIndex: -1, role: 'dialog' },
+          _react2.default.createElement(
+            'div',
+            { className: 'modal-dialog modal-sm' },
+            _react2.default.createElement(
+              'div',
+              { className: 'modal-content' },
+              _react2.default.createElement(
+                'div',
+                { className: 'modal-header' },
+                _react2.default.createElement(
+                  'button',
+                  { type: 'button', className: 'close', 'data-dismiss': 'modal', onClick: function onClick() {
+                      return _this.props.moreClicked(null);
+                    } },
+                  _react2.default.createElement(
+                    'span',
+                    { 'aria-hidden': 'true' },
+                    '\xD7'
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'sr-only' },
+                    'Close'
+                  )
+                ),
+                _react2.default.createElement(
+                  'h4',
+                  { className: 'modal-title' },
+                  allNode.text
+                )
+              ),
+              _react2.default.createElement(
+                'div',
+                { className: 'modal-body' },
+                _react2.default.createElement(
+                  'ul',
+                  { className: 'modal-list' },
+                  allNode.children.map(function (item) {
                     return _this.getItem(item);
-                }).concat([showMoreLink]);
-            }
-            return items.slice(0, 6).map(function (item) {
-                return _this.getItem(item);
-            });
-        };
-        _this.getItem = function (item) {
-            var selectedItem = _this.props.selectedItem;
+                  })
+                )
+              )
+            )
+          )
+        )
+      ) : null;
+    };
+    return _this;
+  }
 
-            var className = '';
-            if (selectedItem && selectedItem === item.id) {
-                className += ' active';
-            }
-            return React.createElement("li", Object.assign({ className: 'sidebar-ref ' + className, title: item.text, key: item.id, onClick: function onClick() {
-                    return _this.props.onItemClicked(item);
-                } }, item.props), item.text);
-        };
-        _this.renderModal = function () {
-            var _this$props = _this.props,
-                showAll = _this$props.showAll,
-                nodes = _this$props.nodes;
+  _createClass(SidebarView, [{
+    key: 'render',
+    value: function render() {
+      var _this2 = this;
 
-            var allNode = nodes.find(function (n) {
-                return n.id === showAll;
-            });
-            return showAll ? React.createElement(_Modal2.default, { onHide: function onHide() {
-                    return _this.props.moreClicked(null);
-                }, show: true, containerClassName: 'modal-open', backdropClassName: 'modal fade in modal-backdrop', backdropStyle: { display: 'block' } }, React.createElement("div", { className: "modal fade in", style: { display: 'block' }, id: "error-modal", tabIndex: -1, role: "dialog" }, React.createElement("div", { className: "modal-dialog modal-sm" }, React.createElement("div", { className: "modal-content" }, React.createElement("div", { className: "modal-header" }, React.createElement("button", { type: "button", className: "close", "data-dismiss": "modal", onClick: function onClick() {
-                    return _this.props.moreClicked(null);
-                } }, React.createElement("span", { "aria-hidden": "true" }, '\xD7'), React.createElement("span", { className: "sr-only" }, "Close")), React.createElement("h4", { className: "modal-title" }, allNode.text)), React.createElement("div", { className: "modal-body" }, React.createElement("ul", { className: 'modal-list' }, allNode.children.map(function (item) {
-                return _this.getItem(item);
-            }))))))) : null;
-        };
-        return _this;
+      var nodes = this.props.nodes;
+
+      return _react2.default.createElement(
+        'div',
+        { id: 'sidebar' },
+        _react2.default.createElement(
+          'a',
+          { href: '#', 'data-toggle': 'modal', 'data-target': '#help-modal' },
+          _react2.default.createElement('img', { id: 'sidebar-logo', src: '/img/git-logo.png' })
+        ),
+        this.renderModal(),
+        _react2.default.createElement(
+          'div',
+          { id: 'sidebar-content' },
+          nodes.map(function (node) {
+            return _react2.default.createElement(
+              'section',
+              { id: 'sidebar-' + node.id },
+              _react2.default.createElement(
+                'h4',
+                _extends({ onClick: function onClick() {
+                    return _this2.props.onItemClicked(node);
+                  } }, node.props),
+                node.text
+              ),
+              _react2.default.createElement(
+                'ul',
+                null,
+                _this2.renderItems(node.children, node)
+              )
+            );
+          })
+        )
+      );
     }
+  }]);
 
-    _createClass(SidebarView, [{
-        key: 'render',
-        value: function render() {
-            var _this2 = this;
-
-            var nodes = this.props.nodes;
-
-            return React.createElement("div", { id: "sidebar" }, React.createElement("a", { href: "#", "data-toggle": "modal", "data-target": "#help-modal" }, React.createElement("img", { id: "sidebar-logo", src: "/img/git-logo.png" })), this.renderModal(), React.createElement("div", { id: "sidebar-content" }, nodes.map(function (node) {
-                return React.createElement("section", { id: 'sidebar-' + node.id }, React.createElement("h4", Object.assign({ onClick: function onClick() {
-                        return _this2.props.onItemClicked(node);
-                    } }, node.props), node.text), React.createElement("ul", null, _this2.renderItems(node.children, node)));
-            })));
-        }
-    }]);
-
-    return SidebarView;
-}(React.PureComponent);
+  return SidebarView;
+}(_react2.default.PureComponent);
 
 exports.default = SidebarView;
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2774,7 +2892,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = activeElement;
 
-var _ownerDocument = __webpack_require__(11);
+var _ownerDocument = __webpack_require__(10);
 
 var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
@@ -2790,7 +2908,7 @@ function activeElement() {
 module.exports = exports['default'];
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2830,7 +2948,7 @@ function fallback(context, node) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2843,13 +2961,13 @@ module.exports = exports['default'];
 
 
 
-var emptyFunction = __webpack_require__(12);
-var invariant = __webpack_require__(13);
-var warning = __webpack_require__(24);
-var assign = __webpack_require__(41);
+var emptyFunction = __webpack_require__(11);
+var invariant = __webpack_require__(12);
+var warning = __webpack_require__(21);
+var assign = __webpack_require__(40);
 
-var ReactPropTypesSecret = __webpack_require__(14);
-var checkPropTypes = __webpack_require__(42);
+var ReactPropTypesSecret = __webpack_require__(13);
+var checkPropTypes = __webpack_require__(41);
 
 module.exports = function(isValidElement, throwOnDirectAccess) {
   /* global Symbol */
@@ -3380,7 +3498,7 @@ module.exports = function(isValidElement, throwOnDirectAccess) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3477,7 +3595,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3491,9 +3609,9 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 
 
 if (process.env.NODE_ENV !== 'production') {
-  var invariant = __webpack_require__(13);
-  var warning = __webpack_require__(24);
-  var ReactPropTypesSecret = __webpack_require__(14);
+  var invariant = __webpack_require__(12);
+  var warning = __webpack_require__(21);
+  var ReactPropTypesSecret = __webpack_require__(13);
   var loggedTypeFailures = {};
 }
 
@@ -3544,7 +3662,7 @@ module.exports = checkPropTypes;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(6)))
 
 /***/ }),
-/* 43 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3557,9 +3675,9 @@ module.exports = checkPropTypes;
 
 
 
-var emptyFunction = __webpack_require__(12);
-var invariant = __webpack_require__(13);
-var ReactPropTypesSecret = __webpack_require__(14);
+var emptyFunction = __webpack_require__(11);
+var invariant = __webpack_require__(12);
+var ReactPropTypesSecret = __webpack_require__(13);
 
 module.exports = function() {
   function shim(props, propName, componentName, location, propFullName, secret) {
@@ -3609,7 +3727,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 44 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3620,7 +3738,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = deprecated;
 
-var _warning = __webpack_require__(26);
+var _warning = __webpack_require__(24);
 
 var _warning2 = _interopRequireDefault(_warning);
 
@@ -3660,7 +3778,7 @@ deprecated._resetWarned = _resetWarned;
 module.exports = exports['default'];
 
 /***/ }),
-/* 45 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3676,7 +3794,7 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createChainableTypeChecker = __webpack_require__(25);
+var _createChainableTypeChecker = __webpack_require__(23);
 
 var _createChainableTypeChecker2 = _interopRequireDefault(_createChainableTypeChecker);
 
@@ -3698,6 +3816,150 @@ function elementType(props, propName, componentName, location, propFullName) {
 }
 
 exports.default = (0, _createChainableTypeChecker2.default)(elementType);
+module.exports = exports['default'];
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _propTypes = __webpack_require__(20);
+
+var _propTypes2 = _interopRequireDefault(_propTypes);
+
+var _componentOrElement = __webpack_require__(22);
+
+var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = __webpack_require__(4);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+var _getContainer = __webpack_require__(25);
+
+var _getContainer2 = _interopRequireDefault(_getContainer);
+
+var _ownerDocument = __webpack_require__(26);
+
+var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+/**
+ * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
+ * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
+ * The children of `<Portal/>` component will be appended to the `container` specified.
+ */
+var Portal = function (_React$Component) {
+  _inherits(Portal, _React$Component);
+
+  function Portal() {
+    var _temp, _this, _ret;
+
+    _classCallCheck(this, Portal);
+
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this._mountOverlayTarget = function () {
+      if (!_this._overlayTarget) {
+        _this._overlayTarget = document.createElement('div');
+        _this._portalContainerNode = (0, _getContainer2.default)(_this.props.container, (0, _ownerDocument2.default)(_this).body);
+        _this._portalContainerNode.appendChild(_this._overlayTarget);
+      }
+    }, _this._unmountOverlayTarget = function () {
+      if (_this._overlayTarget) {
+        _this._portalContainerNode.removeChild(_this._overlayTarget);
+        _this._overlayTarget = null;
+      }
+      _this._portalContainerNode = null;
+    }, _this._renderOverlay = function () {
+
+      var overlay = !_this.props.children ? null : _react2.default.Children.only(_this.props.children);
+
+      // Save reference for future access.
+      if (overlay !== null) {
+        _this._mountOverlayTarget();
+        _this._overlayInstance = _reactDom2.default.unstable_renderSubtreeIntoContainer(_this, overlay, _this._overlayTarget);
+      } else {
+        // Unrender if the component is null for transitions to null
+        _this._unrenderOverlay();
+        _this._unmountOverlayTarget();
+      }
+    }, _this._unrenderOverlay = function () {
+      if (_this._overlayTarget) {
+        _reactDom2.default.unmountComponentAtNode(_this._overlayTarget);
+        _this._overlayInstance = null;
+      }
+    }, _this.getMountNode = function () {
+      return _this._overlayTarget;
+    }, _this.getOverlayDOMNode = function () {
+      if (!_this._isMounted) {
+        throw new Error('getOverlayDOMNode(): A component must be mounted to have a DOM node.');
+      }
+
+      if (_this._overlayInstance) {
+        return _reactDom2.default.findDOMNode(_this._overlayInstance);
+      }
+
+      return null;
+    }, _temp), _possibleConstructorReturn(_this, _ret);
+  }
+
+  Portal.prototype.componentDidMount = function componentDidMount() {
+    this._isMounted = true;
+    this._renderOverlay();
+  };
+
+  Portal.prototype.componentDidUpdate = function componentDidUpdate() {
+    this._renderOverlay();
+  };
+
+  Portal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
+    if (this._overlayTarget && nextProps.container !== this.props.container) {
+      this._portalContainerNode.removeChild(this._overlayTarget);
+      this._portalContainerNode = (0, _getContainer2.default)(nextProps.container, (0, _ownerDocument2.default)(this).body);
+      this._portalContainerNode.appendChild(this._overlayTarget);
+    }
+  };
+
+  Portal.prototype.componentWillUnmount = function componentWillUnmount() {
+    this._isMounted = false;
+    this._unrenderOverlay();
+    this._unmountOverlayTarget();
+  };
+
+  Portal.prototype.render = function render() {
+    return null;
+  };
+
+  return Portal;
+}(_react2.default.Component);
+
+Portal.displayName = 'Portal';
+Portal.propTypes = {
+  /**
+   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
+   * appended to it.
+   */
+  container: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func])
+};
+exports.default = Portal;
 module.exports = exports['default'];
 
 /***/ }),
@@ -4348,7 +4610,7 @@ var _isWindow = __webpack_require__(60);
 
 var _isWindow2 = _interopRequireDefault(_isWindow);
 
-var _ownerDocument = __webpack_require__(11);
+var _ownerDocument = __webpack_require__(10);
 
 var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
 
@@ -4457,309 +4719,6 @@ function showSiblings(container, mountNode) {
 
 exports.__esModule = true;
 
-var _propTypes = __webpack_require__(8);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _componentOrElement = __webpack_require__(15);
-
-var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(4);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _getContainer = __webpack_require__(16);
-
-var _getContainer2 = _interopRequireDefault(_getContainer);
-
-var _ownerDocument = __webpack_require__(17);
-
-var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
-
-var _LegacyPortal = __webpack_require__(63);
-
-var _LegacyPortal2 = _interopRequireDefault(_LegacyPortal);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
- * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
- * The children of `<Portal/>` component will be appended to the `container` specified.
- */
-var Portal = function (_React$Component) {
-  _inherits(Portal, _React$Component);
-
-  function Portal() {
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, Portal);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this.setContainer = function () {
-      var props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : _this.props;
-
-      _this._portalContainerNode = (0, _getContainer2.default)(props.container, (0, _ownerDocument2.default)(_this).body);
-    }, _this.getMountNode = function () {
-      return _this._portalContainerNode;
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  Portal.prototype.componentDidMount = function componentDidMount() {
-    this.setContainer();
-    this.forceUpdate(this.props.onRendered);
-  };
-
-  Portal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    if (nextProps.container !== this.props.container) {
-      this.setContainer(nextProps);
-    }
-  };
-
-  Portal.prototype.componentWillUnmount = function componentWillUnmount() {
-    this._portalContainerNode = null;
-  };
-
-  Portal.prototype.render = function render() {
-    return this.props.children && this._portalContainerNode ? _reactDom2.default.createPortal(this.props.children, this._portalContainerNode) : null;
-  };
-
-  return Portal;
-}(_react2.default.Component);
-
-Portal.displayName = 'Portal';
-Portal.propTypes = {
-  /**
-   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
-   * appended to it.
-   */
-  container: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func]),
-
-  onRendered: _propTypes2.default.func
-};
-exports.default = _reactDom2.default.createPortal ? Portal : _LegacyPortal2.default;
-module.exports = exports['default'];
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _propTypes = __webpack_require__(8);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _componentOrElement = __webpack_require__(15);
-
-var _componentOrElement2 = _interopRequireDefault(_componentOrElement);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactDom = __webpack_require__(4);
-
-var _reactDom2 = _interopRequireDefault(_reactDom);
-
-var _getContainer = __webpack_require__(16);
-
-var _getContainer2 = _interopRequireDefault(_getContainer);
-
-var _ownerDocument = __webpack_require__(17);
-
-var _ownerDocument2 = _interopRequireDefault(_ownerDocument);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-/**
- * The `<Portal/>` component renders its children into a new "subtree" outside of current component hierarchy.
- * You can think of it as a declarative `appendChild()`, or jQuery's `$.fn.appendTo()`.
- * The children of `<Portal/>` component will be appended to the `container` specified.
- */
-var Portal = function (_React$Component) {
-  _inherits(Portal, _React$Component);
-
-  function Portal() {
-    var _temp, _this, _ret;
-
-    _classCallCheck(this, Portal);
-
-    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-      args[_key] = arguments[_key];
-    }
-
-    return _ret = (_temp = (_this = _possibleConstructorReturn(this, _React$Component.call.apply(_React$Component, [this].concat(args))), _this), _this._mountOverlayTarget = function () {
-      if (!_this._overlayTarget) {
-        _this._overlayTarget = document.createElement('div');
-        _this._portalContainerNode = (0, _getContainer2.default)(_this.props.container, (0, _ownerDocument2.default)(_this).body);
-        _this._portalContainerNode.appendChild(_this._overlayTarget);
-      }
-    }, _this._unmountOverlayTarget = function () {
-      if (_this._overlayTarget) {
-        _this._portalContainerNode.removeChild(_this._overlayTarget);
-        _this._overlayTarget = null;
-      }
-      _this._portalContainerNode = null;
-    }, _this._renderOverlay = function () {
-      var overlay = !_this.props.children ? null : _react2.default.Children.only(_this.props.children);
-
-      // Save reference for future access.
-      if (overlay !== null) {
-        _this._mountOverlayTarget();
-
-        var initialRender = !_this._overlayInstance;
-
-        _this._overlayInstance = _reactDom2.default.unstable_renderSubtreeIntoContainer(_this, overlay, _this._overlayTarget, function () {
-          if (initialRender && _this.props.onRendered) {
-            _this.props.onRendered();
-          }
-        });
-      } else {
-        // Unrender if the component is null for transitions to null
-        _this._unrenderOverlay();
-        _this._unmountOverlayTarget();
-      }
-    }, _this._unrenderOverlay = function () {
-      if (_this._overlayTarget) {
-        _reactDom2.default.unmountComponentAtNode(_this._overlayTarget);
-        _this._overlayInstance = null;
-      }
-    }, _this.getMountNode = function () {
-      return _this._overlayTarget;
-    }, _temp), _possibleConstructorReturn(_this, _ret);
-  }
-
-  Portal.prototype.componentDidMount = function componentDidMount() {
-    this._isMounted = true;
-    this._renderOverlay();
-  };
-
-  Portal.prototype.componentDidUpdate = function componentDidUpdate() {
-    this._renderOverlay();
-  };
-
-  Portal.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
-    if (this._overlayTarget && nextProps.container !== this.props.container) {
-      this._portalContainerNode.removeChild(this._overlayTarget);
-      this._portalContainerNode = (0, _getContainer2.default)(nextProps.container, (0, _ownerDocument2.default)(this).body);
-      this._portalContainerNode.appendChild(this._overlayTarget);
-    }
-  };
-
-  Portal.prototype.componentWillUnmount = function componentWillUnmount() {
-    this._isMounted = false;
-    this._unrenderOverlay();
-    this._unmountOverlayTarget();
-  };
-
-  Portal.prototype.render = function render() {
-    return null;
-  };
-
-  return Portal;
-}(_react2.default.Component);
-
-Portal.displayName = 'Portal';
-Portal.propTypes = {
-  /**
-   * A Node, Component instance, or function that returns either. The `container` will have the Portal children
-   * appended to it.
-   */
-  container: _propTypes2.default.oneOfType([_componentOrElement2.default, _propTypes2.default.func]),
-
-  onRendered: _propTypes2.default.func
-};
-exports.default = Portal;
-module.exports = exports['default'];
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _propTypes = __webpack_require__(8);
-
-var _propTypes2 = _interopRequireDefault(_propTypes);
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var propTypes = {
-  children: _propTypes2.default.node
-};
-
-/**
- * Internal helper component to allow attaching a non-conflicting ref to a
- * child element that may not accept refs.
- */
-
-var RefHolder = function (_React$Component) {
-  _inherits(RefHolder, _React$Component);
-
-  function RefHolder() {
-    _classCallCheck(this, RefHolder);
-
-    return _possibleConstructorReturn(this, _React$Component.apply(this, arguments));
-  }
-
-  RefHolder.prototype.render = function render() {
-    return this.props.children;
-  };
-
-  return RefHolder;
-}(_react2.default.Component);
-
-RefHolder.propTypes = propTypes;
-
-exports.default = RefHolder;
-module.exports = exports['default'];
-
-/***/ }),
-/* 65 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
 exports.default = function (node, event, handler, capture) {
   (0, _on2.default)(node, event, handler, capture);
 
@@ -4770,11 +4729,11 @@ exports.default = function (node, event, handler, capture) {
   };
 };
 
-var _on = __webpack_require__(66);
+var _on = __webpack_require__(63);
 
 var _on2 = _interopRequireDefault(_on);
 
-var _off = __webpack_require__(67);
+var _off = __webpack_require__(64);
 
 var _off2 = _interopRequireDefault(_off);
 
@@ -4783,7 +4742,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = exports['default'];
 
 /***/ }),
-/* 66 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4820,7 +4779,7 @@ exports.default = on;
 module.exports = exports['default'];
 
 /***/ }),
-/* 67 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4851,7 +4810,7 @@ exports.default = off;
 module.exports = exports['default'];
 
 /***/ }),
-/* 68 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4886,7 +4845,7 @@ function addFocusListener(handler) {
 module.exports = exports['default'];
 
 /***/ }),
-/* 69 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4896,7 +4855,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _BranchStatus = __webpack_require__(19);
+var _BranchStatus = __webpack_require__(15);
 
 var _BranchStatus2 = _interopRequireDefault(_BranchStatus);
 
@@ -4965,7 +4924,7 @@ var GitBranchesResponseParser = function GitBranchesResponseParser() {
 exports.default = new GitBranchesResponseParser();
 
 /***/ }),
-/* 70 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4993,20 +4952,25 @@ var CommitInfoResponseParser = exports.CommitInfoResponseParser = function () {
                 throw { message: response.message, returnCode: response.returnCode };
             }
             var start = 0;
+            var count = 0;
             var commits = [];
             var data = response.data;
+            var next = void 0;
             while (true) {
                 var end = data.indexOf("\ncommit ", start);
                 if (end !== -1) {
                     var commit = _this.parseCommit(data.substr(start, end - start));
                     if (commits.length < rows) {
                         commits.push(commit);
+                    } else {
+                        next = commit.hash;
                     }
                 } else {
                     commits.push(_this.parseCommit(data.substr(start)));
                     break;
                 }
                 start = end + 1;
+                ++count;
             }
             return { data: commits, message: null, returnCode: 0 };
         };
@@ -5084,7 +5048,7 @@ var CommitInfoResponseParser = exports.CommitInfoResponseParser = function () {
 exports.default = new CommitInfoResponseParser();
 
 /***/ }),
-/* 71 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5097,7 +5061,7 @@ exports.DiffParser = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _Diff = __webpack_require__(20);
+var _Diff = __webpack_require__(16);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5188,7 +5152,7 @@ var DiffParser = exports.DiffParser = function () {
 exports.default = new DiffParser();
 
 /***/ }),
-/* 72 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5204,7 +5168,7 @@ var _Messages2 = _interopRequireDefault(_Messages);
 
 var _reactRedux = __webpack_require__(3);
 
-var _ModalMessage = __webpack_require__(73);
+var _ModalMessage = __webpack_require__(70);
 
 var _ModalMessage2 = _interopRequireDefault(_ModalMessage);
 
@@ -5221,29 +5185,27 @@ exports.default = (0, _reactRedux.connect)(function (state) {
 })(_ModalMessage2.default);
 
 /***/ }),
-/* 73 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-var _Modal = __webpack_require__(23);
+var _Modal = __webpack_require__(19);
 
 var _Modal2 = _interopRequireDefault(_Modal);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5268,31 +5230,74 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var ModalMessage = function (_React$Component) {
-    _inherits(ModalMessage, _React$Component);
+  _inherits(ModalMessage, _React$Component);
 
-    function ModalMessage() {
-        _classCallCheck(this, ModalMessage);
+  function ModalMessage() {
+    _classCallCheck(this, ModalMessage);
 
-        return _possibleConstructorReturn(this, (ModalMessage.__proto__ || Object.getPrototypeOf(ModalMessage)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ModalMessage.__proto__ || Object.getPrototypeOf(ModalMessage)).apply(this, arguments));
+  }
+
+  _createClass(ModalMessage, [{
+    key: 'render',
+    value: function render() {
+      if (!this.props.message || this.props.message === '') {
+        return null;
+      }
+      return _react2.default.createElement(
+        _Modal2.default,
+        { onHide: this.props.close, show: true, containerClassName: 'modal-open', backdropClassName: 'modal fade in modal-backdrop', backdropStyle: { display: 'block' } },
+        _react2.default.createElement(
+          'div',
+          { className: 'modal fade in', style: { display: 'block' }, id: 'error-modal', tabIndex: -1, role: 'dialog' },
+          _react2.default.createElement(
+            'div',
+            { className: 'modal-dialog' },
+            _react2.default.createElement(
+              'div',
+              { className: 'modal-content' },
+              _react2.default.createElement(
+                'div',
+                { className: 'modal-header' },
+                _react2.default.createElement(
+                  'button',
+                  { type: 'button', className: 'close', onClick: this.props.close, 'data-dismiss': 'modal' },
+                  _react2.default.createElement(
+                    'span',
+                    null,
+                    '\xD7'
+                  ),
+                  _react2.default.createElement(
+                    'span',
+                    { className: 'sr-only' },
+                    'Close'
+                  )
+                ),
+                _react2.default.createElement(
+                  'h4',
+                  { className: 'modal-title' },
+                  'Error'
+                )
+              ),
+              _react2.default.createElement(
+                'pre',
+                { className: 'modal-body alert alert-danger' },
+                this.props.message
+              )
+            )
+          )
+        )
+      );
     }
+  }]);
 
-    _createClass(ModalMessage, [{
-        key: 'render',
-        value: function render() {
-            if (!this.props.message || this.props.message === '') {
-                return null;
-            }
-            return React.createElement(_Modal2.default, { onHide: this.props.close, show: true, containerClassName: 'modal-open', backdropClassName: 'modal fade in modal-backdrop', backdropStyle: { display: 'block' } }, React.createElement("div", { className: "modal fade in", style: { display: 'block' }, id: "error-modal", tabIndex: -1, role: "dialog" }, React.createElement("div", { className: "modal-dialog" }, React.createElement("div", { className: "modal-content" }, React.createElement("div", { className: "modal-header" }, React.createElement("button", { type: "button", className: "close", onClick: this.props.close, "data-dismiss": "modal" }, React.createElement("span", null, '\xD7'), React.createElement("span", { className: "sr-only" }, "Close")), React.createElement("h4", { className: "modal-title" }, "Error")), React.createElement("pre", { className: "modal-body alert alert-danger" }, this.props.message)))));
-        }
-    }]);
-
-    return ModalMessage;
-}(React.Component);
+  return ModalMessage;
+}(_react2.default.Component);
 
 exports.default = ModalMessage;
 
 /***/ }),
-/* 74 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5303,13 +5308,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.initState = initState;
 
-var _BranchStatus = __webpack_require__(19);
+var _BranchStatus = __webpack_require__(15);
 
 var _BranchStatus2 = _interopRequireDefault(_BranchStatus);
 
 var _AppState = __webpack_require__(2);
 
-var _Git = __webpack_require__(9);
+var _Git = __webpack_require__(8);
 
 var _Git2 = _interopRequireDefault(_Git);
 
@@ -5321,7 +5326,7 @@ var _Actions = __webpack_require__(1);
 
 var _Actions2 = _interopRequireDefault(_Actions);
 
-var _Navigation = __webpack_require__(18);
+var _Navigation = __webpack_require__(14);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5446,7 +5451,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 75 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5456,7 +5461,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Diff = __webpack_require__(10);
+var _Diff = __webpack_require__(9);
 
 var _Diff2 = _interopRequireDefault(_Diff);
 
@@ -5466,11 +5471,11 @@ var _Commit2 = _interopRequireDefault(_Commit);
 
 var _reactRedux = __webpack_require__(3);
 
-var _HistoryView = __webpack_require__(76);
+var _HistoryView = __webpack_require__(73);
 
 var _HistoryView2 = _interopRequireDefault(_HistoryView);
 
-var _Commit3 = __webpack_require__(78);
+var _Commit3 = __webpack_require__(75);
 
 var _Commit4 = _interopRequireDefault(_Commit3);
 
@@ -5504,31 +5509,29 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_HistoryView2.default);
 
 /***/ }),
-/* 76 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-var _LogView = __webpack_require__(77);
+var _LogView = __webpack_require__(74);
 
 var _LogView2 = _interopRequireDefault(_LogView);
 
 var _AppState = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5553,40 +5556,75 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var HistoryView = function (_React$PureComponent) {
-    _inherits(HistoryView, _React$PureComponent);
+  _inherits(HistoryView, _React$PureComponent);
 
-    function HistoryView() {
-        _classCallCheck(this, HistoryView);
+  function HistoryView() {
+    _classCallCheck(this, HistoryView);
 
-        return _possibleConstructorReturn(this, (HistoryView.__proto__ || Object.getPrototypeOf(HistoryView)).apply(this, arguments));
-    }
+    return _possibleConstructorReturn(this, (HistoryView.__proto__ || Object.getPrototypeOf(HistoryView)).apply(this, arguments));
+  }
 
-    _createClass(HistoryView, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                commits = _props.commits,
-                diffViewMode = _props.diffViewMode,
-                commitHash = _props.commitHash,
-                graph = _props.graph,
-                selectDiffViewMode = _props.selectDiffViewMode,
-                CommitView = _props.CommitView;
+  _createClass(HistoryView, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          commits = _props.commits,
+          diffViewMode = _props.diffViewMode,
+          commitHash = _props.commitHash,
+          graph = _props.graph,
+          selectDiffViewMode = _props.selectDiffViewMode,
+          CommitView = _props.CommitView;
 
-            return React.createElement("div", { id: 'history-view' }, React.createElement(_LogView2.default, { commits: commits, onCommitClicked: this.props.onCommitClicked, active: commitHash, graph: graph }), React.createElement("div", { id: 'commit-view', style: { display: 'flex' } }, React.createElement("div", { id: 'commit-view-header' }, React.createElement("ul", { className: 'nav nav-pills nav-justified', role: 'tablList' }, React.createElement("li", { onClick: function onClick() {
+      return _react2.default.createElement(
+        'div',
+        { id: 'history-view' },
+        _react2.default.createElement(_LogView2.default, { commits: commits, onCommitClicked: this.props.onCommitClicked, active: commitHash, graph: graph }),
+        _react2.default.createElement(
+          'div',
+          { id: 'commit-view', style: { display: 'flex' } },
+          _react2.default.createElement(
+            'div',
+            { id: 'commit-view-header' },
+            _react2.default.createElement(
+              'ul',
+              { className: 'nav nav-pills nav-justified', role: 'tablList' },
+              _react2.default.createElement(
+                'li',
+                { onClick: function onClick() {
                     return selectDiffViewMode(_AppState.CommitViewMode.Diff);
-                }, className: diffViewMode === _AppState.CommitViewMode.Diff ? 'active' : '' }, React.createElement("a", { href: '#' }, "Commit")), React.createElement("li", { onClick: function onClick() {
+                  }, className: diffViewMode === _AppState.CommitViewMode.Diff ? 'active' : '' },
+                _react2.default.createElement(
+                  'a',
+                  { href: '#' },
+                  'Commit'
+                )
+              ),
+              _react2.default.createElement(
+                'li',
+                { onClick: function onClick() {
                     return selectDiffViewMode(_AppState.CommitViewMode.Tree);
-                }, className: diffViewMode === _AppState.CommitViewMode.Tree ? 'active' : '' }, React.createElement("a", { href: '#' }, "Tree")))), React.createElement(CommitView, null)));
-        }
-    }]);
+                  }, className: diffViewMode === _AppState.CommitViewMode.Tree ? 'active' : '' },
+                _react2.default.createElement(
+                  'a',
+                  { href: '#' },
+                  'Tree'
+                )
+              )
+            )
+          ),
+          _react2.default.createElement(CommitView, null)
+        )
+      );
+    }
+  }]);
 
-    return HistoryView;
-}(React.PureComponent);
+  return HistoryView;
+}(_react2.default.PureComponent);
 
 exports.default = HistoryView;
 
 /***/ }),
-/* 77 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5602,11 +5640,11 @@ var _classNames;
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
 var _CommitInfo = __webpack_require__(29);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5653,17 +5691,22 @@ var LogView = function (_React$PureComponent) {
             // Draw the graph
             var circles = graph.circles.map(function (entry) {
                 maxLeft = Math.max(maxLeft, entry.cx);
-                return React.createElement("circle", { cx: entry.cx * xOffset, cy: entry.cy * lineHeight + yOffset, r: entry.r, key: entry.key });
+                return _react2.default.createElement('circle', { cx: entry.cx * xOffset, cy: entry.cy * lineHeight + yOffset, r: entry.r, key: entry.key });
             });
             var lines = graph.paths.map(function (stream, index) {
                 var d = stream.commands.map(function (cmd) {
                     return cmd.type + ' ' + cmd.x * xOffset + ' ' + cmd.y * lineHeight;
                 }).join(' ');
                 var colorIndex = index < COLORS.length ? index : index % COLORS.length;
-                return React.createElement("path", { style: { stroke: COLORS[colorIndex] }, key: stream.key, d: d });
+                return _react2.default.createElement('path', { style: { stroke: COLORS[colorIndex] }, key: stream.key, d: d });
             });
             return {
-                svg: React.createElement("svg", { height: lineHeight * commits.length }, lines, circles),
+                svg: _react2.default.createElement(
+                    'svg',
+                    { height: lineHeight * commits.length },
+                    lines,
+                    circles
+                ),
                 maxLeft: maxLeft
             };
         };
@@ -5687,23 +5730,69 @@ var LogView = function (_React$PureComponent) {
             var graph = this.updateGraph(0);
             var left = Math.max(3, graph.maxLeft) + 1;
             var xOffset = left * 12 + 'px';
-            return React.createElement("div", { id: 'log-view' }, React.createElement("div", null, graph.svg, this.props.commits.map(function (commit, index) {
-                var refs = commit.refs.map(function (tag) {
-                    return React.createElement("span", { key: _CommitInfo.RefType[tag.type] + "_" + tag.text, className: classNames[tag.type] }, tag.text);
-                });
-                var className = _this2.props.active === commit.hash ? "log-entry list-group-item active" : "log-entry list-group-item";
-                return React.createElement("span", { "data-index": index.toString(), onClick: _this2.handleCommitClick, key: commit.hash, className: className, style: { paddingLeft: xOffset, height: lineHeight + 'px' } }, React.createElement("header", null, React.createElement("h6", null, React.createElement("a", { target: "_blank", href: "mailto:" + commit.author.email }, commit.author.name)), refs, React.createElement("span", { className: "log-entry-date" }, commit.author.date.toLocaleString(), '\xA0'), React.createElement("span", { className: "badge" }, commit.hash.substring(0, 7))), React.createElement("p", { className: "list-group-item-text" }, commit.message));
-            })));
+            return _react2.default.createElement(
+                'div',
+                { id: 'log-view' },
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    graph.svg,
+                    this.props.commits.map(function (commit, index) {
+                        var refs = commit.refs.map(function (tag) {
+                            return _react2.default.createElement(
+                                'span',
+                                { key: _CommitInfo.RefType[tag.type] + "_" + tag.text, className: classNames[tag.type] },
+                                tag.text
+                            );
+                        });
+                        var className = _this2.props.active === commit.hash ? "log-entry list-group-item active" : "log-entry list-group-item";
+                        return _react2.default.createElement(
+                            'span',
+                            { 'data-index': index.toString(), onClick: _this2.handleCommitClick, key: commit.hash, className: className, style: { paddingLeft: xOffset, height: lineHeight + 'px' } },
+                            _react2.default.createElement(
+                                'header',
+                                null,
+                                _react2.default.createElement(
+                                    'h6',
+                                    null,
+                                    _react2.default.createElement(
+                                        'a',
+                                        { target: '_blank', href: "mailto:" + commit.author.email },
+                                        commit.author.name
+                                    )
+                                ),
+                                refs,
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'log-entry-date' },
+                                    commit.author.date.toLocaleString(),
+                                    '\xA0'
+                                ),
+                                _react2.default.createElement(
+                                    'span',
+                                    { className: 'badge' },
+                                    commit.hash.substring(0, 7)
+                                )
+                            ),
+                            _react2.default.createElement(
+                                'p',
+                                { className: 'list-group-item-text' },
+                                commit.message
+                            )
+                        );
+                    })
+                )
+            );
         }
     }]);
 
     return LogView;
-}(React.PureComponent);
+}(_react2.default.PureComponent);
 
 exports.default = LogView;
 
 /***/ }),
-/* 78 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5713,15 +5802,15 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _Diff = __webpack_require__(10);
+var _Diff = __webpack_require__(9);
 
 var _Diff2 = _interopRequireDefault(_Diff);
 
-var _Navigation = __webpack_require__(18);
+var _Navigation = __webpack_require__(14);
 
 var _Navigation2 = _interopRequireDefault(_Navigation);
 
-var _Tree = __webpack_require__(21);
+var _Tree = __webpack_require__(17);
 
 var _Tree2 = _interopRequireDefault(_Tree);
 
@@ -5729,7 +5818,7 @@ var _AppState = __webpack_require__(2);
 
 var _reactRedux = __webpack_require__(3);
 
-var _CommitView = __webpack_require__(79);
+var _CommitView = __webpack_require__(76);
 
 var _CommitView2 = _interopRequireDefault(_CommitView);
 
@@ -5769,14 +5858,14 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_CommitView2.default);
 
 /***/ }),
-/* 79 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -5789,7 +5878,7 @@ var _DiffView = __webpack_require__(32);
 
 var _DiffView2 = _interopRequireDefault(_DiffView);
 
-var _TreeView = __webpack_require__(80);
+var _TreeView = __webpack_require__(77);
 
 var _TreeView2 = _interopRequireDefault(_TreeView);
 
@@ -5820,59 +5909,125 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var CommitView = function (_React$PureComponent) {
-    _inherits(CommitView, _React$PureComponent);
+  _inherits(CommitView, _React$PureComponent);
 
-    function CommitView() {
-        _classCallCheck(this, CommitView);
+  function CommitView() {
+    _classCallCheck(this, CommitView);
 
-        var _this = _possibleConstructorReturn(this, (CommitView.__proto__ || Object.getPrototypeOf(CommitView)).apply(this, arguments));
+    var _this = _possibleConstructorReturn(this, (CommitView.__proto__ || Object.getPrototypeOf(CommitView)).apply(this, arguments));
 
-        _this.renderButtons = function () {
-            var _this$props = _this.props,
-                ignoreWhitespace = _this$props.ignoreWhitespace,
-                fullFileDiff = _this$props.fullFileDiff,
-                diffContext = _this$props.diffContext,
-                toggleIgnoreWhiteSpace = _this$props.toggleIgnoreWhiteSpace,
-                toggleShowFullFile = _this$props.toggleShowFullFile,
-                updateDiffContext = _this$props.updateDiffContext,
-                onExloreClicked = _this$props.onExloreClicked;
+    _this.renderButtons = function () {
+      var _this$props = _this.props,
+          ignoreWhitespace = _this$props.ignoreWhitespace,
+          fullFileDiff = _this$props.fullFileDiff,
+          diffContext = _this$props.diffContext,
+          toggleIgnoreWhiteSpace = _this$props.toggleIgnoreWhiteSpace,
+          toggleShowFullFile = _this$props.toggleShowFullFile,
+          updateDiffContext = _this$props.updateDiffContext,
+          onExloreClicked = _this$props.onExloreClicked;
 
-            var ignoreWhitespaceClass = 'btn btn-sm btn-default diff-ignore-whitespace' + (ignoreWhitespace ? ' active' : '');
-            var allFile = fullFileDiff;
-            var completeFileClass = 'btn btn-sm btn-default diff-context-all' + (allFile ? ' active' : '');
-            return _react2.default.createElement("div", { className: 'panel-heading btn-toolbar', role: 'toolbar' }, _react2.default.createElement("button", { type: 'button', className: ignoreWhitespaceClass, "data-toggle": 'button', "aria-pressed": ignoreWhitespace, onClick: toggleIgnoreWhiteSpace }, "Ignore Whitespace"), _react2.default.createElement("button", { type: 'button', className: completeFileClass, "data-toggle": 'button', "aria-pressed": allFile, onClick: function onClick() {
-                    return toggleShowFullFile();
-                } }, "Complete file"), _react2.default.createElement("div", { className: 'btn-group btn-group-sm' }, _react2.default.createElement("span", null, 'Context:\xA0' + diffContext), '\xA0', _react2.default.createElement("button", { type: 'button', className: 'btn btn-default diff-context-remove', onClick: function onClick() {
-                    return updateDiffContext(diffContext - 1);
-                } }, "-"), _react2.default.createElement("button", { type: 'button', className: 'btn btn-default diff-context-add', onClick: function onClick() {
-                    return updateDiffContext(diffContext + 1);
-                } }, "+")), _react2.default.createElement("div", { className: 'btn-group btn-group-sm diff-selection-buttons' }, _react2.default.createElement("button", { type: 'button', className: 'btn btn-default diff-stage', style: { display: 'none' } }, "Stage"), _react2.default.createElement("button", { type: 'button', className: 'btn btn-default diff-cancel', style: { display: 'none' } }, "Cancel"), _react2.default.createElement("button", { type: 'button', className: 'btn btn-default diff-unstage', style: { display: 'none' } }, "Unstage")), _react2.default.createElement("button", { type: 'button', className: 'btn btn-sm btn-default diff-explore', onClick: onExloreClicked }, "Explore"));
-        };
-        return _this;
+      var ignoreWhitespaceClass = 'btn btn-sm btn-default diff-ignore-whitespace' + (ignoreWhitespace ? ' active' : '');
+      var allFile = fullFileDiff;
+      var completeFileClass = 'btn btn-sm btn-default diff-context-all' + (allFile ? ' active' : '');
+      return _react2.default.createElement(
+        'div',
+        { className: 'panel-heading btn-toolbar', role: 'toolbar' },
+        _react2.default.createElement(
+          'button',
+          { type: 'button', className: ignoreWhitespaceClass, 'data-toggle': 'button', 'aria-pressed': ignoreWhitespace, onClick: toggleIgnoreWhiteSpace },
+          'Ignore Whitespace'
+        ),
+        _react2.default.createElement(
+          'button',
+          { type: 'button', className: completeFileClass, 'data-toggle': 'button', 'aria-pressed': allFile, onClick: function onClick() {
+              return toggleShowFullFile();
+            } },
+          'Complete file'
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'btn-group btn-group-sm' },
+          _react2.default.createElement(
+            'span',
+            null,
+            'Context:\xA0' + diffContext
+          ),
+          '\xA0',
+          _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default diff-context-remove', onClick: function onClick() {
+                return updateDiffContext(diffContext - 1);
+              } },
+            '-'
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default diff-context-add', onClick: function onClick() {
+                return updateDiffContext(diffContext + 1);
+              } },
+            '+'
+          )
+        ),
+        _react2.default.createElement(
+          'div',
+          { className: 'btn-group btn-group-sm diff-selection-buttons' },
+          _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default diff-stage', style: { display: 'none' } },
+            'Stage'
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default diff-cancel', style: { display: 'none' } },
+            'Cancel'
+          ),
+          _react2.default.createElement(
+            'button',
+            { type: 'button', className: 'btn btn-default diff-unstage', style: { display: 'none' } },
+            'Unstage'
+          )
+        ),
+        _react2.default.createElement(
+          'button',
+          { type: 'button', className: 'btn btn-sm btn-default diff-explore', onClick: onExloreClicked },
+          'Explore'
+        )
+      );
+    };
+    return _this;
+  }
+
+  _createClass(CommitView, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          diff = _props.diff,
+          path = _props.path,
+          files = _props.files,
+          diffViewMode = _props.diffViewMode,
+          onNodeSelected = _props.onNodeSelected;
+
+      var renderedButtons = diffViewMode === _AppState.CommitViewMode.Diff ? this.renderButtons() : null;
+      return _react2.default.createElement(
+        'div',
+        { className: 'diff-view-container panel panel-default' },
+        renderedButtons,
+        _react2.default.createElement(
+          'div',
+          { className: 'panel-body' },
+          diffViewMode === _AppState.CommitViewMode.Diff ? _react2.default.createElement(_DiffView2.default, { diff: diff, headerLines: this.props.headerLines, diffViewMode: _DiffView.DiffViewMode.Full }) : _react2.default.createElement(_TreeView2.default, { path: path, files: files, onNodeSelected: onNodeSelected })
+        )
+      );
     }
+  }]);
 
-    _createClass(CommitView, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                diff = _props.diff,
-                path = _props.path,
-                files = _props.files,
-                diffViewMode = _props.diffViewMode,
-                onNodeSelected = _props.onNodeSelected;
-
-            var renderedButtons = diffViewMode === _AppState.CommitViewMode.Diff ? this.renderButtons() : null;
-            return _react2.default.createElement("div", { className: 'diff-view-container panel panel-default' }, renderedButtons, _react2.default.createElement("div", { className: 'panel-body' }, diffViewMode === _AppState.CommitViewMode.Diff ? _react2.default.createElement(_DiffView2.default, { diff: diff, headerLines: this.props.headerLines, diffViewMode: _DiffView.DiffViewMode.Full }) : _react2.default.createElement(_TreeView2.default, { path: path, files: files, onNodeSelected: onNodeSelected })));
-        }
-    }]);
-
-    return CommitView;
+  return CommitView;
 }(_react2.default.PureComponent);
 
 exports.default = CommitView;
 
 /***/ }),
-/* 80 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5886,9 +6041,9 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -5907,11 +6062,20 @@ var TreeView = function (_React$PureComponent) {
         _this.renderContent = function (path, files) {
             if (path[path.length - 1].type === 'blob') {
                 // TODO: Show HTML source instead of rendering content as HTML page.
-                return React.createElement("div", { id: "tree-view-blob-content" }, React.createElement("iframe", { src: '/git/cat-file/' + path[path.length - 1].objectId }));
+                return _react2.default.createElement(
+                    'div',
+                    { id: 'tree-view-blob-content' },
+                    _react2.default.createElement('iframe', { src: '/git/cat-file/' + path[path.length - 1].objectId })
+                );
             }
-            return React.createElement("div", { id: 'tree-view-tree-content', className: 'list-group' }, _this.renderMoveUpNode(path), _this.sortFoldersFirst(files).map(function (item) {
-                return _this.renderFileItem(item);
-            }));
+            return _react2.default.createElement(
+                'div',
+                { id: 'tree-view-tree-content', className: 'list-group' },
+                _this.renderMoveUpNode(path),
+                _this.sortFoldersFirst(files).map(function (item) {
+                    return _this.renderFileItem(item);
+                })
+            );
         };
         return _this;
     }
@@ -5923,12 +6087,29 @@ var TreeView = function (_React$PureComponent) {
 
             var path = this.props.path;
             var files = this.props.files;
-            var breadcrumb = React.createElement("ol", { className: 'breadcrumb' }, path.map(function (node) {
-                return React.createElement("li", { onClick: function onClick() {
-                        return _this2.props.onNodeSelected(node);
-                    } }, React.createElement("a", { href: '#' }, node.name));
-            }));
-            return React.createElement("div", { id: 'tree-view' }, breadcrumb, this.renderContent(path, files));
+            var breadcrumb = _react2.default.createElement(
+                'ol',
+                { className: 'breadcrumb' },
+                path.map(function (node) {
+                    return _react2.default.createElement(
+                        'li',
+                        { onClick: function onClick() {
+                                return _this2.props.onNodeSelected(node);
+                            } },
+                        _react2.default.createElement(
+                            'a',
+                            { href: '#' },
+                            node.name
+                        )
+                    );
+                })
+            );
+            return _react2.default.createElement(
+                'div',
+                { id: 'tree-view' },
+                breadcrumb,
+                this.renderContent(path, files)
+            );
         }
     }, {
         key: 'renderFileItem',
@@ -5937,9 +6118,28 @@ var TreeView = function (_React$PureComponent) {
 
             var formatedSize = this.getFormatedSize(item.size);
             var className = 'tree-item-' + item.type + (item.isSymbolicLink ? ' tree-item-symlink' : '');
-            return React.createElement("a", { href: '#', className: 'list-group-item' }, React.createElement("span", { className: className, onClick: function onClick() {
-                    return _this3.props.onNodeSelected(item);
-                } }, item.name), React.createElement("span", null, formatedSize.size), '\xA0', React.createElement("span", null, formatedSize.unit));
+            return _react2.default.createElement(
+                'a',
+                { href: '#', className: 'list-group-item' },
+                _react2.default.createElement(
+                    'span',
+                    { className: className, onClick: function onClick() {
+                            return _this3.props.onNodeSelected(item);
+                        } },
+                    item.name
+                ),
+                _react2.default.createElement(
+                    'span',
+                    null,
+                    formatedSize.size
+                ),
+                '\xA0',
+                _react2.default.createElement(
+                    'span',
+                    null,
+                    formatedSize.unit
+                )
+            );
         }
     }, {
         key: 'sortFoldersFirst',
@@ -5956,9 +6156,19 @@ var TreeView = function (_React$PureComponent) {
         value: function renderMoveUpNode(path) {
             var _this4 = this;
 
-            return path.length > 1 ? React.createElement("a", { href: '#', className: 'list-group-item', onClick: function onClick() {
-                    return _this4.props.onNodeSelected(path[path.length - 2]);
-                } }, React.createElement("span", { className: 'tree-item-tree' }, ".."), React.createElement("span", null), React.createElement("span", null)) : null;
+            return path.length > 1 ? _react2.default.createElement(
+                'a',
+                { href: '#', className: 'list-group-item', onClick: function onClick() {
+                        return _this4.props.onNodeSelected(path[path.length - 2]);
+                    } },
+                _react2.default.createElement(
+                    'span',
+                    { className: 'tree-item-tree' },
+                    '..'
+                ),
+                _react2.default.createElement('span', null),
+                _react2.default.createElement('span', null)
+            ) : null;
         }
     }, {
         key: 'getFormatedSize',
@@ -5994,34 +6204,32 @@ var TreeView = function (_React$PureComponent) {
     }]);
 
     return TreeView;
-}(React.PureComponent);
+}(_react2.default.PureComponent);
 
 exports.default = TreeView;
 
 /***/ }),
-/* 81 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
 var _DiffView = __webpack_require__(32);
 
 var _DiffView2 = _interopRequireDefault(_DiffView);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6030,35 +6238,53 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var ExploreView = function (_React$PureComponent) {
-    _inherits(ExploreView, _React$PureComponent);
+  _inherits(ExploreView, _React$PureComponent);
 
-    function ExploreView() {
-        _classCallCheck(this, ExploreView);
+  function ExploreView() {
+    _classCallCheck(this, ExploreView);
 
-        return _possibleConstructorReturn(this, (ExploreView.__proto__ || Object.getPrototypeOf(ExploreView)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (ExploreView.__proto__ || Object.getPrototypeOf(ExploreView)).apply(this, arguments));
+  }
+
+  _createClass(ExploreView, [{
+    key: 'render',
+    value: function render() {
+      var _props = this.props,
+          removedLinesDiff = _props.removedLinesDiff,
+          addedLinesDiff = _props.addedLinesDiff,
+          ExploreNavigation = _props.ExploreNavigation;
+
+      var removedLinesDiffs = removedLinesDiff ? [removedLinesDiff] : [];
+      var addedLinesDiffs = addedLinesDiff ? [addedLinesDiff] : [];
+      return _react2.default.createElement(
+        'div',
+        { id: 'commit-explorer-view' },
+        _react2.default.createElement(
+          'div',
+          { id: 'commit-explorer-diff-view' },
+          _react2.default.createElement(
+            'div',
+            { className: 'diff-view-container panel panel-default' },
+            _react2.default.createElement(
+              'div',
+              { className: 'panel-body split-diff-view' },
+              _react2.default.createElement(_DiffView2.default, { diff: removedLinesDiffs, headerLines: [], diffViewMode: _DiffView.DiffViewMode.Removed, onScroll: this.props.onScroll, offset: this.props.position }),
+              _react2.default.createElement(_DiffView2.default, { diff: addedLinesDiffs, headerLines: [], diffViewMode: _DiffView.DiffViewMode.Added, onScroll: this.props.onScroll, offset: this.props.position })
+            )
+          )
+        ),
+        _react2.default.createElement(ExploreNavigation, null)
+      );
     }
+  }]);
 
-    _createClass(ExploreView, [{
-        key: 'render',
-        value: function render() {
-            var _props = this.props,
-                removedLinesDiff = _props.removedLinesDiff,
-                addedLinesDiff = _props.addedLinesDiff,
-                ExploreNavigation = _props.ExploreNavigation;
-
-            var removedLinesDiffs = removedLinesDiff ? [removedLinesDiff] : [];
-            var addedLinesDiffs = addedLinesDiff ? [addedLinesDiff] : [];
-            return React.createElement("div", { id: "commit-explorer-view" }, React.createElement("div", { id: "commit-explorer-diff-view" }, React.createElement("div", { className: "diff-view-container panel panel-default" }, React.createElement("div", { className: "panel-body split-diff-view" }, React.createElement(_DiffView2.default, { diff: removedLinesDiffs, headerLines: [], diffViewMode: _DiffView.DiffViewMode.Removed, onScroll: this.props.onScroll, offset: this.props.position }), React.createElement(_DiffView2.default, { diff: addedLinesDiffs, headerLines: [], diffViewMode: _DiffView.DiffViewMode.Added, onScroll: this.props.onScroll, offset: this.props.position })))), React.createElement(ExploreNavigation, null));
-        }
-    }]);
-
-    return ExploreView;
-}(React.PureComponent);
+  return ExploreView;
+}(_react2.default.PureComponent);
 
 exports.default = ExploreView;
 
 /***/ }),
-/* 82 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6070,15 +6296,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _reactRedux = __webpack_require__(3);
 
-var _Diff = __webpack_require__(10);
+var _Diff = __webpack_require__(9);
 
 var _Diff2 = _interopRequireDefault(_Diff);
 
-var _ExploreNavigation = __webpack_require__(83);
+var _ExploreNavigation = __webpack_require__(80);
 
 var _ExploreNavigation2 = _interopRequireDefault(_ExploreNavigation);
 
-var _Offsets = __webpack_require__(22);
+var _Offsets = __webpack_require__(18);
 
 var _Offsets2 = _interopRequireDefault(_Offsets);
 
@@ -6113,7 +6339,7 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ExploreNavigation2.default);
 
 /***/ }),
-/* 83 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6127,9 +6353,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _reactDom = __webpack_require__(4);
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6146,41 +6376,67 @@ var ExploreNavigation = function (_React$PureComponent) {
         var _this = _possibleConstructorReturn(this, (ExploreNavigation.__proto__ || Object.getPrototypeOf(ExploreNavigation)).apply(this, arguments));
 
         _this.setOffset = function (offset) {
-            var lnode = _this.leftFileList;
+            var node = _reactDom2.default.findDOMNode(_this);
+            var lnode = node.querySelector('.file-list-left-container');
             lnode.scrollTop = offset.top;
             lnode.scrollLeft = offset.left;
-            var rnode = _this.rightFileList;
+            var rnode = node.querySelector('.file-list-right-container');
             rnode.scrollTop = offset.top;
             rnode.scrollLeft = offset.left;
         };
         _this.renderFileList = function () {
-            return React.createElement("div", { className: "file-list-container" }, React.createElement("div", { className: "file-list-left-container", ref: function ref(fileList) {
-                    return _this.leftFileList = fileList;
-                }, onScroll: _this.props.onFilesScroll }, React.createElement("div", { className: "list-group" }, _this.props.files ? _this.props.files.map(function (fileDiff, index) {
-                var className = 'list-group-item';
-                if (_this.props.selected === index) {
-                    className += ' active';
-                }
-                return React.createElement("a", { className: className, href: '#', onClick: function onClick() {
-                        return _this.props.fileSelected(fileDiff);
-                    } }, fileDiff.from);
-            }) : null)), React.createElement("div", { className: "file-list-right-container", ref: function ref(fileList) {
-                    return _this.rightFileList = fileList;
-                }, onScroll: _this.props.onFilesScroll }, React.createElement("div", { className: "list-group" }, _this.props.files ? _this.props.files.map(function (fileDiff, index) {
-                var className = 'list-group-item';
-                if (_this.props.selected === index) {
-                    className += ' active';
-                }
-                return React.createElement("a", { className: className, href: '#', onClick: function onClick() {
-                        return _this.props.fileSelected(fileDiff);
-                    } }, fileDiff.to);
-            }) : null)));
+            return _react2.default.createElement(
+                'div',
+                { className: 'file-list-container' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'file-list-left-container', onScroll: _this.props.onFilesScroll },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'list-group' },
+                        _this.props.files ? _this.props.files.map(function (fileDiff, index) {
+                            var className = 'list-group-item';
+                            if (_this.props.selected === index) {
+                                className += ' active';
+                            }
+                            return _react2.default.createElement(
+                                'a',
+                                { className: className, href: '#', onClick: function onClick() {
+                                        return _this.props.fileSelected(fileDiff);
+                                    } },
+                                fileDiff.from
+                            );
+                        }) : null
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'file-list-right-container', onScroll: _this.props.onFilesScroll },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'list-group' },
+                        _this.props.files ? _this.props.files.map(function (fileDiff, index) {
+                            var className = 'list-group-item';
+                            if (_this.props.selected === index) {
+                                className += ' active';
+                            }
+                            return _react2.default.createElement(
+                                'a',
+                                { className: className, href: '#', onClick: function onClick() {
+                                        return _this.props.fileSelected(fileDiff);
+                                    } },
+                                fileDiff.to
+                            );
+                        }) : null
+                    )
+                )
+            );
         };
         return _this;
     }
 
     _createClass(ExploreNavigation, [{
-        key: "componentDidMount",
+        key: 'componentDidMount',
         value: function componentDidMount() {
             var offset = this.props.filesOffset;
             if (offset) {
@@ -6188,7 +6444,7 @@ var ExploreNavigation = function (_React$PureComponent) {
             }
         }
     }, {
-        key: "componentDidUpdate",
+        key: 'componentDidUpdate',
         value: function componentDidUpdate(prevProps) {
             var offset = this.props.filesOffset;
             var prevOffset = prevProps.filesOffset || { left: 0, top: 0 };
@@ -6197,35 +6453,70 @@ var ExploreNavigation = function (_React$PureComponent) {
             }
         }
     }, {
-        key: "render",
+        key: 'render',
         value: function render() {
-            return React.createElement("div", { id: "commit-explorer-navigator-view" }, React.createElement("div", { className: "file-list-view panel panel-default" }, React.createElement("div", { className: "panel-heading" }, React.createElement("h5", null, " Files ")), this.renderFileList()), React.createElement("div", { className: "panel panel-default" }, React.createElement("div", { className: "panel-heading" }, React.createElement("h5", null, " Commit Details ")), React.createElement("div", { className: "panel-body", style: { whiteSpace: 'pre' } }, this.props.commitDetails)));
+            return _react2.default.createElement(
+                'div',
+                { id: 'commit-explorer-navigator-view' },
+                _react2.default.createElement(
+                    'div',
+                    { className: 'file-list-view panel panel-default' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'panel-heading' },
+                        _react2.default.createElement(
+                            'h5',
+                            null,
+                            ' Files '
+                        )
+                    ),
+                    this.renderFileList()
+                ),
+                _react2.default.createElement(
+                    'div',
+                    { className: 'panel panel-default' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'panel-heading' },
+                        _react2.default.createElement(
+                            'h5',
+                            null,
+                            ' Commit Details '
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'panel-body', style: { whiteSpace: 'pre' } },
+                        this.props.commitDetails
+                    )
+                )
+            );
         }
     }]);
 
     return ExploreNavigation;
-}(React.PureComponent);
+}(_react2.default.PureComponent);
 
 exports.default = ExploreNavigation;
 
 /***/ }),
-/* 84 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(0);
 
-var React = _interopRequireWildcard(_react);
+var _react2 = _interopRequireDefault(_react);
 
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6250,30 +6541,67 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 
 var RemoteView = function (_React$PureComponent) {
-    _inherits(RemoteView, _React$PureComponent);
+  _inherits(RemoteView, _React$PureComponent);
 
-    function RemoteView() {
-        _classCallCheck(this, RemoteView);
+  function RemoteView() {
+    _classCallCheck(this, RemoteView);
 
-        return _possibleConstructorReturn(this, (RemoteView.__proto__ || Object.getPrototypeOf(RemoteView)).apply(this, arguments));
+    return _possibleConstructorReturn(this, (RemoteView.__proto__ || Object.getPrototypeOf(RemoteView)).apply(this, arguments));
+  }
+
+  _createClass(RemoteView, [{
+    key: "render",
+    value: function render() {
+      var repo = this.props.repo;
+
+      return _react2.default.createElement(
+        "div",
+        { className: "jumbotron" },
+        _react2.default.createElement(
+          "h1",
+          null,
+          "Remote access"
+        ),
+        _react2.default.createElement(
+          "p",
+          null,
+          "Git webui allows other people to clone and pull from your repository."
+        ),
+        _react2.default.createElement(
+          "div",
+          { className: "git-access" },
+          _react2.default.createElement(
+            "p",
+            null,
+            "Other people can clone your repository:"
+          ),
+          _react2.default.createElement(
+            "pre",
+            { className: "git-clone" },
+            "git clone http://" + document.location.hostname + ":" + document.location.port + "/ " + repo
+          ),
+          _react2.default.createElement(
+            "p",
+            null,
+            "Or to pull from your repository:"
+          ),
+          _react2.default.createElement(
+            "pre",
+            { className: "git-pull" },
+            'git pull http://' + document.location.hostname + ':' + document.location.port + '/'
+          )
+        )
+      );
     }
+  }]);
 
-    _createClass(RemoteView, [{
-        key: "render",
-        value: function render() {
-            var repo = this.props.repo;
-
-            return React.createElement("div", { className: "jumbotron" }, React.createElement("h1", null, "Remote access"), React.createElement("p", null, "Git webui allows other people to clone and pull from your repository."), React.createElement("div", { className: "git-access" }, React.createElement("p", null, "Other people can clone your repository:"), React.createElement("pre", { className: "git-clone" }, "git clone http://" + document.location.hostname + ":" + document.location.port + "/ " + repo), React.createElement("p", null, "Or to pull from your repository:"), React.createElement("pre", { className: "git-pull" }, 'git pull http://' + document.location.hostname + ':' + document.location.port + '/')));
-        }
-    }]);
-
-    return RemoteView;
-}(React.PureComponent);
+  return RemoteView;
+}(_react2.default.PureComponent);
 
 exports.default = RemoteView;
 
 /***/ }),
-/* 85 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6283,23 +6611,23 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _redux = __webpack_require__(86);
+var _redux = __webpack_require__(83);
 
-var _AppData = __webpack_require__(87);
+var _AppData = __webpack_require__(84);
 
-var _DiffOptions = __webpack_require__(88);
+var _DiffOptions = __webpack_require__(85);
 
-var _Branches = __webpack_require__(89);
+var _Branches = __webpack_require__(86);
 
-var _Commits = __webpack_require__(90);
+var _Commits = __webpack_require__(87);
 
-var _Diff = __webpack_require__(91);
+var _Diff = __webpack_require__(88);
 
-var _CommitTree = __webpack_require__(92);
+var _CommitTree = __webpack_require__(89);
 
-var _Offsets = __webpack_require__(93);
+var _Offsets = __webpack_require__(90);
 
-var _Navigation = __webpack_require__(94);
+var _Navigation = __webpack_require__(91);
 
 var _Navigation2 = _interopRequireDefault(_Navigation);
 
@@ -6307,7 +6635,7 @@ var _Actions = __webpack_require__(1);
 
 var _Actions2 = _interopRequireDefault(_Actions);
 
-var _reduxThunk = __webpack_require__(95);
+var _reduxThunk = __webpack_require__(92);
 
 var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
@@ -6329,13 +6657,13 @@ var store = (0, _redux.createStore)(reducer, (0, _redux.applyMiddleware)(_reduxT
 exports.default = store;
 
 /***/ }),
-/* 86 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = Redux;
 
 /***/ }),
-/* 87 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6406,7 +6734,7 @@ function appData(state, action) {
 }
 
 /***/ }),
-/* 88 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6456,7 +6784,7 @@ function diffOptions(state, action) {
    */
 
 /***/ }),
-/* 89 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6494,7 +6822,7 @@ function getBranchDataReducer(key) {
 }
 
 /***/ }),
-/* 90 */
+/* 87 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6646,7 +6974,7 @@ function commits(state, action) {
 }
 
 /***/ }),
-/* 91 */
+/* 88 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6661,7 +6989,7 @@ var _Actions = __webpack_require__(1);
 
 var _Actions2 = _interopRequireDefault(_Actions);
 
-var _Diff = __webpack_require__(20);
+var _Diff = __webpack_require__(16);
 
 var _Commit = __webpack_require__(30);
 
@@ -6795,7 +7123,7 @@ function commitDiff(state, action) {
 }
 
 /***/ }),
-/* 92 */
+/* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6901,7 +7229,7 @@ function commitTree(state, action) {
    */
 
 /***/ }),
-/* 93 */
+/* 90 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6937,7 +7265,7 @@ function offsets(state, action) {
 }
 
 /***/ }),
-/* 94 */
+/* 91 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6954,7 +7282,7 @@ var _Actions = __webpack_require__(1);
 
 var _Actions2 = _interopRequireDefault(_Actions);
 
-var _BranchStatus = __webpack_require__(19);
+var _BranchStatus = __webpack_require__(15);
 
 var _BranchStatus2 = _interopRequireDefault(_BranchStatus);
 
@@ -7048,7 +7376,7 @@ function Navigation(state, action) {
 }
 
 /***/ }),
-/* 95 */
+/* 92 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7078,4 +7406,4 @@ exports['default'] = thunk;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=index.js.map
