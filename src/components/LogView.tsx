@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import * as React from 'react';
 import { CommitInfo, RefType } from '../actions/git/CommitInfo';
 import { Graph } from '../actions/Commit';
 

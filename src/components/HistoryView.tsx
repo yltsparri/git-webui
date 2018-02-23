@@ -16,7 +16,7 @@
  */
 
 import { CommitInfo } from '../actions/git/CommitInfo';
-import React from 'react';
+import * as React from 'react';
 import LogView from './LogView';
 import { CommitViewMode } from '../actions/AppState';
 import {Graph} from '../actions/Commit';

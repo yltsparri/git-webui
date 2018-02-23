@@ -1,6 +1,5 @@
-import React from 'react';
+import * as React from 'react';
 import { Offset } from '../actions/AppState';
-import ReactDOM from 'react-dom';
 
 export interface FilePair {
   from: string;
@@ -24,6 +23,10 @@ interface CombinedExploreNavigationProps extends ExploreNavigationProps, Explore
 
 }
 export default class ExploreNavigation extends React.PureComponent<CombinedExploreNavigationProps, undefined> {
+  
+  private leftFileList: HTMLDivElement;
+  private rightFileList: HTMLDivElement;
+
   componentDidMount() {
     const offset = this.props.filesOffset;
     if (offset) {
@@ -57,19 +60,19 @@ export default class ExploreNavigation extends React.PureComponent<CombinedExplo
       </div>
     </div>;
   }
+
   setOffset = (offset: Offset) => {
-    let node = ReactDOM.findDOMNode(this);
-    const lnode = node.querySelector('.file-list-left-container');
+    const lnode = this.leftFileList;
     lnode.scrollTop = offset.top;
     lnode.scrollLeft = offset.left;
-    const rnode = node.querySelector('.file-list-right-container');
+    const rnode = this.rightFileList;
     rnode.scrollTop = offset.top;
     rnode.scrollLeft = offset.left;
   }
 
   renderFileList = () => {
     return <div className="file-list-container">
-      <div className="file-list-left-container" onScroll={this.props.onFilesScroll}>
+      <div className="file-list-left-container" ref={(fileList) => this.leftFileList = fileList} onScroll={this.props.onFilesScroll}>
         <div className="list-group">
           {
             this.props.files ? this.props.files.map((fileDiff, index) => {
@@ -82,7 +85,7 @@ export default class ExploreNavigation extends React.PureComponent<CombinedExplo
           }
         </div>
       </div>
-      <div className="file-list-right-container" onScroll={this.props.onFilesScroll}>
+      <div className="file-list-right-container"  ref={(fileList) => this.rightFileList = fileList}onScroll={this.props.onFilesScroll}>
         <div className="list-group">
           {
             this.props.files ? this.props.files.map((fileDiff, index) => {

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import FileInfo from '../actions/git/FileInfo';
 
 export interface TreeViewDataProps {

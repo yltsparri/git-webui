@@ -15,10 +15,9 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import * as React from 'react';
 import { Offset } from '../actions/AppState';
 import { HunkPartType, FileDiff, Hunk } from '../actions/git/Diff';
-import ReactDOM from 'react-dom';
 
 export enum DiffViewMode {
   Full = 0,
@@ -35,6 +34,7 @@ interface DiffViewProps {
 }
 
 export default class DiffView extends React.PureComponent<DiffViewProps, undefined> {
+  private diffView: HTMLDivElement;
 
   componentDidMount() {
     const offset = this.props.offset;
@@ -53,7 +53,7 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
 
   render() {
     return <div className='panel-body'>
-      <div className='diff-view' onScroll={this.props.onScroll}>
+      <div className='diff-view' ref={(diffView: HTMLDivElement) => this.diffView = diffView} onScroll={this.props.onScroll}>
         <div className='diff-view-lines' >
           {
             this.props.headerLines.map((comm, index) => {
@@ -67,8 +67,7 @@ export default class DiffView extends React.PureComponent<DiffViewProps, undefin
   }
 
   setOffset = (offset: Offset) => {
-    let node = ReactDOM.findDOMNode(this);
-    node = node.querySelector('.diff-view');
+    const node = this.diffView;
     node.scrollTop = offset.top;
     node.scrollLeft = offset.left;
   }

@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import {Offset} from '../actions/AppState';
 import DiffView, { DiffViewMode } from './DiffView';
 import { FileDiff } from '../actions/git/Diff';

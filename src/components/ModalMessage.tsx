@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import * as React from 'react';
 import Modal from 'react-overlays/lib/Modal';
 
 export interface ModalMessageProps {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-import React from 'react';
+import * as React from 'react';
 import { Provider, connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import Sidebar from './Sidebar';
