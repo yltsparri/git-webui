@@ -15,67 +15,38 @@
  * limitations under the License.
  */
 
-import { CommitTree } from '../AppState';
-import Actions from '../Actions';
+import { AnyAction } from "redux";
+import Actions from "../Actions";
+import { CommitTree } from "../AppState";
+import FileInfo from "../git/FileInfo";
 
-export function commitTree(state: CommitTree, action): CommitTree {
+export function commitTree(state: CommitTree, action: AnyAction): CommitTree {
   switch (action.type) {
     case Actions.SET_DIRNAME:
       if (action.dirName) {
-        let root;
-        if (state.path.length) {
-          root = Object.assign({}, state.path[0], { name: action.data.dirName });
-        }
-        else {
-          root = {
-            name: action.dirName,
-            size: NaN,
-            objectId: null,
-            isSymbolicLink: false,
-            mode: 0,
-            type: 'tree',
-            parent: null
-          };
-        }
-        return {
-          path: [root],
-          files: []
-        };
+        return setDirName(state, action);
       }
+      return state;
     case Actions.SELECT_COMMIT:
-      let root;
-      if (state.path.length) {
-        root = Object.assign({}, state.path[0], { objectId: action.selectedCommit });
-      }
-      else {
-        root = {
-          name: action.selectedCommit,
-          size: NaN,
-          objectId: action.selectedCommit,
-          isSymbolicLink: false,
-          mode: 0,
-          type: 'tree',
-          parent: null
-        };
-      }
-      return {
-        path: [root],
-        files: []
-      };
+      return selectCommit(state, action);
     case Actions.SET_COMMIT_TREE_FILES:
       return {
         path: state.path,
         files: action.files
       };
     case Actions.SELECT_COMMIT_TREE_FILE:
-      const currentIndex = state.path.findIndex(file => file.objectId === action.objectId);
+      const currentIndex = state.path.findIndex(
+        file => file.objectId === action.objectId
+      );
       if (currentIndex > -1) {
         return {
           path: state.path.slice(0, currentIndex + 1),
           files: state.files
         };
       }
-      const fileIndex = state.files.findIndex(file => file.objectId === action.objectId);
+      const fileIndex = state.files.findIndex(
+        file => file.objectId === action.objectId
+      );
       if (fileIndex > -1) {
         return {
           path: state.path.concat(state.files.slice(fileIndex, fileIndex + 1)),
@@ -83,8 +54,55 @@ export function commitTree(state: CommitTree, action): CommitTree {
         };
       }
   }
-  return state || {
-    path: [],
+  return (
+    state || {
+      path: [],
+      files: []
+    }
+  );
+}
+function selectCommit(state: CommitTree, action: AnyAction) {
+  let root;
+  if (state.path.length) {
+    root = Object.assign({}, state.path[0], {
+      objectId: action.selectedCommit
+    });
+  } else {
+    root = {
+      name: action.selectedCommit,
+      size: NaN,
+      objectId: action.selectedCommit,
+      isSymbolicLink: false,
+      mode: 0,
+      type: "tree",
+      parent: null
+    };
+  }
+  return {
+    path: [root],
+    files: []
+  };
+}
+
+function setDirName(state: CommitTree, action: AnyAction) {
+  let root;
+  if (state.path.length) {
+    root = Object.assign({}, state.path[0], {
+      name: action.data.dirName
+    });
+  } else {
+    root = {
+      name: action.dirName,
+      size: NaN,
+      objectId: null,
+      isSymbolicLink: false,
+      mode: 0,
+      type: "tree",
+      parent: null
+    };
+  }
+  return {
+    path: [root as FileInfo],
     files: []
   };
 }

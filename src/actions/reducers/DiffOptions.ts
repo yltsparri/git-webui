@@ -15,22 +15,30 @@
  * limitations under the License.
  */
 
-import { DiffOptions } from '../AppState';
-import Actions from '../Actions';
+import { AnyAction } from "redux";
+import Actions from "../Actions";
+import { DiffOptions } from "../AppState";
 
-export function diffOptions(state: DiffOptions, action): DiffOptions {
+export function diffOptions(
+  state: DiffOptions,
+  action: AnyAction
+): DiffOptions {
   switch (action.type) {
     case Actions.UPDATE_COMMIT_VIEW_DATA:
       return Object.assign({}, state, action.data);
     case Actions.TOGGLE_SHOW_FULL_FILE:
       return Object.assign({}, state, { fullFile: !state.fullFile });
     case Actions.TOGGLE_IGNORE_WHITESPACE:
-      return Object.assign({}, state, { ignoreWhitespace: !state.ignoreWhitespace });
+      return Object.assign({}, state, {
+        ignoreWhitespace: !state.ignoreWhitespace
+      });
   }
-  return state || {
-    ignoreWhitespace: false,
-    context: 3,
-    fullFile: false,
-    options: null
-  };
+  return (
+    state || {
+      ignoreWhitespace: false,
+      context: 3,
+      fullFile: false,
+      options: null
+    }
+  );
 }

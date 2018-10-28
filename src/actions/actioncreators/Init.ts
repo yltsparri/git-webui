@@ -15,14 +15,16 @@
  * limitations under the License.
  */
 
-import GitBranch from '../git/GitBranch';
-import GitBrancesResponse from '../git/GitBrancesResponse';
-import BranchStatus from '../git/BranchStatus';
-import { NavigationType } from '../AppState';
-import Git from '../git/Git';
-import Message from './Messages';
-import Actions from '../Actions';
-import { itemSelected } from './Navigation';
+import { Action } from "redux";
+import { ThunkAction, ThunkDispatch } from "redux-thunk";
+import Actions from "../Actions";
+import { NavigationType } from "../AppState";
+import BranchStatus from "../git/BranchStatus";
+import Git from "../git/Git";
+import GitBrancesResponse from "../git/GitBrancesResponse";
+import GitBranch from "../git/GitBranch";
+import Message from "./Messages";
+import { itemSelected } from "./Navigation";
 
 const setDirName = (dirName: string) => {
   return {
@@ -38,104 +40,113 @@ const setViewOnly = (viewOnly: boolean) => {
   };
 };
 
-const getViewOnly = (dispatch) =>
-  Git.getViewOnly()
-    .then(response => {
-      dispatch(setViewOnly(response.data === "1"));
-      if (response.message) {
-        dispatch(Message.addMessage(response.message));
-      }
-    });
+const getViewOnly = (dispatch: ThunkDispatch<{}, {}, Action>) =>
+  Git.getViewOnly().then(response => {
+    dispatch(setViewOnly(response.data === "1"));
+    if (response.message) {
+      dispatch(Message.addMessage(response.message));
+    }
+  });
 
-const setLocalBranches = (branches) => {
+const setLocalBranches = (branches: GitBranch[]) => {
   return {
     type: Actions.SET_LOCAL_BRANCHES,
     data: branches
   };
 };
 
-const selectActiveBranch = (branches: Array<GitBranch>) => {
-  let active: GitBranch = branches.find(b => b.status === BranchStatus.Current);
-  if(!active){
+const selectActiveBranch = (branches: GitBranch[]) => {
+  let active = branches.find(b => b.status === BranchStatus.Current);
+  if (!active) {
     active = branches[0];
   }
-  return active ?
-    itemSelected(NavigationType.LocalBranches + '_' + active.name) : null;
+  return active
+    ? itemSelected(NavigationType.LocalBranches + "_" + active.name)
+    : null;
 };
 
-const getLocalBranches = (dispatch) =>
+const getLocalBranches = (dispatch: ThunkDispatch<{}, {}, Action>) =>
   Git.getLocalBranches()
     .then((response: GitBrancesResponse) => {
-      dispatch(setLocalBranches(response.data));
-      if (response.message) {
-        dispatch(Message.addMessage(response.message));
+      if (response.data) {
+        dispatch(setLocalBranches(response.data));
+        if (response.message) {
+          dispatch(Message.addMessage(response.message));
+        }
+        const action = selectActiveBranch(response.data);
+        if (action) {
+          dispatch(action);
+        }
       }
-      let action = selectActiveBranch(response.data);
-      if (action) {
-        dispatch(action);
-      }
-    }).catch((error) => {
-      console.log(error);
+    })
+    .catch(error => {
       dispatch(Message.addMessage(error.message));
     });
 
-const setRemoteBranches = (branches: Array<GitBranch>) => {
+const setRemoteBranches = (branches: GitBranch[]) => {
   return {
     type: Actions.SET_REMOTE_BRANCHES,
     data: branches
   };
 };
 
-const getRemoteBranches = (dispatch) => {
+const getRemoteBranches = (dispatch: ThunkDispatch<{}, {}, Action>) => {
   return Git.getRemoteBranches()
     .then((response: GitBrancesResponse) => {
-      dispatch(setRemoteBranches(response.data));
+      if (response.data) {
+        dispatch(setRemoteBranches(response.data));
+      }
       if (response.message) {
         dispatch(Message.addMessage(response.message));
       }
-    }).catch((error) => {
-      console.log(error);
+    })
+    .catch(error => {
       dispatch(Message.addMessage(error.message));
     });
 };
 
-
-const setTags = (tags: Array<GitBranch>) => {
+const setTags = (tags: GitBranch[]) => {
   return {
     type: Actions.SET_TAGS,
     data: tags
   };
 };
 
-const getTags = (dispatch) => {
+const getTags = (dispatch: ThunkDispatch<{}, {}, Action>) => {
   return Git.getTags()
     .then((response: GitBrancesResponse) => {
-      dispatch(setTags(response.data));
+      if (response.data) {
+        dispatch(setTags(response.data));
+      }
       if (response.message) {
         dispatch(Message.addMessage(response.message));
       }
-    }).catch((error) => {
-      console.log(error);
+    })
+    .catch(error => {
       dispatch(Message.addMessage(error.message));
     });
 };
 
-export function initState() {
-  return (dispatch) => {
-    return Git.getDirName()
-      .then(response => {
-        if (response.returnCode === 0) {
+export function initState(): ThunkAction<Promise<void>, {}, {}, Action> &
+  Action {
+  const action = (dispatch: ThunkDispatch<{}, {}, Action>) => {
+    return Git.getDirName().then(response => {
+      if (response.returnCode === 0) {
+        if (response.data) {
           dispatch(setDirName(response.data));
-          dispatch(getViewOnly);
-          dispatch(getLocalBranches);
-          dispatch(getRemoteBranches);
-          dispatch(getTags);
         }
-        if (response.message) {
-          dispatch(Message.addMessage(response.message));
-        }
-      });
+        dispatch(getViewOnly);
+        dispatch(getLocalBranches);
+        dispatch(getRemoteBranches);
+        dispatch(getTags);
+      }
+      if (response.message) {
+        dispatch(Message.addMessage(response.message));
+      }
+    });
   };
+  action.type = "thunk";
+  return action;
 }
 
 export default {

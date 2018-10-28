@@ -15,29 +15,31 @@
  * limitations under the License.
  */
 
-import { CommitInfo } from '../git/CommitInfo';
-import { Commits, CommitViewMode } from '../AppState';
-import Actions from '../Actions';
-import {Graph} from '../Commit';
+import { AnyAction } from "redux";
+import Actions from "../Actions";
+import { Commits, CommitViewMode } from "../AppState";
+import { Graph, Path } from "../Commit";
+import { CommitInfo } from "../git/CommitInfo";
 
-const updateGraph = (commits, startAt) => {
+const updateGraph = (commitInfos: CommitInfo[], startAt: number) => {
   // Draw the graph
-  var currentY = startAt;
-  let streams = [];
+  let currentY = startAt;
+  const streams = new Array<Path>();
   const circles = [];
   const paths = [];
-  for (var i = startAt; i < commits.length; ++i) {
-    var entry = commits[i];
+  for (let i = startAt; i < commitInfos.length; ++i) {
+    const entry = commitInfos[i];
     if (!entry) {
       break;
     }
-    var index = 0;
+    let index = 0;
 
+    let j = 0;
     // Find streams to join
-    var childCount = 0;
-    var removedStreams = 0;
-    for (var j = 0; j < streams.length;) {
-      var stream = streams[j];
+    let childCount = 0;
+    let removedStreams = 0;
+    for (j = 0; j < streams.length; ) {
+      const stream = streams[j];
       if (stream.sha1 === entry.hash) {
         if (childCount === 0) {
           // Replace the stream
@@ -51,9 +53,9 @@ const updateGraph = (commits, startAt) => {
           ++j;
         } else {
           // Join the stream
-          var x = (index + 1);
+          const x = index + 1;
           stream.commands[stream.commands.length - 1].y = currentY;
-          stream.commands.push({ type: 'L', x, y: currentY + 0.5});
+          stream.commands.push({ type: "L", x, y: currentY + 0.5 });
           streams.splice(j, 1);
           ++removedStreams;
         }
@@ -65,30 +67,31 @@ const updateGraph = (commits, startAt) => {
         ++j;
       }
     }
-
     // Add new streams
     for (j = 0; j < entry.parents.length; ++j) {
-      var parent = entry.parents[j];
-      const x = (index + j + 1);
+      const parent = entry.parents[j];
+      const x = index + j + 1;
       if (j !== 0 || streams.length === 0) {
-        var obj = {
+        const obj = {
           sha1: parent,
-          key: entry.hash + '_' + parent,
-          commands: [{
-            type: 'M',
-            x: index + 1,
-            y: currentY + 0.5
-          },
-          {
-            type: 'L',
-            x: x,
-            y: currentY + 1
-          },
-          {
-            type: 'L',
-            x: x,
-            y: currentY + 1.5
-          }]
+          key: entry.hash + "_" + parent,
+          commands: [
+            {
+              type: "M",
+              x: index + 1,
+              y: currentY + 0.5
+            },
+            {
+              type: "L",
+              x,
+              y: currentY + 1
+            },
+            {
+              type: "L",
+              x,
+              y: currentY + 1.5
+            }
+          ]
         };
         paths.push(obj);
         streams.splice(index + j, 0, obj);
@@ -96,33 +99,36 @@ const updateGraph = (commits, startAt) => {
     }
     for (j = index + j; j < streams.length; ++j) {
       const stream = streams[j];
-      const x = (j + 1);
+      const x = j + 1;
       stream.commands[stream.commands.length - 1].y = currentY;
-      stream.commands.push({ type: "L", x, y: currentY + 0.5});
-      stream.commands.push({ type: "L", x});
+      stream.commands.push({ type: "L", x, y: currentY + 0.5 });
+      stream.commands.push({ type: "L", x, y: currentY });
     }
 
-    circles.push({ cx: (index + 1), cy: currentY, r: 4, key: entry.hash + 'c' });
+    circles.push({ cx: index + 1, cy: currentY, r: 4, key: entry.hash + "c" });
     currentY++;
   }
-  for (var idx = 0; idx < streams.length; ++idx) {
-    const stream = streams[idx];
-    stream.commands[stream.commands.length - 1].y = commits.length;
+  for (const stream of streams) {
+    stream.commands[stream.commands.length - 1].y = commitInfos.length;
   }
   return {
-    paths, circles
+    paths,
+    circles
   };
 };
 
-export function commits(state: Commits, action): Commits {
+export function commits(state: Commits, action: AnyAction): Commits {
   switch (action.type) {
-    case 'SET_COMMITS':
-      const commits = action.commits as Array<CommitInfo> || [];
-      const graph: Graph = updateGraph(commits, 0);
+    case "SET_COMMITS":
+      const commitInfos = (action.commits as CommitInfo[]) || [];
+      const graph: Graph = updateGraph(commitInfos, 0);
       return Object.assign({}, state, {
-        commits: commits,
+        commits: commitInfos,
         graph,
-        selectedCommit: commits.length > 0 ? commits[commits.length - 1].hash : null
+        selectedCommit:
+          commitInfos.length > 0
+            ? commitInfos[commitInfos.length - 1].hash
+            : null
       });
     case Actions.SELECT_COMMIT:
       return Object.assign({}, state, {
@@ -133,11 +139,13 @@ export function commits(state: Commits, action): Commits {
         viewMode: action.viewMode
       });
     default:
-      return state || {
-        commits: new Array<CommitInfo>(),
-        selectedCommit: null,
-        viewMode: CommitViewMode.Diff,
-        graph: { paths: [], circles: [] }
-      };
+      return (
+        state || {
+          commits: new Array<CommitInfo>(),
+          selectedCommit: null,
+          viewMode: CommitViewMode.Diff,
+          graph: { paths: [], circles: [] }
+        }
+      );
   }
 }

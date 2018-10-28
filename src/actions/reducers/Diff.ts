@@ -15,15 +15,16 @@
  * limitations under the License.
  */
 
-import { CommitDiff } from '../AppState';
-import Actions from '../Actions';
-import { Hunk, HunkPart, HunkPartType, FileDiff } from '../git/Diff';
-import { CommitViewMode } from '../Commit';
+import { AnyAction } from "redux";
+import Actions from "../Actions";
+import { CommitDiff } from "../AppState";
+import { CommitViewMode } from "../Commit";
+import { FileDiff, Hunk, HunkPart, HunkPartType } from "../git/Diff";
 
-const filter = (hunks: Array<Hunk>) => {
-  const removedHunks = [];
-  const addedHunks = [];
-  hunks.forEach((hunk) => {
+const filter = (hunks: Hunk[]) => {
+  const removedHunks = new Array<Hunk>();
+  const addedHunks = new Array<Hunk>();
+  hunks.forEach(hunk => {
     const leftHunk = {
       header: hunk.header,
       parts: new Array<HunkPart>()
@@ -40,8 +41,7 @@ const filter = (hunks: Array<Hunk>) => {
       if (part.type === HunkPartType.Keep) {
         leftHunk.parts.push(part);
         rightHunk.parts.push(part);
-      }
-      else if (part.type === HunkPartType.Remove) {
+      } else if (part.type === HunkPartType.Remove) {
         if (partIndex < hunk.parts.length - 1) {
           const next = hunk.parts[partIndex + 1];
           if (next.type === HunkPartType.Add) {
@@ -51,32 +51,32 @@ const filter = (hunks: Array<Hunk>) => {
             if (next.content.length > part.content.length) {
               leftHunk.parts.push({
                 type: null,
-                content: new Array<string>(next.content.length - part.content.length)
+                content: new Array<string>(
+                  next.content.length - part.content.length
+                )
               });
-            }
-            else if (next.content.length < part.content.length) {
+            } else if (next.content.length < part.content.length) {
               rightHunk.parts.push({
                 type: null,
-                content: new Array<string>(part.content.length - next.content.length)
+                content: new Array<string>(
+                  part.content.length - next.content.length
+                )
               });
             }
-          }
-          else {
+          } else {
             leftHunk.parts.push(part);
             rightHunk.parts.push({
               type: null,
               content: new Array<string>(part.content.length)
             });
           }
-        }
-        else {
+        } else {
           rightHunk.parts.push({
             type: null,
             content: new Array<string>(part.content.length)
           });
         }
-      }
-      else if (part.type === HunkPartType.Add) {
+      } else if (part.type === HunkPartType.Add) {
         leftHunk.parts.push({
           type: null,
           content: new Array<string>(part.content.length)
@@ -88,24 +88,30 @@ const filter = (hunks: Array<Hunk>) => {
   return { removedHunks, addedHunks };
 };
 
-const getSplitDiff = (fileDiffs, selectedFile) => {
+const getSplitDiff = (
+  fileDiffs: FileDiff[],
+  selectedFile: number | null
+) => {
   if (selectedFile === null || !fileDiffs[selectedFile]) {
     return { removedLinesDiff: null, addedLinesDiff: null };
   }
   const file = fileDiffs[selectedFile];
-  var filtered = file && file.hunks ? filter(file.hunks) : { removedHunks: [], addedHunks: [] };
-  let removedLinesDiff: FileDiff = {
+  const filtered =
+    file && file.hunks
+      ? filter(file.hunks)
+      : { removedHunks: [], addedHunks: [] };
+  const removedLinesDiff: FileDiff = {
     hunks: filtered.removedHunks,
     header: file.header,
-    fileModeLine: file.newFileModeLine,
+    fileModeLine: file.fileModeLine,
     indexLine: file.indexLine,
     initialFile: file.initialFile,
     resultingFile: file.resultingFile
   };
-  let addedLinesDiff: FileDiff = {
+  const addedLinesDiff: FileDiff = {
     hunks: filtered.addedHunks,
     header: file.header,
-    fileModeLine: file.newFileModeLine,
+    fileModeLine: file.fileModeLine,
     indexLine: file.indexLine,
     initialFile: file.initialFile,
     resultingFile: file.resultingFile
@@ -113,11 +119,16 @@ const getSplitDiff = (fileDiffs, selectedFile) => {
   return { removedLinesDiff, addedLinesDiff };
 };
 
-export function commitDiff(state: CommitDiff, action): CommitDiff {
+export function commitDiff(state: CommitDiff, action: AnyAction): CommitDiff {
   switch (action.type) {
     case Actions.UPDATE_COMMIT_DIFF_DATA:
-      let splitDiff = getSplitDiff(action.data.fileDiffs, state.selectedFile || 0);
-      return Object.assign({}, state, action.data, splitDiff, { selectedFile: action.selectedFile || 0 });
+      const splitDiff = getSplitDiff(
+        action.data.fileDiffs,
+        state.selectedFile || 0
+      );
+      return Object.assign({}, state, action.data, splitDiff, {
+        selectedFile: action.selectedFile || 0
+      });
     case Actions.SELECT_COMMIT:
       return Object.assign({}, state, {
         selectedFile: null,
@@ -125,17 +136,25 @@ export function commitDiff(state: CommitDiff, action): CommitDiff {
         addedLinesDiff: null
       });
     case Actions.SELECT_COMMIT_VIEW_MODE:
-      return Object.assign({}, state, { useSplitDiff: action.mode === CommitViewMode.SidebySideDiff });
+      return Object.assign({}, state, {
+        useSplitDiff: action.mode === CommitViewMode.SidebySideDiff
+      });
     case Actions.SELECT_COMMIT_DIFF_FILE:
-      return Object.assign({}, state, { selectedFile: action.selectedFile },
-        getSplitDiff(state.fileDiffs, action.selectedFile));
+      return Object.assign(
+        {},
+        state,
+        { selectedFile: action.selectedFile },
+        getSplitDiff(state.fileDiffs, action.selectedFile)
+      );
   }
-  return state || {
-    fileDiffs: new Array<FileDiff>(),
-    selectedFile: 0,
-    headerLines: new Array<string>(),
-    removedLinesDiff: null,
-    addedLinesDiff: null,
-    useSplitDiff: false
-  };
+  return (
+    state || {
+      fileDiffs: new Array<FileDiff>(),
+      selectedFile: 0,
+      headerLines: new Array<string>(),
+      removedLinesDiff: null,
+      addedLinesDiff: null,
+      useSplitDiff: false
+    }
+  );
 }

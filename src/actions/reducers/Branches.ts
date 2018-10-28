@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-import GitBranch from '../git/GitBranch';
+import { AnyAction } from "redux";
+import GitBranch from "../git/GitBranch";
 
 export function getBranchDataReducer(key: string) {
-  return (state: Array<GitBranch>, action): Array<GitBranch> => {
+  return (state: GitBranch[], action: AnyAction): GitBranch[] => {
     switch (action.type) {
       case key:
         return action.data || [];
@@ -27,4 +28,3 @@ export function getBranchDataReducer(key: string) {
     }
   };
 }
-

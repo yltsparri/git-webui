@@ -15,73 +15,89 @@
  * limitations under the License.
  */
 
-import FileInfo from './FileInfo';
-import GitBranchesResponseParser from './GitBranchesResponseParser';
-import GitBrancesResponse from './GitBrancesResponse';
-import GitResponse from './GitResponse';
-import CommitInfoResponseParser from './CommitInfoResponseParser';
-import CommitInfo from './CommitInfo';
-import DiffParser from './DiffParser';
-import { Diff } from './Diff';
+import CommitInfo from "./CommitInfo";
+import CommitInfoResponseParser from "./CommitInfoResponseParser";
+import { Diff } from "./Diff";
+import DiffParser from "./DiffParser";
+import FileInfo from "./FileInfo";
+import GitBrancesResponse from "./GitBrancesResponse";
+import GitBranchesResponseParser from "./GitBranchesResponseParser";
+import GitResponse from "./GitResponse";
 
 export class Git {
-
-  getViewOnly = (): Promise<GitResponse<string>> => {
-
-    return this.makeRequest('GET', 'viewonly', null, { 'Content-Type': 'text/plain' })
-      .then((text: string) => { return { data: text, message: null, returnCode: 0 }; })
-      .catch((error) => {
-        console.log(error);
+  public getViewOnly = (): Promise<GitResponse<string>> => {
+    return this.makeRequest("GET", "viewonly", null, {
+      "Content-Type": "text/plain"
+    })
+      .then((text: string) => {
+        return { data: text, returnCode: 0 };
+      })
+      .catch(error => {
         return {
-          data: '',
+          data: "",
           returnCode: error.code,
           message: error.message
         };
       });
   }
 
-  getDirName = (): Promise<GitResponse<string>> => {
-    return this.makeRequest('GET', 'dirname', null, { 'Content-Type': 'text/plain' })
-      .then((text: string) => { return { data: text, message: null, returnCode: 0 }; })
-      .catch((error) => {
-        console.log(error);
+  public getDirName = (): Promise<GitResponse<string>> => {
+    return this.makeRequest("GET", "dirname", null, {
+      "Content-Type": "text/plain"
+    })
+      .then((text: string) => {
+        return { data: text, returnCode: 0 };
+      })
+      .catch(error => {
         return {
-          data: '',
+          data: "",
           returnCode: error.code,
           message: error.message
         };
       });
   }
 
-  getLocalBranches = (): Promise<GitBrancesResponse> => {
-    return this.runGit('branch', null)
-      .then(response => GitBranchesResponseParser.parse(response));
+  public getLocalBranches = (): Promise<GitBrancesResponse> => {
+    return this.runGit("branch").then(response =>
+      GitBranchesResponseParser.parse(response)
+    );
   }
 
-  getRemoteBranches = (): Promise<GitBrancesResponse> => {
-    return this.runGit('branch --remotes', null)
-      .then(response => GitBranchesResponseParser.parse(response));
+  public getRemoteBranches = (): Promise<GitBrancesResponse> => {
+    return this.runGit("branch --remotes").then(response =>
+      GitBranchesResponseParser.parse(response)
+    );
   }
 
-  getTags = (): Promise<GitBrancesResponse> => {
-    return this.runGit('tag', null)
-      .then(response => GitBranchesResponseParser.parse(response));
+  public getTags = (): Promise<GitBrancesResponse> => {
+    return this.runGit("tag").then(response =>
+      GitBranchesResponseParser.parse(response)
+    );
   }
 
-  getCommits = (rows: number, from: string): Promise<GitResponse<Array<CommitInfo>>> => {
-    const command: string = "log --date-order --pretty=raw --decorate=full --max-count=" + (rows + 1) + " " + from + " --";
-    return this.runGit(command, null)
-      .then((response: GitResponse<string>) => {
-        return CommitInfoResponseParser.parse(rows, response);
-      });
+  public getCommits = (
+    rows: number,
+    from: string
+  ): Promise<GitResponse<CommitInfo[]>> => {
+    const command: string =
+      "log --date-order --pretty=raw --decorate=full --max-count=" +
+      (rows + 1) +
+      " " +
+      from +
+      " --";
+    return this.runGit(command).then((response: GitResponse<string>) => {
+      return CommitInfoResponseParser.parse(rows, response);
+    });
   }
 
-  getDiff = (commit: string,
+  public getDiff = (
+    commit: string,
     diffContext: number,
     ignoreWhitespace: boolean,
-    gitDiffOpts?: Array<string>,
-    gitFile?: string): Promise<GitResponse<Diff>> => {
-    let fullCmd = 'show ' + commit;
+    gitDiffOpts?: string[],
+    gitFile?: string
+  ): Promise<GitResponse<Diff>> => {
+    let fullCmd = "show " + commit;
     if (diffContext) {
       fullCmd += " --unified=" + diffContext.toString();
     }
@@ -94,76 +110,78 @@ export class Git {
     if (gitFile) {
       fullCmd += " -- " + gitFile;
     }
-    return this.runGit(fullCmd, null)
-      .then(response => {
-        return {
-          data: DiffParser.parse(response.data),
-          message: response.message,
-          returnCode: response.returnCode
-        };
-      });
+    return this.runGit(fullCmd).then(response => {
+      return {
+        data: DiffParser.parse(response.data!),
+        message: response.message,
+        returnCode: response.returnCode
+      };
+    });
   }
 
-  listFiles = (parent: string): Promise<GitResponse<Array<FileInfo>>> => {
-    let readToNext = (str: string, char: string, start: number): string => {
-      var end = str.indexOf(char, start);
+  public listFiles = (parent: string): Promise<GitResponse<FileInfo[]>> => {
+    const readToNext = (str: string, char: string, start: number): string => {
+      const end = str.indexOf(char, start);
       return end >= 0 ? str.substring(start, end) : str.substring(start);
     };
-    return this.runGit('ls-tree -l ' + parent, null)
-      .then(response => {
-        if (response.returnCode !== 0) {
+    return this.runGit("ls-tree -l " + parent)
+      .then((response: GitResponse<string>) => {
+        if (response.returnCode !== 0 || !response.data) {
           return {
-            data: null,
+            data: new Array<FileInfo>(),
             message: response.message,
             returnCode: response.returnCode
           };
         }
-        let lines = response.data.split('\n');
-        let data = lines.filter(line => line !== '')
-          .map(line => {
-            // line format
-            // {mode} {type} {objectId} {size} {name}
-            let start = 0;
+        const lines = response.data.split("\n");
+        const getFileInfo = (line: string) => {
+          // line format
+          // {mode} {type} {objectId} {size} {name}
+          let start = 0;
 
-            // mode
-            let substr = readToNext(line, ' ', start);
-            start += substr.length + 1;
-            let mode = parseInt(substr);
+          // mode
+          let substr = readToNext(line, " ", start);
+          start += substr.length + 1;
+          const mode = parseInt(substr, 10);
 
-            // type
-            let type = readToNext(line, ' ', start);
-            start += type.length + 1;
+          // type
+          const type = readToNext(line, " ", start);
+          start += type.length + 1;
 
-            // objectId
-            let objectId = readToNext(line, ' ', start);
-            start += objectId.length + 1;
+          // objectId
+          const objectId = readToNext(line, " ", start);
+          start += objectId.length + 1;
 
-            // size
-            substr = readToNext(line, '\t', start);
-            start += substr.length + 1;
-            let size = parseInt(substr.trim());
+          // size
+          substr = readToNext(line, "\t", start);
+          start += substr.length + 1;
+          const size = parseInt(substr.trim(), 10);
 
-            // name
-            let name = line.substring(start);
+          // name
+          const name = line.substring(start);
 
-            return {
-              mode: mode,
-              objectId: objectId,
-              size: size,
-              isSymbolicLink: (mode & 120000) === 120000,
-              type: type,
-              name: name,
-              parent: parent
-            };
-          });
-        return {
-          data: data,
-          message: response.message,
-          returnCode: response.returnCode
+          return {
+            mode,
+            objectId,
+            size,
+            // tslint:disable-next-line:no-bitwise
+            isSymbolicLink: (mode & 120000) === 120000,
+            type,
+            name,
+            parent
+          } as FileInfo;
         };
+        const data: FileInfo[] = lines
+          .filter(line => line !== "")
+          .map(getFileInfo);
+        const r = {
+          data,
+          message: response.message,
+          returnCode: response.returnCode || 0
+        } as GitResponse<FileInfo[]>;
+        return r;
       })
-      .catch((error) => {
-        console.log(error);
+      .catch((error: Error & { code: number }) => {
         return {
           data: undefined,
           returnCode: error.code,
@@ -172,7 +190,10 @@ export class Git {
       });
   }
 
-  private runGit = (cmd: string, arg1: string): Promise<GitResponse<string>> => {
+  private runGit = (
+    cmd: string,
+    arg1?: string
+  ): Promise<GitResponse<string>> => {
     // cmd = git command line arguments
     // other arguments = optional stdin content and a callback function:
     // ex:
@@ -183,50 +204,57 @@ export class Git {
       cmd += "\n" + arg1;
     }
 
-    return this.makeRequest('POST', 'git', cmd, { 'Content-Type': 'text/plain' })
-      .then((data: string) => {
-        let processed = this.processResponse(data);
-        var rcode = parseInt(processed.footers["Git-Return-Code"]);
-        if (rcode === 0) {
-          return {
-            data: processed.output,
-            returnCode: rcode,
-            message: processed.message
-          };
-        }
-        throw {
-          code: rcode,
+    return this.makeRequest("POST", "git", cmd, {
+      "Content-Type": "text/plain"
+    }).then((data: string) => {
+      const processed = this.processResponse(data);
+      const rcode = parseInt(processed.footers["Git-Return-Code"], 10);
+      if (rcode === 0) {
+        return {
+          data: processed.output,
+          returnCode: rcode,
           message: processed.message
         };
-      });
+      }
+      throw {
+        code: rcode,
+        message: processed.message
+      };
+    });
   }
 
   private processResponse = (data: string) => {
-    var footers = {};
-    var fIndex = data.length;
+    const footers = {};
+    let fIndex = data.length;
     while (true) {
-      var oldFIndex = fIndex;
+      const oldFIndex = fIndex;
       fIndex = data.lastIndexOf("\r\n", fIndex - 1);
-      var line = data.substring(fIndex + 2, oldFIndex);
+      const line = data.substring(fIndex + 2, oldFIndex);
       if (line.length > 0) {
-        var footer = line.split(": ");
+        const footer = line.split(": ");
         footers[footer[0]] = footer[1];
       } else {
         break;
       }
     }
 
-    var messageStartIndex = fIndex - parseInt(footers["Git-Stderr-Length"]);
-    var message = data.substring(messageStartIndex, fIndex);
-    var output = data.substring(0, messageStartIndex);
+    const messageStartIndex =
+      fIndex - parseInt(footers["Git-Stderr-Length"], 10);
+    const message = data.substring(messageStartIndex, fIndex);
+    const output = data.substring(0, messageStartIndex);
     return { footers, message, output };
   }
 
-  private makeRequest = (method, url, data, headers) => {
-    return new Promise(function (resolve, reject) {
-      var xhr = new XMLHttpRequest();
+  private makeRequest = (
+    method: string,
+    url: string,
+    data: string | null,
+    headers: {}
+  ) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
       xhr.open(method, url);
-      xhr.onload = function () {
+      xhr.onload = () => {
         if (xhr.status >= 200 && xhr.status < 300) {
           resolve(xhr.response);
         } else {
@@ -236,13 +264,14 @@ export class Git {
           });
         }
       };
-      xhr.onerror = function () {
+      xhr.onerror = () => {
         reject({
           code: xhr.status,
           message: xhr.statusText
         });
       };
-      for (var key in headers) {
+      // tslint:disable-next-line:forin
+      for (const key in headers) {
         xhr.setRequestHeader(key, headers[key]);
       }
       xhr.send(data);

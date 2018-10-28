@@ -15,40 +15,55 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
-import Modal from 'react-overlays/lib/Modal';
+import * as React from "react";
+import Modal from "react-overlays/lib/Modal";
 
 export interface ModalMessageProps {
   message: string;
-  close();
+  close: () => void;
 }
 
-export default class ModalMessage extends React.Component<ModalMessageProps, any> {
-
-  render() {
-    if (!this.props.message || this.props.message === '') {
+export default class ModalMessage extends React.Component<ModalMessageProps> {
+  public render() {
+    if (!this.props.message || this.props.message === "") {
       return null;
     }
-    return <Modal onHide={this.props.close} show={true}
-      containerClassName='modal-open'
-      backdropClassName='modal fade in modal-backdrop'
-      backdropStyle={{ display: 'block' }}>
-      <div className="modal fade in" style={{ display: 'block' }} id="error-modal" tabIndex={-1} role="dialog">
-        <div className="modal-dialog">
-          <div className="modal-content">
-            <div className="modal-header">
-              <button type="button" className="close" onClick={this.props.close} data-dismiss="modal">
-                <span>&times;</span>
-                <span className="sr-only">Close</span>
-              </button>
-              <h4 className="modal-title">Error</h4>
+    return (
+      <Modal
+        onHide={this.props.close}
+        show={true}
+        containerClassName="modal-open"
+        backdropClassName="modal fade in modal-backdrop"
+        backdropStyle={{ display: "block" }}
+      >
+        <div
+          className="modal fade in"
+          style={{ display: "block" }}
+          id="error-modal"
+          tabIndex={-1}
+          role="dialog"
+        >
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-header">
+                <button
+                  type="button"
+                  className="close"
+                  onClick={this.props.close}
+                  data-dismiss="modal"
+                >
+                  <span>&times;</span>
+                  <span className="sr-only">Close</span>
+                </button>
+                <h4 className="modal-title">Error</h4>
+              </div>
+              <pre className="modal-body alert alert-danger">
+                {this.props.message}
+              </pre>
             </div>
-            <pre className="modal-body alert alert-danger">
-              {this.props.message}
-            </pre>
           </div>
         </div>
-      </div>
-    </Modal>;
+      </Modal>
+    );
   }
 }

@@ -1,30 +1,33 @@
-import {applyMiddleware, combineReducers, createStore} from 'redux';
-import {appData} from './reducers/AppData';
-import {diffOptions} from './reducers/DiffOptions';
-import {getBranchDataReducer} from './reducers/Branches';
-import {commits} from './reducers/Commits';
-import {commitDiff} from './reducers/Diff';
-import {commitTree} from './reducers/CommitTree';
-import {offsets} from './reducers/Offsets';
-import Navigation from './reducers/Navigation';
-import Actions from './Actions';
-import thunk from 'redux-thunk';
+import { applyMiddleware, combineReducers, createStore } from "redux";
+import thunk from "redux-thunk";
+import Actions from "./Actions";
+import { appData } from "./reducers/AppData";
+import { getBranchDataReducer } from "./reducers/Branches";
+import { commits } from "./reducers/Commits";
+import { commitTree } from "./reducers/CommitTree";
+import { commitDiff } from "./reducers/Diff";
+import { diffOptions } from "./reducers/DiffOptions";
+import Navigation from "./reducers/Navigation";
+import { offsets } from "./reducers/Offsets";
 
-let reducer = combineReducers({
-  appData: appData,
-  diffOptions: diffOptions,
+const reducer = combineReducers({
+  appData,
+  diffOptions,
   localBranches: getBranchDataReducer(Actions.SET_LOCAL_BRANCHES),
   remoteBrances: getBranchDataReducer(Actions.SET_REMOTE_BRANCHES),
   tags: getBranchDataReducer(Actions.SET_TAGS),
   commits,
   offsets,
-  commitDiff: commitDiff,
-  commitTree: commitTree,
+  commitDiff,
+  commitTree,
   navigation: Navigation
 });
 
-let store = createStore(reducer, applyMiddleware(
-  thunk, // lets us dispatch() functions
-));
+const store = createStore(
+  reducer,
+  applyMiddleware(
+    thunk // lets us dispatch() functions
+  )
+);
 
 export default store;

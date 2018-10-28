@@ -1,6 +1,6 @@
-import GitBranch from './GitBranch';
+import GitBranch from "./GitBranch";
 interface GitBrancesResponse {
-  data?: Array<GitBranch>;
+  data?: GitBranch[];
   returnCode: number;
   message?: string;
 }

@@ -1,54 +1,52 @@
-import { CommitInfo, Person, Ref, RefType } from './CommitInfo';
-import GitResponse from './GitResponse';
+import { CommitInfo, Person, Ref, RefType } from "./CommitInfo";
+import GitResponse from "./GitResponse";
 
 export class CommitInfoResponseParser {
-
-  parse = (rows: number, response: GitResponse<string>): GitResponse<Array<CommitInfo>> => {
+  public parse = (
+    rows: number,
+    response: GitResponse<string>
+  ): GitResponse<CommitInfo[]> => {
     if (response.returnCode !== 0) {
       throw { message: response.message, returnCode: response.returnCode };
     }
-    var start = 0;
-    let commits: Array<CommitInfo> = [];
-    const data = response.data;
+    let start = 0;
+    const commits: CommitInfo[] = [];
+    const data = response.data!;
     while (true) {
-      var end = data.indexOf("\ncommit ", start);
+      const end = data.indexOf("\ncommit ", start);
       if (end !== -1) {
-        let commit = this.parseCommit(data.substr(start, end - start));
+        const commit = this.parseCommit(data.substr(start, end - start));
         if (commits.length < rows) {
           commits.push(commit);
         }
-      }
-      else {
+      } else {
         commits.push(this.parseCommit(data.substr(start)));
         break;
       }
       start = end + 1;
     }
-    return { data: commits, message: null, returnCode: 0 };
+    return { data: commits, message: undefined, returnCode: 0 };
   }
 
-
   private parseCommit = (data: string): CommitInfo => {
-    let commit: CommitInfo = {
-      hash: null,
+    const commit: Partial<CommitInfo> = {
       parents: [],
-      tree: null,
-      author: null,
-      committer: null,
-      message: null,
       refs: []
     };
 
-    data.split("\n").forEach((line) => {
+    data.split("\n").forEach(line => {
       if (line.indexOf("commit ") === 0) {
         commit.hash = line.substr(7, 40);
         if (line.length > 47) {
-          var s = line.lastIndexOf("(") + 1;
-          var e = line.lastIndexOf(")");
-          commit.refs = line.substr(s, e - s).split(", ").map((ref) => this.parseRef(ref));
+          const s = line.lastIndexOf("(") + 1;
+          const e = line.lastIndexOf(")");
+          commit.refs = line
+            .substr(s, e - s)
+            .split(", ")
+            .map(ref => this.parseRef(ref));
         }
       } else if (line.indexOf("parent ") === 0) {
-        commit.parents.push(line.substr(7));
+        commit.parents!.push(line.substr(7));
       } else if (line.indexOf("tree ") === 0) {
         commit.tree = line.substr(5);
       } else if (line.indexOf("author ") === 0) {
@@ -59,11 +57,10 @@ export class CommitInfoResponseParser {
         commit.message = line.substr(4) + "\n";
       }
     });
-    return commit;
+    return commit as CommitInfo;
   }
 
   private parseRef(data: string): Ref {
-
     if (data.indexOf("refs/remotes") === 0) {
       return { text: data.substr(13), type: RefType.Remote };
     } else if (data.indexOf("refs/heads") === 0) {
@@ -83,11 +80,11 @@ export class CommitInfoResponseParser {
     const dateEnd = data.indexOf(" ", emailEnd + 2);
     const secs = data.substr(emailEnd + 2, dateEnd - emailEnd - 2);
     const date = new Date(0);
-    date.setUTCSeconds(parseInt(secs));
+    date.setUTCSeconds(parseInt(secs, 10));
     return {
-      name: name,
-      email: email,
-      date: date
+      name,
+      email,
+      date
     };
   }
 }

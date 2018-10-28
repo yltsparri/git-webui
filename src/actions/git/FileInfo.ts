@@ -5,7 +5,7 @@ export interface FileInfo {
   isSymbolicLink: boolean;
   type: string;
   name: string;
-  parent: string;
+  parent: string | null;
 }
 
 export default FileInfo;

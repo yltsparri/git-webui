@@ -15,52 +15,62 @@
  * limitations under the License.
  */
 
-import React from 'react';
-import DiffView, { DiffViewMode } from './DiffView';
-import TreeView from './TreeView';
-import { FileDiff } from '../actions/git/Diff';
-import { CommitViewMode } from '../actions/AppState';
-import FileInfo from '../actions/git/FileInfo';
+import React from "react";
+import { CommitViewMode } from "../actions/AppState";
+import { FileDiff } from "../actions/git/Diff";
+import FileInfo from "../actions/git/FileInfo";
+import DiffView, { DiffViewMode } from "./DiffView";
+import TreeView from "./TreeView";
 
 export interface CommitViewStateProps {
-  diff: Array<FileDiff>;
-  headerLines: Array<string>;
+  diff: FileDiff[];
+  headerLines: string[];
   ignoreWhitespace: boolean;
   diffContext: number;
   fullFileDiff: boolean;
   diffViewMode: CommitViewMode;
-  path: Array<FileInfo>;
-  files: Array<FileInfo>;
+  path: FileInfo[];
+  files: FileInfo[];
 }
 
 export interface CommitViewActionProps {
-  toggleIgnoreWhiteSpace();
-  updateDiffContext(diffContext: number);
-  onNodeSelected(node: FileInfo);
-  toggleShowFullFile();
-  onExloreClicked();
+  toggleIgnoreWhiteSpace: () => void;
+  updateDiffContext: (diffContext: number) => void;
+  onNodeSelected: (node: FileInfo) => void;
+  toggleShowFullFile: () => void;
+  onExloreClicked: () => void;
 }
 
-interface CommitViewProps extends CommitViewStateProps, CommitViewActionProps { }
+interface CommitViewProps extends CommitViewStateProps, CommitViewActionProps {}
 
-export default class CommitView extends React.PureComponent<CommitViewProps, undefined>{
-  render() {
-    const {diff, path, files, diffViewMode, onNodeSelected} = this.props;
-    let renderedButtons = diffViewMode === CommitViewMode.Diff ?
-      this.renderButtons() : null;
-    return <div className='diff-view-container panel panel-default'>
-      {renderedButtons}
-      <div className='panel-body'>
-        {diffViewMode === CommitViewMode.Diff ?
-          <DiffView diff={diff} headerLines={this.props.headerLines} diffViewMode={DiffViewMode.Full} /> :
-          <TreeView path={path}
-            files={files}
-            onNodeSelected={onNodeSelected} />}
+export default class CommitView extends React.PureComponent<CommitViewProps> {
+  public render() {
+    const { diff, path, files, diffViewMode, onNodeSelected } = this.props;
+    const renderedButtons =
+      diffViewMode === CommitViewMode.Diff ? this.renderButtons() : null;
+    return (
+      <div className="diff-view-container panel panel-default">
+        {renderedButtons}
+        <div className="panel-body">
+          {diffViewMode === CommitViewMode.Diff ? (
+            <DiffView
+              diff={diff}
+              headerLines={this.props.headerLines}
+              diffViewMode={DiffViewMode.Full}
+            />
+          ) : (
+            <TreeView
+              path={path}
+              files={files}
+              onNodeSelected={onNodeSelected}
+            />
+          )}
+        </div>
       </div>
-    </div>;
+    );
   }
 
-  renderButtons = () => {
+  public renderButtons = () => {
     const {
       ignoreWhitespace,
       fullFileDiff,
@@ -68,60 +78,86 @@ export default class CommitView extends React.PureComponent<CommitViewProps, und
       toggleIgnoreWhiteSpace,
       toggleShowFullFile,
       updateDiffContext,
-      onExloreClicked} = this.props;
-    const ignoreWhitespaceClass = 'btn btn-sm btn-default diff-ignore-whitespace' +
-      (ignoreWhitespace ? ' active' : '');
+      onExloreClicked
+    } = this.props;
+    const ignoreWhitespaceClass =
+      "btn btn-sm btn-default diff-ignore-whitespace" +
+      (ignoreWhitespace ? " active" : "");
     const allFile = fullFileDiff;
-    const completeFileClass = 'btn btn-sm btn-default diff-context-all' + (allFile ? ' active' : '');
+    const completeFileClass =
+      "btn btn-sm btn-default diff-context-all" + (allFile ? " active" : "");
 
-    return <div className='panel-heading btn-toolbar' role='toolbar'>
-      <button type='button'
-        className={ignoreWhitespaceClass}
-        data-toggle='button'
-        aria-pressed={ignoreWhitespace}
-        onClick={toggleIgnoreWhiteSpace}>
-        Ignore Whitespace
-      </button>
-      <button type='button'
-        className={completeFileClass}
-        data-toggle='button'
-        aria-pressed={allFile}
-        onClick={() => toggleShowFullFile()}>
-        Complete file
-      </button>
-      <div className='btn-group btn-group-sm'>
-        <span>{'Context:\u00A0' + diffContext}</span>{'\u00A0'}
-        <button type='button'
-          className='btn btn-default diff-context-remove'
-          onClick={() => updateDiffContext(diffContext - 1)}>
-          -
+    const onClickMinus = () => updateDiffContext(diffContext - 1);
+    const onClickPlus = () => updateDiffContext(diffContext + 1);
+    return (
+      <div className="panel-heading btn-toolbar" role="toolbar">
+        <button
+          type="button"
+          className={ignoreWhitespaceClass}
+          data-toggle="button"
+          aria-pressed={ignoreWhitespace}
+          onClick={toggleIgnoreWhiteSpace}
+        >
+          Ignore Whitespace
         </button>
-        <button type='button'
-          className='btn btn-default diff-context-add'
-          onClick={() => updateDiffContext(diffContext + 1)}>
-          +
+        <button
+          type="button"
+          className={completeFileClass}
+          data-toggle="button"
+          aria-pressed={allFile}
+          onClick={toggleShowFullFile}
+        >
+          Complete file
+        </button>
+        <div className="btn-group btn-group-sm">
+          <span>{"Context:\u00A0" + diffContext}</span>
+          {"\u00A0"}
+          <button
+            type="button"
+            className="btn btn-default diff-context-remove"
+            onClick={onClickMinus}
+          >
+            -
+          </button>
+          <button
+            type="button"
+            className="btn btn-default diff-context-add"
+            onClick={onClickPlus}
+          >
+            +
+          </button>
+        </div>
+        <div className="btn-group btn-group-sm diff-selection-buttons">
+          <button
+            type="button"
+            className="btn btn-default diff-stage"
+            style={{ display: "none" }}
+          >
+            Stage
+          </button>
+          <button
+            type="button"
+            className="btn btn-default diff-cancel"
+            style={{ display: "none" }}
+          >
+            Cancel
+          </button>
+          <button
+            type="button"
+            className="btn btn-default diff-unstage"
+            style={{ display: "none" }}
+          >
+            Unstage
+          </button>
+        </div>
+        <button
+          type="button"
+          className="btn btn-sm btn-default diff-explore"
+          onClick={onExloreClicked}
+        >
+          Explore
         </button>
       </div>
-      <div className='btn-group btn-group-sm diff-selection-buttons'>
-        <button type='button'
-          className='btn btn-default diff-stage'
-          style={{ display: 'none' }}>
-          Stage
-        </button>
-        <button type='button'
-          className='btn btn-default diff-cancel'
-          style={{ display: 'none' }}>
-          Cancel
-        </button>
-        <button type='button'
-          className='btn btn-default diff-unstage'
-          style={{ display: 'none' }}>
-          Unstage
-        </button>
-      </div>
-      <button type='button' className='btn btn-sm btn-default diff-explore' onClick={onExloreClicked}>
-        Explore
-        </button>
-    </div>;
+    );
   }
 }

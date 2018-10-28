@@ -15,13 +15,29 @@
  * limitations under the License.
  */
 
-import GitBranch from './git/GitBranch';
-import { CommitInfo } from '../actions/git/CommitInfo';
-import FileInfo from './git/FileInfo';
-import { Diff } from './git/Diff';
-import { CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions } from './Commit';
+import { CommitInfo } from "../actions/git/CommitInfo";
+import {
+  CommitDiff,
+  Commits,
+  CommitTree,
+  CommitViewMode,
+  DiffOptions
+} from "./Commit";
+import { Diff } from "./git/Diff";
+import FileInfo from "./git/FileInfo";
+import GitBranch from "./git/GitBranch";
 
-export { Diff, FileInfo, CommitInfo, GitBranch, CommitDiff, Commits, CommitTree, CommitViewMode, DiffOptions };
+export {
+  Diff,
+  FileInfo,
+  CommitInfo,
+  GitBranch,
+  CommitDiff,
+  Commits,
+  CommitTree,
+  CommitViewMode,
+  DiffOptions
+};
 
 export enum AppMode {
   Workspace = 0,
@@ -31,11 +47,11 @@ export enum AppMode {
 }
 
 export class NavigationType {
-  public static readonly Workspace = 'workspace';
-  public static readonly RemoteAccess = 'remote-access';
-  public static readonly LocalBranches = 'local-branches';
-  public static readonly RemoteBranches = 'remote-branches';
-  public static readonly Tags = 'tags';
+  public static readonly Workspace = "workspace";
+  public static readonly RemoteAccess = "remote-access";
+  public static readonly LocalBranches = "local-branches";
+  public static readonly RemoteBranches = "remote-branches";
+  public static readonly Tags = "tags";
 }
 
 export interface AppData {
@@ -55,13 +71,13 @@ export interface NavigationNode {
   id: string;
   text: string;
   parentId: string;
-  children: Array<string>;
+  children: string[];
   props: { [key: string]: any };
 }
 
 export interface Navigation {
-  rootNodes: Array<string>;
-  nodes: { [id: string]: NavigationNode; };
+  rootNodes: string[];
+  nodes: { [id: string]: NavigationNode };
   showAll: string;
   selected: string;
 }

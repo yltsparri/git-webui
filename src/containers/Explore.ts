@@ -1,23 +1,29 @@
-import ExploreView, { ExploreViewStateProps, ExploreViewActions } from '../components/ExploreView';
-import { connect } from 'react-redux';
-import { AppState } from '../actions/AppState';
-import ExploreNavigation from './ExploreNavigation';
-import Offsets from '../actions/actioncreators/Offsets';
+import { connect } from "react-redux";
+import { Dispatch } from "redux";
+import Offsets from "../actions/actioncreators/Offsets";
+import { AppState } from "../actions/AppState";
+import ExploreView, {
+  ExploreViewActions,
+  ExploreViewStateProps
+} from "../components/ExploreView";
+import ExploreNavigation from "./ExploreNavigation";
 
 const mapStateToProps = (state: AppState) => {
   return {
     removedLinesDiff: state.commitDiff.removedLinesDiff,
     addedLinesDiff: state.commitDiff.addedLinesDiff,
-    position: state.offsets['EXPLORE_DIFF'],
-    ExploreNavigation: ExploreNavigation
+    position: state.offsets.get("EXPLORE_DIFF")!,
+    ExploreNavigation
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     onScroll: (ev: React.UIEvent<HTMLDivElement>) => {
       const target: HTMLDivElement = ev.target as HTMLDivElement;
-      dispatch(Offsets.setOffset('EXPLORE_DIFF', target.scrollTop, target.scrollLeft));
+      dispatch(
+        Offsets.setOffset("EXPLORE_DIFF", target.scrollTop, target.scrollLeft)
+      );
     }
   };
 };

@@ -1,6 +1,6 @@
-import { FileDiff } from './git/Diff';
-import FileInfo from './git/FileInfo';
-import CommitInfo from './git/CommitInfo';
+import CommitInfo from "./git/CommitInfo";
+import { FileDiff } from "./git/Diff";
+import FileInfo from "./git/FileInfo";
 
 export enum CommitViewMode {
   Diff = 0,
@@ -12,18 +12,18 @@ export interface DiffOptions {
   ignoreWhitespace: boolean;
   context: number;
   fullFile: boolean;
-  options?: Array<string>;
+  options?: string[];
 }
 
 export interface CommitTree {
-  path: Array<FileInfo>;
-  files: Array<FileInfo>;
+  path: FileInfo[];
+  files: FileInfo[];
 }
 
 export interface CommitDiff {
-  fileDiffs: Array<FileDiff>;
+  fileDiffs: FileDiff[];
   selectedFile: number;
-  headerLines: Array<string>;
+  headerLines: string[];
   useSplitDiff: boolean;
   removedLinesDiff: FileDiff;
   addedLinesDiff: FileDiff;
@@ -31,12 +31,13 @@ export interface CommitDiff {
 
 export interface Path {
   key: string;
-  commands: Array<{ type: string, x: number, y: number }>;
+  sha1?: string;
+  commands: Array<{ type: string; x: number; y: number }>;
 }
 
 export interface Graph {
-   paths: Array<Path>;
-   circles: Array<Circle>;
+  paths: Path[];
+  circles: Circle[];
 }
 
 export interface Circle {
@@ -47,7 +48,7 @@ export interface Circle {
 }
 
 export interface Commits {
-  commits: Array<CommitInfo>;
+  commits: CommitInfo[];
   selectedCommit: string;
   viewMode: CommitViewMode;
   graph: Graph;

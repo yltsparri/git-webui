@@ -15,36 +15,43 @@
  * limitations under the License.
  */
 
-import { CommitInfo } from '../git/CommitInfo';
-import FileInfo from '../git/FileInfo';
-import { AppState, CommitViewMode,  } from '../AppState';
-import Actions from '../Actions';
-import Tree from './Tree';
-import Diff from './Diff';
+import { Action } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import Actions from "../Actions";
+import { AppState, CommitViewMode } from "../AppState";
+import { CommitInfo } from "../git/CommitInfo";
+import FileInfo from "../git/FileInfo";
+import Diff from "./Diff";
+import Tree from "./Tree";
 
 export function commitSelected(commit: CommitInfo) {
-  return (dispatch, getState: () => AppState) => {
+  return (
+    dispatch: ThunkDispatch<{}, {}, Action>,
+    getState: () => AppState
+  ) => {
     let state = getState();
-    let root: FileInfo = {
+    const root: FileInfo = {
       name: state.appData.dirName,
       size: NaN,
       objectId: commit.hash,
       isSymbolicLink: false,
       mode: 0,
-      type: 'tree',
+      type: "tree",
       parent: null
     };
     dispatch({ type: Actions.SELECT_COMMIT, selectedCommit: commit.hash });
 
-    dispatch({ type: Actions.UPDATE_COMMIT_VIEW_DATA, data: { commitHash: commit.hash, path: [root], files: [] } });
+    dispatch({
+      type: Actions.UPDATE_COMMIT_VIEW_DATA,
+      data: { commitHash: commit.hash, path: [root], files: [] }
+    });
     state = getState();
     if (state.commits.viewMode === CommitViewMode.Diff) {
       dispatch(Diff.loadDiff(commit.hash));
-    }
-    else if (state.commits.viewMode === CommitViewMode.Tree) {
+    } else if (state.commits.viewMode === CommitViewMode.Tree) {
       dispatch(Tree.selectNode(root));
     }
   };
 }
 
-export default {commitSelected};
+export default { commitSelected };

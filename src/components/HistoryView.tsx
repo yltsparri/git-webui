@@ -15,49 +15,67 @@
  * limitations under the License.
  */
 
-import { CommitInfo } from '../actions/git/CommitInfo';
-import * as React from 'react';
-import LogView from './LogView';
-import { CommitViewMode } from '../actions/AppState';
-import {Graph} from '../actions/Commit';
+import * as React from "react";
+import { CommitViewMode } from "../actions/AppState";
+import { Graph } from "../actions/Commit";
+import { CommitInfo } from "../actions/git/CommitInfo";
+import LogView from "./LogView";
 
 export interface HistoryViewDataProps {
   commitHash: string;
   diffViewMode: CommitViewMode;
-  commits: Array<CommitInfo>;
+  commits: CommitInfo[];
   graph: Graph;
   CommitView: React.ComponentClass<any>;
   ExploreView: React.ComponentClass<any>;
 }
 
 export interface HistoryViewDispatchProps {
-  onCommitClicked(commit);
-  selectDiffViewMode(mode: CommitViewMode);
+  onCommitClicked: (commit: CommitInfo) => void;
+  selectDiffViewMode: (mode: CommitViewMode) => void;
 }
 
-interface HistoryViewProps extends HistoryViewDataProps, HistoryViewDispatchProps { }
-export default class HistoryView extends React.PureComponent<HistoryViewProps, undefined> {
-  render() {
-    const {
-      commits,
-      diffViewMode,
-      commitHash,
-      graph,
-      selectDiffViewMode,
-      CommitView
-    } = this.props;
+interface HistoryViewProps
+  extends HistoryViewDataProps,
+    HistoryViewDispatchProps {}
+export default class HistoryView extends React.PureComponent<HistoryViewProps> {
+  public render() {
+    const { commits, diffViewMode, commitHash, graph, CommitView } = this.props;
 
-    return <div id='history-view'>
-      <LogView commits={commits} onCommitClicked={this.props.onCommitClicked} active={commitHash} graph={graph}/>
-      <div id='commit-view' style={{ display: 'flex' }}>
-        <div id='commit-view-header'>
-          <ul className='nav nav-pills nav-justified' role='tablList'>
-            <li onClick={() => selectDiffViewMode(CommitViewMode.Diff)} className={diffViewMode === CommitViewMode.Diff ? 'active' : ''}><a href='#'>Commit</a></li>
-            <li onClick={() => selectDiffViewMode(CommitViewMode.Tree)} className={diffViewMode === CommitViewMode.Tree ? 'active' : ''}><a href='#'>Tree</a></li>
-          </ul>
+    return (
+      <div id="history-view">
+        <LogView
+          commits={commits}
+          onCommitClicked={this.props.onCommitClicked}
+          active={commitHash}
+          graph={graph}
+        />
+        <div id="commit-view" style={{ display: "flex" }}>
+          <div id="commit-view-header">
+            <ul className="nav nav-pills nav-justified" role="tablList">
+              <li
+                onClick={this.selectDiffViewModeDiff}
+                className={diffViewMode === CommitViewMode.Diff ? "active" : ""}
+              >
+                <a href="#">Commit</a>
+              </li>
+              <li
+                onClick={this.selectDiffViewModeTree}
+                className={diffViewMode === CommitViewMode.Tree ? "active" : ""}
+              >
+                <a href="#">Tree</a>
+              </li>
+            </ul>
+          </div>
+          <CommitView />
         </div>
-        <CommitView />
       </div>
-    </div>;
+    );
   }
+
+  private selectDiffViewModeDiff = () =>
+    this.props.selectDiffViewMode(CommitViewMode.Diff)
+
+  private selectDiffViewModeTree = () =>
+    this.props.selectDiffViewMode(CommitViewMode.Tree)
 }

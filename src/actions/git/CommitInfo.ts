@@ -35,12 +35,12 @@ export interface Person {
 
 export interface CommitInfo {
   hash: string;
-  parents: Array<string>;
+  parents: string[];
   tree: string;
   message: string;
   author: Person;
   committer: Person;
-  refs?: Array<Ref>;
+  refs?: Ref[];
 }
 
 export default CommitInfo;

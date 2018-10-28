@@ -15,30 +15,39 @@
  * limitations under the License.
  */
 
-import Git from '../git/Git';
-import { AppMode, AppState, NavigationNode, NavigationType } from '../AppState';
-import Actions from '../Actions';
-import Commit from './Commit';
-import Messages from './Messages';
+import { Action } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import Actions from "../Actions";
+import { AppMode, AppState, NavigationNode, NavigationType } from "../AppState";
+import Git from "../git/Git";
+import Commit from "./Commit";
+import Messages from "./Messages";
 
-const loadCommits = (dispatch, item) => Git.getCommits(1000, item.text)
-  .then((response) => {
-    if (response.returnCode === 0) {
-      dispatch({ type: Actions.SET_COMMITS, commits: response.data });
-      if (response.data.length) {
-        dispatch(Commit.commitSelected(response.data[0]));
+const loadCommits = (
+  dispatch: ThunkDispatch<{}, {}, Action>,
+  item: { text: string }
+) =>
+  Git.getCommits(1000, item.text)
+    .then(response => {
+      if (response.returnCode === 0) {
+        dispatch({ type: Actions.SET_COMMITS, commits: response.data });
+        if (response.data && response.data.length) {
+          dispatch(Commit.commitSelected(response.data[0]));
+        }
       }
-    }
-    if (response.message) {
-      dispatch(Messages.addMessage(response.message));
-    }
-  })
-  .catch((error) => {
-    dispatch(Messages.addMessage(error.message));
-  });
+      if (response.message) {
+        dispatch(Messages.addMessage(response.message));
+      }
+    })
+    .catch(error => {
+      dispatch(Messages.addMessage(error.message));
+    });
 
 export function itemSelected(itemId: string) {
-  return (dispatch, getState: () => AppState) => {
+  return (
+    dispatch: ThunkDispatch<{}, {}, Action>,
+    getState: () => AppState
+  ) => {
     dispatch({ type: Actions.NODE_SELECTED, data: { selected: itemId } });
     const state = getState();
     const nav = state.navigation;
@@ -50,16 +59,19 @@ export function itemSelected(itemId: string) {
     while (parent && parent.parentId) {
       parent = nav.nodes[parent.parentId];
     }
-    if (parent && (parent.id === NavigationType.LocalBranches ||
-      parent.id === NavigationType.RemoteBranches ||
-      parent.id === NavigationType.Tags)) {
-      dispatch(dispatch => loadCommits(dispatch, item));
+    if (
+      parent &&
+      (parent.id === NavigationType.LocalBranches ||
+        parent.id === NavigationType.RemoteBranches ||
+        parent.id === NavigationType.Tags)
+    ) {
+      loadCommits(dispatch, item);
     }
   };
 }
 
 const showMore = (id: string) => {
-  return { type: Actions.SHOW_ALL, data: { id: id } };
+  return { type: Actions.SHOW_ALL, data: { id } };
 };
 
 export default {

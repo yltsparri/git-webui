@@ -15,28 +15,39 @@
  * limitations under the License.
  */
 
-import * as React from 'react';
+import * as React from "react";
 
 export interface RemoteViewProps {
   repo: string;
+  mode?: AppendMode;
 }
 
-export default class RemoteView extends React.PureComponent<RemoteViewProps, undefined> {
-
-  render() {
-    const {repo} = this.props;
-    return <div className="jumbotron">
-      <h1>Remote access</h1>
-      <p>Git webui allows other people to clone and pull from your repository.</p>
-      <div className="git-access">
-        <p>Other people can clone your repository:</p>
-        <pre className="git-clone">
-          {"git clone http://" + document.location.hostname + ":" + document.location.port + "/ " + repo}
-        </pre>
-        <p>Or to pull from your repository:</p>
-        <pre className="git-pull">
-          {'git pull http://' + document.location.hostname + ':' + document.location.port + '/'}</pre>
+export default class RemoteView extends React.PureComponent<RemoteViewProps> {
+  public render() {
+    const { repo } = this.props;
+    const location = document.location!;
+    return (
+      <div className="jumbotron">
+        <h1>Remote access</h1>
+        <p>
+          Git webui allows other people to clone and pull from your repository.
+        </p>
+        <div className="git-access">
+          <p>Other people can clone your repository:</p>
+          <pre className="git-clone">
+            {"git clone http://" +
+              location.hostname +
+              ":" +
+              location.port +
+              "/ " +
+              repo}
+          </pre>
+          <p>Or to pull from your repository:</p>
+          <pre className="git-pull">
+            {"git pull http://" + location.hostname + ":" + location.port + "/"}
+          </pre>
+        </div>
       </div>
-    </div>;
+    );
   }
 }

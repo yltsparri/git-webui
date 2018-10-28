@@ -1,8 +1,8 @@
-import DiffParser from './DiffParser';
-import { HunkPartType } from './Diff';
+import { HunkPartType } from "./Diff";
+import DiffParser from "./DiffParser";
 
-describe('Diff parser with context 3', () => {
-  var diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
+describe("Diff parser with context 3", () => {
+  const diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
 Author: Ülo Parri <yltsparri@gmail.com>
 Date:   Sat Jan 14 14:55:49 2017 +0200
 
@@ -23,7 +23,7 @@ index 7ae17c4..c4e46e0 100644
  const loadDiff = (commit: string) => {
 `;
 
-  let diff = DiffParser.parse(diffString);
+  const diff = DiffParser.parse(diffString);
   it("Header lines count", () => {
     expect(diff.headerLines.length).toBe(6);
   });
@@ -31,27 +31,35 @@ index 7ae17c4..c4e46e0 100644
     expect(diff.fileDiffs.length).toBe(1);
   });
   it("First hunk", () => {
-    let firstHunk = diff.fileDiffs[0].hunks[0];
-    expect(firstHunk.header).toBe("@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';");
+    const firstHunk = diff.fileDiffs[0].hunks[0];
+    expect(firstHunk.header).toBe(
+      "@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';"
+    );
     expect(diff.fileDiffs[0].hunks.length).toBe(1);
   });
   it("First hunk, first part", () => {
-    let firstHunkPart = diff.fileDiffs[0].hunks[0].parts[0];
+    const firstHunkPart = diff.fileDiffs[0].hunks[0].parts[0];
     expect(firstHunkPart.content.length).toBe(3);
     expect(firstHunkPart.type).toBe(HunkPartType.Keep);
-    expect(firstHunkPart.content[0]).toBe(" import FileInfo from './git/FileInfo';");
+    expect(firstHunkPart.content[0]).toBe(
+      " import FileInfo from './git/FileInfo';"
+    );
     expect(firstHunkPart.content[1]).toBe(" import Git from './git/Git';");
-    expect(firstHunkPart.content[2]).toBe(" import { AppMode, AppState, DiffViewMode } from './AppState';");
+    expect(firstHunkPart.content[2]).toBe(
+      " import { AppMode, AppState, DiffViewMode } from './AppState';"
+    );
   });
   it("First hunk, second part", () => {
-    let hunkPart = diff.fileDiffs[0].hunks[0].parts[1];
+    const hunkPart = diff.fileDiffs[0].hunks[0].parts[1];
     expect(hunkPart.content.length).toBe(2);
     expect(hunkPart.type).toBe(HunkPartType.Add);
     expect(hunkPart.content[0]).toBe("+import Actions from './Actions';");
-    expect(hunkPart.content[1]).toBe("+import GitResponse from './git/GitResponse';");
+    expect(hunkPart.content[1]).toBe(
+      "+import GitResponse from './git/GitResponse';"
+    );
   });
   it("First hunk, third part", () => {
-    let hunkPart = diff.fileDiffs[0].hunks[0].parts[2];
+    const hunkPart = diff.fileDiffs[0].hunks[0].parts[2];
     expect(hunkPart.content.length).toBe(4);
     expect(hunkPart.type).toBe(HunkPartType.Keep);
     expect(hunkPart.content[0]).toBe(" ");
@@ -61,8 +69,8 @@ index 7ae17c4..c4e46e0 100644
   });
 });
 
-describe('Diff parser with context 0', () => {
-  var diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
+describe("Diff parser with context 0", () => {
+  const diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
 Author: Ülo Parri <yltsparri@gmail.com>
 Date:   Sat Jan 14 14:55:49 2017 +0200
 
@@ -77,7 +85,7 @@ index 7ae17c4..c4e46e0 100644
 +import GitResponse from './git/GitResponse';
 `;
 
-  let diff = DiffParser.parse(diffString);
+  const diff = DiffParser.parse(diffString);
   it("Header lines count", () => {
     expect(diff.headerLines.length).toBe(6);
   });
@@ -85,27 +93,31 @@ index 7ae17c4..c4e46e0 100644
     expect(diff.fileDiffs.length).toBe(1);
   });
   it("First hunk", () => {
-    let firstHunk = diff.fileDiffs[0].hunks[0];
-    expect(firstHunk.header).toBe("@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';");
+    const firstHunk = diff.fileDiffs[0].hunks[0];
+    expect(firstHunk.header).toBe(
+      "@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';"
+    );
     expect(diff.fileDiffs[0].hunks.length).toBe(1);
   });
   it("First hunk, first part", () => {
-    let hunkPart = diff.fileDiffs[0].hunks[0].parts[0];
+    const hunkPart = diff.fileDiffs[0].hunks[0].parts[0];
     expect(hunkPart.content.length).toBe(2);
     expect(hunkPart.type).toBe(HunkPartType.Add);
     expect(hunkPart.content[0]).toBe("+import Actions from './Actions';");
-    expect(hunkPart.content[1]).toBe("+import GitResponse from './git/GitResponse';");
+    expect(hunkPart.content[1]).toBe(
+      "+import GitResponse from './git/GitResponse';"
+    );
   });
   it("First hunk, second part", () => {
-    let hunkPart = diff.fileDiffs[0].hunks[0].parts[1];
+    const hunkPart = diff.fileDiffs[0].hunks[0].parts[1];
     expect(hunkPart.content.length).toBe(1);
     expect(hunkPart.type).toBe(HunkPartType.Keep);
     expect(hunkPart.content[0]).toBe("");
   });
 });
 
-describe('Diff parser with context 3, multiple hunks', () => {
-  var diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
+describe("Diff parser with context 3, multiple hunks", () => {
+  const diffString = `commit 8f1b45bf139ae36b24a17a343a3dfbf1f3b3e9cf
 Author: Ülo Parri <yltsparri@gmail.com>
 Date:   Sat Jan 14 14:55:49 2017 +0200
 
@@ -141,7 +153,7 @@ index 7ae17c4..c4e46e0 100644
    };
 `;
 
-  let diff = DiffParser.parse(diffString);
+  const diff = DiffParser.parse(diffString);
   it("Header lines count", () => {
     expect(diff.headerLines.length).toBe(6);
   });
@@ -149,27 +161,33 @@ index 7ae17c4..c4e46e0 100644
     expect(diff.fileDiffs.length).toBe(1);
   });
   it("First hunk", () => {
-    let firstHunk = diff.fileDiffs[0].hunks[0];
-    expect(firstHunk.header).toBe("@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';");
+    const firstHunk = diff.fileDiffs[0].hunks[0];
+    expect(firstHunk.header).toBe(
+      "@@ -22,6 +22,8 @@ import BranchStatus from './git/BranchStatus';"
+    );
     expect(diff.fileDiffs[0].hunks.length).toBe(2);
   });
   it("Second hunk, first part", () => {
-    let firstHunkPart = diff.fileDiffs[0].hunks[1].parts[0];
+    const firstHunkPart = diff.fileDiffs[0].hunks[1].parts[0];
     expect(firstHunkPart.content.length).toBe(3);
     expect(firstHunkPart.type).toBe(HunkPartType.Keep);
     expect(firstHunkPart.content[0]).toBe("       diffContext = 99999999;");
     expect(firstHunkPart.content[1]).toBe("     }");
-    expect(firstHunkPart.content[2]).toBe("     return git.getDiff(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)");
+    expect(firstHunkPart.content[2]).toBe(
+      "     return git.getDiff(commit, diffContext, ignoreWhitespace, gitDiffOpts, gitFile)"
+    );
   });
   it("Second hunk header", () => {
-    let hunk = diff.fileDiffs[0].hunks[1];
-    expect(hunk.header).toBe("@@ -33,10 +35,10 @@ const loadDiff = (commit: string) => {");
+    const hunk = diff.fileDiffs[0].hunks[1];
+    expect(hunk.header).toBe(
+      "@@ -33,10 +35,10 @@ const loadDiff = (commit: string) => {"
+    );
     expect(hunk.parts.length).toBe(4);
   });
   it("Last hunk, last part", () => {
-    let hunks = diff.fileDiffs[0].hunks;
-    let hunk =  hunks[hunks.length - 1];
-    let hunkPart = hunk.parts[hunk.parts.length - 1];
+    const hunks = diff.fileDiffs[0].hunks;
+    const hunk = hunks[hunks.length - 1];
+    const hunkPart = hunk.parts[hunk.parts.length - 1];
     expect(hunkPart.content.length).toBe(4);
     expect(hunkPart.type).toBe(HunkPartType.Keep);
     expect(hunkPart.content[0]).toBe("         }");

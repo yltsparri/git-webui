@@ -1,12 +1,14 @@
-import DiffActions from '../actions/actioncreators/Diff';
-import NavigationActions from '../actions/actioncreators/Navigation';
-import TreeActions from '../actions/actioncreators/Tree';
-import { AppState, AppMode } from '../actions/AppState';
-import { connect } from 'react-redux';
-import CommitView, { CommitViewActionProps, CommitViewStateProps } from '../components/CommitView';
-import FileInfo from '../actions/git/FileInfo';
-
-
+import { connect } from "react-redux";
+import { AnyAction, Dispatch } from "redux";
+import DiffActions from "../actions/actioncreators/Diff";
+import NavigationActions from "../actions/actioncreators/Navigation";
+import TreeActions from "../actions/actioncreators/Tree";
+import { AppMode, AppState } from "../actions/AppState";
+import FileInfo from "../actions/git/FileInfo";
+import CommitView, {
+  CommitViewActionProps,
+  CommitViewStateProps
+} from "../components/CommitView";
 
 const mapStateToProps = (state: AppState): CommitViewStateProps => {
   return {
@@ -21,19 +23,19 @@ const mapStateToProps = (state: AppState): CommitViewStateProps => {
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     toggleIgnoreWhiteSpace: () => {
-      dispatch(DiffActions.toggleIgnoreWhiteSpace());
+      dispatch((DiffActions.toggleIgnoreWhiteSpace() as {}) as AnyAction);
     },
     updateDiffContext: (diffContext: number) => {
-      dispatch(DiffActions.setDiffContext(diffContext));
+      dispatch((DiffActions.setDiffContext(diffContext) as {}) as AnyAction);
     },
     onNodeSelected: (node: FileInfo) => {
-      dispatch(TreeActions.selectNode(node));
+      dispatch((TreeActions.selectNode(node) as {}) as AnyAction);
     },
     toggleShowFullFile: () => {
-      dispatch(DiffActions.toggleShowFullFile());
+      dispatch((DiffActions.toggleShowFullFile() as {}) as AnyAction);
     },
     onExloreClicked: () => {
       dispatch(NavigationActions.changeAppMode(AppMode.Explore));

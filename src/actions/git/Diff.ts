@@ -1,6 +1,6 @@
 export interface Diff {
-  headerLines: Array<string>;
-  fileDiffs: Array<FileDiff>;
+  headerLines: string[];
+  fileDiffs: FileDiff[];
 }
 
 export interface FileDiff {
@@ -9,7 +9,7 @@ export interface FileDiff {
   indexLine: string;
   initialFile: string;
   resultingFile: string;
-  hunks: Array<Hunk>;
+  hunks: Hunk[];
 }
 
 export enum HunkPartType {
@@ -19,13 +19,13 @@ export enum HunkPartType {
 }
 
 export interface HunkPart {
-  content: Array<string>;
-  type: HunkPartType;
+  content: string[];
+  type: HunkPartType | null;
 }
 
 export interface Hunk {
   header: string;
-  parts: Array<HunkPart>;
+  parts: HunkPart[];
 }
 
 export default Diff;

@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`matches snapshot 1`] = `
+<div
+  className="root"
+>
+  <div
+    id="sidebar"
+  >
+    <a
+      data-target="#help-modal"
+      data-toggle="modal"
+      href="#"
+    >
+      <img
+        id="sidebar-logo"
+        src="/img/git-logo.png"
+      />
+    </a>
+    <div
+      id="sidebar-content"
+    >
+      <section
+        id="sidebar-workspace"
+      >
+        <h4
+          onClick={[Function]}
+        >
+          Workspace
+        </h4>
+        <ul />
+      </section>
+      <section
+        id="sidebar-remote-access"
+      >
+        <h4
+          onClick={[Function]}
+        >
+          Remote
+        </h4>
+        <ul />
+      </section>
+      <section
+        id="sidebar-local-branches"
+      >
+        <h4
+          onClick={[Function]}
+        >
+          Local Branches
+        </h4>
+        <ul />
+      </section>
+      <section
+        id="sidebar-remote-branches"
+      >
+        <h4
+          onClick={[Function]}
+        >
+          Remote Branches
+        </h4>
+        <ul />
+      </section>
+      <section
+        id="sidebar-tags"
+      >
+        <h4
+          onClick={[Function]}
+        >
+          Tags
+        </h4>
+        <ul />
+      </section>
+    </div>
+  </div>
+  <div
+    id="main-view"
+  >
+    <div
+      id="history-view"
+    >
+      <div
+        id="log-view"
+      >
+        <div>
+          <svg
+            height={0}
+          />
+        </div>
+      </div>
+      <div
+        id="commit-view"
+        style={
+          Object {
+            "display": "flex",
+          }
+        }
+      >
+        <div
+          id="commit-view-header"
+        >
+          <ul
+            className="nav nav-pills nav-justified"
+            role="tablList"
+          >
+            <li
+              className=""
+              onClick={[Function]}
+            >
+              <a
+                href="#"
+              >
+                Commit
+              </a>
+            </li>
+            <li
+              className="active"
+              onClick={[Function]}
+            >
+              <a
+                href="#"
+              >
+                Tree
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div
+          className="diff-view-container panel panel-default"
+        >
+          <div
+            className="panel-body"
+          >
+            <div
+              id="tree-view"
+            >
+              <ol
+                className="breadcrumb"
+              />
+              <div
+                className="list-group"
+                id="tree-view-tree-content"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

@@ -15,23 +15,28 @@
  * limitations under the License.
  */
 
-import FileInfo from '../git/FileInfo';
-import Git from '../git/Git';
-import Actions from '../Actions';
-import Messages from './Messages';
+import { Action } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+import Actions from "../Actions";
+import FileInfo from "../git/FileInfo";
+import Git from "../git/Git";
+import Messages from "./Messages";
 
 export function selectNode(node: FileInfo) {
-  return (dispatch) => {
-    dispatch({ type: Actions.SELECT_COMMIT_TREE_FILE, objectId: node.objectId });
-    if (node.type === 'tree') {
-      return Git.listFiles(node.objectId)
-        .then(response => {
-          dispatch({ type: Actions.SET_COMMIT_TREE_FILES, files: response.data });
-          if (response.message) {
-            dispatch(Messages.addMessage(response.message));
-          }
-        });
+  return (dispatch: ThunkDispatch<{}, {}, Action>) => {
+    dispatch({
+      type: Actions.SELECT_COMMIT_TREE_FILE,
+      objectId: node.objectId
+    });
+    if (node.type === "tree") {
+      return Git.listFiles(node.objectId).then(response => {
+        dispatch({ type: Actions.SET_COMMIT_TREE_FILES, files: response.data });
+        if (response.message) {
+          dispatch(Messages.addMessage(response.message));
+        }
+      });
     }
+    return new Promise<void>(resolve => resolve());
   };
 }
 

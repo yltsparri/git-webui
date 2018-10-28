@@ -15,10 +15,11 @@
  * limitations under the License.
  */
 
-import { AppData, AppMode, NavigationType } from '../AppState';
-import Actions from '../Actions';
+import { AnyAction } from "redux";
+import Actions from "../Actions";
+import { AppData, AppMode, NavigationType } from "../AppState";
 
-export function appData(state: AppData, action): AppData {
+export function appData(state: AppData, action: AnyAction): AppData {
   switch (action.type) {
     case Actions.SET_DIRNAME:
       const dirName = action.dirName;
@@ -38,18 +39,21 @@ export function appData(state: AppData, action): AppData {
     case Actions.UPDATE_BASEDATA:
       return Object.assign({}, state, action.data);
     case Actions.ADD_MESSAGE:
-      return Object.assign({}, state, { messages: (state.messages ? state.messages + '\n' : '') + action.message });
+      return Object.assign({}, state, {
+        messages: (state.messages ? state.messages + "\n" : "") + action.message
+      });
     case Actions.CLOSE_MESSAGE:
       return Object.assign({}, state, { messages: null });
     case Actions.SHOW_ALL:
       return Object.assign({}, state, { showAll: action.type });
-
   }
-  return state || {
-    dirName: '',
-    viewOnly: true,
-    mode: AppMode.History,
-    messages: null,
-    showAll: null
-  };
+  return (
+    state || {
+      dirName: "",
+      viewOnly: true,
+      mode: AppMode.History,
+      messages: null,
+      showAll: null
+    }
+  );
 }

@@ -1,4 +1,14 @@
 {
+  "extends": ["tslint:recommended", "tslint-react", "tslint-config-prettier"],
+  "linterOptions": {
+    "exclude": [
+      "config/**/*.js",
+      "node_modules/**/*.ts",
+      "coverage/lcov-report/*.js",
+      "dist/**/*",
+      "release/**/*"
+    ]
+  },
   "rules": {
     "no-unused-expression": true,
     "no-duplicate-variable": true,
@@ -8,6 +18,8 @@
       true,
       "always"
     ],
-    "triple-equals": true
+    "triple-equals": true,
+    "object-literal-sort-keys": false,
+    "interface-name": [true, "never-prefix"]
   }
 }

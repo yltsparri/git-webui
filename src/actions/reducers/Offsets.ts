@@ -1,3 +1,6 @@
+import { AnyAction } from "redux";
+import { Offset } from "../AppState";
+
 /*
  * Copyright 2017 Ülo Parri
  * Copyright 2015 Eric ALBER
@@ -15,12 +18,11 @@
  * limitations under the License.
  */
 
-export function offsets(state, action) {
-    if (action.type === 'SET_OFFSET') {
-      const toSet = {};
-      toSet[action.key] = action.offset;
-      return Object.assign({}, state, toSet);
-    }
-    return state || {};
+export function offsets(state: Offset[], action: AnyAction) {
+  if (action.type === "SET_OFFSET") {
+    const toSet = {};
+    toSet[action.key] = action.offset;
+    return Object.assign({}, state, toSet);
   }
-
+  return state || {};
+}
