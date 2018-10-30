@@ -20,9 +20,9 @@ import { ThunkDispatch } from "redux-thunk";
 import Actions from "../Actions";
 import { AppState, CommitViewMode } from "../AppState";
 import { CommitInfo } from "../git/CommitInfo";
-import FileInfo from "../git/FileInfo";
-import Diff from "./Diff";
-import Tree from "./Tree";
+import { FileInfo } from "../git/FileInfo";
+import { loadDiff } from "./Diff";
+import { selectNode } from "./Tree";
 
 export function commitSelected(commit: CommitInfo) {
   return (
@@ -47,11 +47,9 @@ export function commitSelected(commit: CommitInfo) {
     });
     state = getState();
     if (state.commits.viewMode === CommitViewMode.Diff) {
-      dispatch(Diff.loadDiff(commit.hash));
+      dispatch(loadDiff(commit.hash));
     } else if (state.commits.viewMode === CommitViewMode.Tree) {
-      dispatch(Tree.selectNode(root));
+      dispatch(selectNode(root));
     }
   };
 }
-
-export default { commitSelected };

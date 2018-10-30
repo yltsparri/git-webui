@@ -23,7 +23,7 @@ export interface ModalMessageProps {
   close: () => void;
 }
 
-export default class ModalMessage extends React.Component<ModalMessageProps> {
+export class ModalMessage extends React.Component<ModalMessageProps> {
   public render() {
     if (!this.props.message || this.props.message === "") {
       return null;

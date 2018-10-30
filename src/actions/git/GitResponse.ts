@@ -3,5 +3,3 @@ export interface GitResponse<T> {
   returnCode: number;
   message?: string;
 }
-
-export default GitResponse;

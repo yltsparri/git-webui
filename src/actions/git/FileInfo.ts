@@ -7,5 +7,3 @@ export interface FileInfo {
   name: string;
   parent: string | null;
 }
-
-export default FileInfo;

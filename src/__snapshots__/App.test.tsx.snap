@@ -14,7 +14,7 @@ exports[`matches snapshot 1`] = `
     >
       <img
         id="sidebar-logo"
-        src="/img/git-logo.png"
+        src="git-logo.png"
       />
     </a>
     <div
@@ -108,6 +108,7 @@ exports[`matches snapshot 1`] = `
             >
               <a
                 href="#"
+                onClick={[Function]}
               >
                 Commit
               </a>
@@ -118,6 +119,7 @@ exports[`matches snapshot 1`] = `
             >
               <a
                 href="#"
+                onClick={[Function]}
               >
                 Tree
               </a>

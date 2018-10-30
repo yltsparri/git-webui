@@ -1,5 +1,5 @@
 import * as React from "react";
-import FileInfo from "../actions/git/FileInfo";
+import { FileInfo } from "../actions/git/FileInfo";
 
 export interface TreeViewDataProps {
   path: FileInfo[];
@@ -7,7 +7,7 @@ export interface TreeViewDataProps {
   onNodeSelected(node: FileInfo): void;
 }
 
-export default class TreeView extends React.PureComponent<TreeViewDataProps> {
+export class TreeView extends React.PureComponent<TreeViewDataProps> {
   public render() {
     const path: FileInfo[] = this.props.path;
     const files: FileInfo[] = this.props.files;

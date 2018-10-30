@@ -100,12 +100,12 @@ class WebUiRequestHandler(SimpleHTTPRequestHandler):
         if self.path.startswith("/git/cat-file/"):
             obj = self.path[14:]
             self.process(["git", "cat-file", "-p", obj], b"", True, False)
-        elif self.path == "/dirname":
+        elif self.path == "/git/dirname":
             wc = os.path.split(WebUiRequestHandler.REPO_ROOT)[1]
             self.send_text(200, codecs.encode(wc, "utf-8"))
-        elif self.path == "/hostname":
+        elif self.path == "/git/hostname":
             self.send_text(200, codecs.encode(socket.gethostname(), "utf-8"))
-        elif self.path == "/viewonly":
+        elif self.path == "/git/viewonly":
             vo = "1" if self.is_view_only() else "0"
             self.send_text(200, codecs.encode(vo, "utf-8"))
         elif self.is_git_request():

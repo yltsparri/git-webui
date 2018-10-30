@@ -17,6 +17,7 @@
 
 import * as React from "react";
 import Modal from "react-overlays/lib/Modal";
+import logo from "../img/git-logo.png";
 
 export interface NavNode {
   text: string;
@@ -43,14 +44,14 @@ export interface SidebarViewProps
   extends SidebarViewDataProps,
     SidebarViewDispatchProps {}
 
-export default class SidebarView extends React.PureComponent<SidebarViewProps> {
+export class SidebarView extends React.PureComponent<SidebarViewProps> {
   public render() {
     const { nodes } = this.props;
 
     return (
       <div id="sidebar">
         <a href="#" data-toggle="modal" data-target="#help-modal">
-          <img id="sidebar-logo" src="/img/git-logo.png" />
+          <img id="sidebar-logo" src={logo} />
         </a>
         {this.renderModal()}
         <div id="sidebar-content">

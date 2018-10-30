@@ -1,13 +1,14 @@
 import { connect } from "react-redux";
 import { AnyAction } from "redux";
-import NavigationActions from "../actions/actioncreators/Navigation";
-import Offsets from "../actions/actioncreators/Offsets";
+import { itemSelected, showMore } from "../actions/actioncreators/Navigation";
+import { setOffset } from "../actions/actioncreators/Offsets";
 import { AppState, NavigationNode } from "../actions/AppState";
-import SidebarView, {
+import {
   NavNode,
+  SidebarView,
   SidebarViewDataProps,
   SidebarViewDispatchProps
-} from "../components/SidebarView";
+} from "./SidebarView";
 
 const mapNodes = (
   nodeId: string,
@@ -31,7 +32,11 @@ const mapNodes = (
   );
 };
 
-export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
+export const SidebarContainer = connect<
+  SidebarViewDataProps,
+  SidebarViewDispatchProps,
+  any
+>(
   (state: AppState) => {
     return {
       dirName: state.appData.dirName,
@@ -46,12 +51,12 @@ export default connect<SidebarViewDataProps, SidebarViewDispatchProps, any>(
   (dispatch): SidebarViewDispatchProps => {
     return {
       onItemClicked: (item: NavNode) => {
-        dispatch((NavigationActions.itemSelected(item.id) as {}) as AnyAction);
-        dispatch(Offsets.setOffset("EXPLORE_DIFF", 0, 0));
-        dispatch(Offsets.setOffset("EXPLORE_FILES", 0, 0));
+        dispatch((itemSelected(item.id) as {}) as AnyAction);
+        dispatch(setOffset("EXPLORE_DIFF", 0, 0));
+        dispatch(setOffset("EXPLORE_FILES", 0, 0));
       },
       moreClicked: (id: string) => {
-        dispatch(NavigationActions.showMore(id));
+        dispatch(showMore(id));
       }
     };
   }

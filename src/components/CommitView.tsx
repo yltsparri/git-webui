@@ -18,9 +18,9 @@
 import React from "react";
 import { CommitViewMode } from "../actions/AppState";
 import { FileDiff } from "../actions/git/Diff";
-import FileInfo from "../actions/git/FileInfo";
-import DiffView, { DiffViewMode } from "./DiffView";
-import TreeView from "./TreeView";
+import { FileInfo } from "../actions/git/FileInfo";
+import { DiffView, DiffViewMode } from "./DiffView";
+import { TreeView } from "./TreeView";
 
 export interface CommitViewStateProps {
   diff: FileDiff[];
@@ -43,7 +43,7 @@ export interface CommitViewActionProps {
 
 interface CommitViewProps extends CommitViewStateProps, CommitViewActionProps {}
 
-export default class CommitView extends React.PureComponent<CommitViewProps> {
+export class CommitView extends React.PureComponent<CommitViewProps> {
   public render() {
     const { diff, path, files, diffViewMode, onNodeSelected } = this.props;
     const renderedButtons =

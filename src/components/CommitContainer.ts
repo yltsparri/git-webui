@@ -1,14 +1,19 @@
 import { connect } from "react-redux";
 import { AnyAction, Dispatch } from "redux";
-import DiffActions from "../actions/actioncreators/Diff";
-import NavigationActions from "../actions/actioncreators/Navigation";
-import TreeActions from "../actions/actioncreators/Tree";
+import {
+  setDiffContext,
+  toggleIgnoreWhiteSpace,
+  toggleShowFullFile
+} from "../actions/actioncreators/Diff";
+import { changeAppMode } from "../actions/actioncreators/Navigation";
+import { selectNode } from "../actions/actioncreators/Tree";
 import { AppMode, AppState } from "../actions/AppState";
-import FileInfo from "../actions/git/FileInfo";
-import CommitView, {
+import { FileInfo } from "../actions/git/FileInfo";
+import {
+  CommitView,
   CommitViewActionProps,
   CommitViewStateProps
-} from "../components/CommitView";
+} from "./CommitView";
 
 const mapStateToProps = (state: AppState): CommitViewStateProps => {
   return {
@@ -26,24 +31,28 @@ const mapStateToProps = (state: AppState): CommitViewStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     toggleIgnoreWhiteSpace: () => {
-      dispatch((DiffActions.toggleIgnoreWhiteSpace() as {}) as AnyAction);
+      dispatch((toggleIgnoreWhiteSpace() as {}) as AnyAction);
     },
     updateDiffContext: (diffContext: number) => {
-      dispatch((DiffActions.setDiffContext(diffContext) as {}) as AnyAction);
+      dispatch((setDiffContext(diffContext) as {}) as AnyAction);
     },
     onNodeSelected: (node: FileInfo) => {
-      dispatch((TreeActions.selectNode(node) as {}) as AnyAction);
+      dispatch((selectNode(node) as {}) as AnyAction);
     },
     toggleShowFullFile: () => {
-      dispatch((DiffActions.toggleShowFullFile() as {}) as AnyAction);
+      dispatch((toggleShowFullFile() as {}) as AnyAction);
     },
     onExloreClicked: () => {
-      dispatch(NavigationActions.changeAppMode(AppMode.Explore));
+      dispatch(changeAppMode(AppMode.Explore));
     }
   };
 };
 
-export default connect<CommitViewStateProps, CommitViewActionProps, any>(
+export const CommitContainer = connect<
+  CommitViewStateProps,
+  CommitViewActionProps,
+  any
+>(
   mapStateToProps,
   mapDispatchToProps
 )(CommitView);

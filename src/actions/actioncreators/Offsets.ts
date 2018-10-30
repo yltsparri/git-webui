@@ -8,5 +8,3 @@ export function setOffset(key: string, top: number, left: number) {
     }
   };
 }
-
-export default { setOffset };

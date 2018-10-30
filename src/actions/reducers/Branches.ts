@@ -16,7 +16,7 @@
  */
 
 import { AnyAction } from "redux";
-import GitBranch from "../git/GitBranch";
+import { GitBranch } from "../git/GitBranch";
 
 export function getBranchDataReducer(key: string) {
   return (state: GitBranch[], action: AnyAction): GitBranch[] => {

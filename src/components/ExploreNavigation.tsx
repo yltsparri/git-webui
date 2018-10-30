@@ -22,7 +22,7 @@ export interface ExploreNavigationActions {
 interface CombinedExploreNavigationProps
   extends ExploreNavigationProps,
     ExploreNavigationActions {}
-export default class ExploreNavigation extends React.PureComponent<
+export class ExploreNavigation extends React.PureComponent<
   CombinedExploreNavigationProps
 > {
   private leftFileList: HTMLDivElement;

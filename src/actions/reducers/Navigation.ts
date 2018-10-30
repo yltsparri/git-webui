@@ -1,7 +1,7 @@
 import { AnyAction } from "redux";
 import Actions from "../Actions";
 import { Navigation, NavigationNode, NavigationType } from "../AppState";
-import BranchStatus from "../git/BranchStatus";
+import { BranchStatus } from "../git/BranchStatus";
 import { GitBranch } from "../git/GitBranch";
 
 const mapNodes = (
@@ -31,10 +31,7 @@ const mapNodes = (
   return newNodes;
 };
 
-export default function Navigation(
-  state: Navigation,
-  action: AnyAction
-): Navigation {
+export function Navigation(state: Navigation, action: AnyAction): Navigation {
   switch (action.type) {
     case Actions.SET_LOCAL_BRANCHES:
       return Object.assign({}, state, {

@@ -35,7 +35,7 @@ const classNames = {
 };
 
 const lineHeight = 54;
-export default class LogView extends React.PureComponent<LogViewProps> {
+export class LogView extends React.PureComponent<LogViewProps> {
   public render() {
     const graph = this.updateGraph(0);
     const left = Math.max(3, graph.maxLeft) + 1;

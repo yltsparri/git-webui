@@ -22,7 +22,7 @@ export function offsets(state: Offset[], action: AnyAction) {
   if (action.type === "SET_OFFSET") {
     const toSet = {};
     toSet[action.key] = action.offset;
-    return Object.assign({}, state, toSet);
+    return { ...state, ...toSet };
   }
   return state || {};
 }

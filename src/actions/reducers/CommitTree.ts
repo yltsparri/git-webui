@@ -18,7 +18,7 @@
 import { AnyAction } from "redux";
 import Actions from "../Actions";
 import { CommitTree } from "../AppState";
-import FileInfo from "../git/FileInfo";
+import { FileInfo } from "../git/FileInfo";
 
 export function commitTree(state: CommitTree, action: AnyAction): CommitTree {
   switch (action.type) {

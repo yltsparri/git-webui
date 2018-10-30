@@ -1,16 +1,16 @@
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import Messages from "../actions/actioncreators/Messages";
+import { closeMessage } from "../actions/actioncreators/Messages";
 import { AppState } from "../actions/AppState";
-import ModalMessage from "../components/ModalMessage";
+import { ModalMessage } from "./ModalMessage";
 
-export default connect<any, any, any>(
+export const ModalMessageContainer = connect<any, any, any>(
   (state: AppState) => {
     return { message: state.appData.messages };
   },
   (dispatch: Dispatch) => {
     return {
-      close: () => dispatch(Messages.closeMessage())
+      close: () => dispatch(closeMessage())
     };
   }
 )(ModalMessage);

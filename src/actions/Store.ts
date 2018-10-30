@@ -7,7 +7,7 @@ import { commits } from "./reducers/Commits";
 import { commitTree } from "./reducers/CommitTree";
 import { commitDiff } from "./reducers/Diff";
 import { diffOptions } from "./reducers/DiffOptions";
-import Navigation from "./reducers/Navigation";
+import { Navigation } from "./reducers/Navigation";
 import { offsets } from "./reducers/Offsets";
 
 const reducer = combineReducers({
@@ -23,11 +23,9 @@ const reducer = combineReducers({
   navigation: Navigation
 });
 
-const store = createStore(
+export const store = createStore(
   reducer,
   applyMiddleware(
     thunk // lets us dispatch() functions
   )
 );
-
-export default store;

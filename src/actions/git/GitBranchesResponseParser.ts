@@ -1,7 +1,8 @@
-import BranchStatus from "./BranchStatus";
-import GitBrancesResponse from "./GitBrancesResponse";
-import GitBranch from "./GitBranch";
-import GitResponse from "./GitResponse";
+import { BranchStatus } from "./BranchStatus";
+import { GitBrancesResponse } from "./GitBrancesResponse";
+import { GitBranch } from "./GitBranch";
+import { GitResponse } from "./GitResponse";
+
 class GitBranchesResponseParser {
   public parse = (response: GitResponse<string>): GitBrancesResponse => {
     if (response.returnCode !== 0) {

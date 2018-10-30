@@ -16,6 +16,7 @@
  */
 
 import * as React from "react";
+
 import { Offset } from "../actions/AppState";
 import { FileDiff, Hunk, HunkPartType } from "../actions/git/Diff";
 
@@ -33,7 +34,7 @@ interface DiffViewProps {
   onScroll?: (event: React.UIEvent<HTMLDivElement>) => any;
 }
 
-export default class DiffView extends React.PureComponent<DiffViewProps> {
+export class DiffView extends React.PureComponent<DiffViewProps> {
   private diffView: HTMLDivElement;
 
   public componentDidMount() {
@@ -83,18 +84,6 @@ export default class DiffView extends React.PureComponent<DiffViewProps> {
     node.scrollLeft = offset.left;
   }
 
-  public getDiffLines = (fileDiffs: FileDiff[]) => {
-    if (fileDiffs === null) {
-      return null;
-    }
-    const lines: JSX.Element[] = [];
-    fileDiffs.forEach((fileDiff, index) => {
-      this.addHeaders(fileDiff, lines, index);
-      this.addHunks(fileDiff.hunks, lines, index);
-    });
-    return lines;
-  }
-
   public addHeaders = (
     fileDiff: FileDiff,
     lines: JSX.Element[],
@@ -105,26 +94,12 @@ export default class DiffView extends React.PureComponent<DiffViewProps> {
     }
     lines.push(
       <pre
-        className="diff-view-line diff-line-header diff-section-start"
+        className="diff-view-line diff-line-header"
         key={"fileHeader_" + key}
       >
-        {fileDiff.header}
-      </pre>
-    );
-    lines.push(
-      <pre
-        className="diff-view-line diff-line-header"
-        key={"fileHeader_index" + key}
-      >
-        {fileDiff.indexLine}
-      </pre>
-    );
-    lines.push(
-      <pre
-        className="diff-view-line diff-line-header"
-        key={"fileHeader_mode" + key}
-      >
-        {fileDiff.fileModeLine}
+        {[fileDiff.header, fileDiff.indexLine, fileDiff.fileModeLine].join(
+          "\n"
+        )}
       </pre>
     );
     if (this.props.diffViewMode !== DiffViewMode.Added) {
@@ -179,20 +154,12 @@ export default class DiffView extends React.PureComponent<DiffViewProps> {
       const part = hunk.parts[hunkPartIndex];
       const className = this.getHunkPartClassName(part.type);
       const partKey = key + "_" + hunkPartIndex;
-      for (
-        let contentIndex = 0;
-        contentIndex < part.content.length;
-        contentIndex++
-      ) {
-        const line = part.content[contentIndex] || "\n";
-        lines.push(
-          this.getDiffLine(
-            line,
-            className,
-            partKey + "_" + hunkPartIndex + "_" + contentIndex
-          )
-        );
-      }
+      const content = part.content;
+      lines.push(
+        <pre className={className} key={partKey}>
+          {content.join("\n")}
+        </pre>
+      );
     }
   }
 
@@ -218,5 +185,17 @@ export default class DiffView extends React.PureComponent<DiffViewProps> {
         {line}
       </pre>
     );
+  }
+
+  private getDiffLines = (fileDiffs: FileDiff[]) => {
+    if (fileDiffs === null) {
+      return null;
+    }
+    const lines: JSX.Element[] = [];
+    fileDiffs.forEach((fileDiff, index) => {
+      this.addHeaders(fileDiff, lines, index);
+      this.addHunks(fileDiff.hunks, lines, index);
+    });
+    return lines;
   }
 }

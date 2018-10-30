@@ -1,5 +1,5 @@
 import { CommitInfo, Person, Ref, RefType } from "./CommitInfo";
-import GitResponse from "./GitResponse";
+import { GitResponse } from "./GitResponse";
 
 export class CommitInfoResponseParser {
   public parse = (
@@ -16,7 +16,7 @@ export class CommitInfoResponseParser {
       const end = data.indexOf("\ncommit ", start);
       if (end !== -1) {
         const commit = this.parseCommit(data.substr(start, end - start));
-        if (commits.length < rows) {
+        if (commits.length < rows) { 
           commits.push(commit);
         }
       } else {

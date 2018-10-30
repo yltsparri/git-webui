@@ -19,12 +19,12 @@ import { Action } from "redux";
 import { ThunkDispatch } from "redux-thunk";
 import Actions from "../Actions";
 import { AppState, CommitViewMode } from "../AppState";
-import FileInfo from "../git/FileInfo";
+import { FileInfo } from "../git/FileInfo";
 import Git from "../git/Git";
-import Messages from "./Messages";
-import Tree from "./Tree";
+import { addMessage } from "./Messages";
+import { selectNode } from "./Tree";
 
-const loadDiff = (commit: string) => {
+export const loadDiff = (commit: string) => {
   return (
     dispatch: ThunkDispatch<{}, {}, Action>,
     getState: () => AppState
@@ -42,7 +42,7 @@ const loadDiff = (commit: string) => {
           data: response.data
         });
         if (response.message) {
-          dispatch(Messages.addMessage(response.message));
+          dispatch(addMessage(response.message));
         }
       }
     );
@@ -76,7 +76,7 @@ export function selectDiffViewMode(mode: CommitViewMode) {
           parent: null
         };
       }
-      dispatch(Tree.selectNode(root));
+      dispatch(selectNode(root));
     }
   };
 }
@@ -123,12 +123,3 @@ export function toggleShowFullFile() {
 export function selectFile(index: number) {
   return { type: "SELECT_COMMIT_DIFF_FILE", selectedFile: index };
 }
-
-export default {
-  loadDiff,
-  selectDiffViewMode,
-  setDiffContext,
-  toggleIgnoreWhiteSpace,
-  toggleShowFullFile,
-  selectFile
-};

@@ -19,7 +19,7 @@ import * as React from "react";
 import { CommitViewMode } from "../actions/AppState";
 import { Graph } from "../actions/Commit";
 import { CommitInfo } from "../actions/git/CommitInfo";
-import LogView from "./LogView";
+import { LogView } from "./LogView";
 
 export interface HistoryViewDataProps {
   commitHash: string;
@@ -27,7 +27,7 @@ export interface HistoryViewDataProps {
   commits: CommitInfo[];
   graph: Graph;
   CommitView: React.ComponentClass<any>;
-  ExploreView: React.ComponentClass<any>;
+  Explore: React.ComponentClass<any>;
 }
 
 export interface HistoryViewDispatchProps {
@@ -38,7 +38,8 @@ export interface HistoryViewDispatchProps {
 interface HistoryViewProps
   extends HistoryViewDataProps,
     HistoryViewDispatchProps {}
-export default class HistoryView extends React.PureComponent<HistoryViewProps> {
+
+export class HistoryView extends React.PureComponent<HistoryViewProps> {
   public render() {
     const { commits, diffViewMode, commitHash, graph, CommitView } = this.props;
 
@@ -57,13 +58,17 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps> {
                 onClick={this.selectDiffViewModeDiff}
                 className={diffViewMode === CommitViewMode.Diff ? "active" : ""}
               >
-                <a href="#">Commit</a>
+                <a href="#" onClick={this.preventDefault}>
+                  Commit
+                </a>
               </li>
               <li
                 onClick={this.selectDiffViewModeTree}
                 className={diffViewMode === CommitViewMode.Tree ? "active" : ""}
               >
-                <a href="#">Tree</a>
+                <a href="#" onClick={this.preventDefault}>
+                  Tree
+                </a>
               </li>
             </ul>
           </div>
@@ -71,6 +76,10 @@ export default class HistoryView extends React.PureComponent<HistoryViewProps> {
         </div>
       </div>
     );
+  }
+
+  private preventDefault = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
   }
 
   private selectDiffViewModeDiff = () =>

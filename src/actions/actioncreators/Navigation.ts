@@ -20,10 +20,10 @@ import { ThunkDispatch } from "redux-thunk";
 import Actions from "../Actions";
 import { AppMode, AppState, NavigationNode, NavigationType } from "../AppState";
 import Git from "../git/Git";
-import Commit from "./Commit";
-import Messages from "./Messages";
+import { commitSelected } from "./Commit";
+import { addMessage } from "./Messages";
 
-const loadCommits = (
+export const loadCommits = (
   dispatch: ThunkDispatch<{}, {}, Action>,
   item: { text: string }
 ) =>
@@ -32,15 +32,15 @@ const loadCommits = (
       if (response.returnCode === 0) {
         dispatch({ type: Actions.SET_COMMITS, commits: response.data });
         if (response.data && response.data.length) {
-          dispatch(Commit.commitSelected(response.data[0]));
+          dispatch(commitSelected(response.data[0]));
         }
       }
       if (response.message) {
-        dispatch(Messages.addMessage(response.message));
+        dispatch(addMessage(response.message));
       }
     })
     .catch(error => {
-      dispatch(Messages.addMessage(error.message));
+      dispatch(addMessage(error.message));
     });
 
 export function itemSelected(itemId: string) {
@@ -70,14 +70,10 @@ export function itemSelected(itemId: string) {
   };
 }
 
-const showMore = (id: string) => {
+export const showMore = (id: string) => {
   return { type: Actions.SHOW_ALL, data: { id } };
 };
 
-export default {
-  itemSelected,
-  showMore,
-  changeAppMode: (mode: AppMode) => {
-    return { type: Actions.UPDATE_BASEDATA, data: { mode } };
-  }
+export const changeAppMode = (mode: AppMode) => {
+  return { type: Actions.UPDATE_BASEDATA, data: { mode } };
 };

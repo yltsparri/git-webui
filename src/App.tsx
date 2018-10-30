@@ -1,11 +1,12 @@
 import * as React from "react";
 import { connect } from "react-redux";
+import { initState } from "./actions/actioncreators/Init";
 import { AppMode, AppState } from "./actions/AppState";
-import RemoteView from "./components/RemoteView";
-import Explore from "./containers/Explore";
-import HistoryView from "./containers/History";
-import ModalMessage from "./containers/ModalMessage";
-import Sidebar from "./containers/Sidebar";
+import { ExploreContainer } from "./components/ExploreContainer";
+import { HistoryViewContainer } from "./components/HistoryContainer";
+import { ModalMessageContainer } from "./components/ModalMessageContainer";
+import { RemoteView } from "./components/RemoteView";
+import { SidebarContainer } from "./components/SidebarContainer";
 import "./css/bootstrap.css";
 import "./css/main.css";
 
@@ -14,13 +15,20 @@ interface IndexProps {
   repo: string;
 }
 
-export class App extends React.Component<IndexProps> {
+interface DispatchProps {
+  init: () => void;
+}
+
+export class App extends React.Component<IndexProps & DispatchProps> {
+  public componentDidMount() {
+    this.props.init();
+  }
   public render() {
     return (
       <div className="root">
-        <Sidebar />
+        <SidebarContainer />
         <div id="main-view">
-          <ModalMessage />
+          <ModalMessageContainer />
           {this.getMainViewContents()}
         </div>
       </div>
@@ -34,20 +42,23 @@ export class App extends React.Component<IndexProps> {
       case AppMode.Workspace:
         return <div />;
       case AppMode.Explore:
-        return <Explore />;
+        return <ExploreContainer />;
       default:
-        return <HistoryView />;
+        return <HistoryViewContainer />;
     }
   }
 }
 
-const ConnectedApp = connect<IndexProps, {}, {}, AppState>(
+export const ConnectedApp = connect<IndexProps, DispatchProps, {}, AppState>(
   (state: AppState) => {
     return {
       repo: state.appData.dirName,
       mode: state.appData.mode
     };
+  },
+  dispatch => {
+    return {
+      init: () => dispatch(initState())
+    };
   }
 )(App);
-
-export default ConnectedApp;

@@ -2,7 +2,7 @@ import * as React from "react";
 import { create } from "react-test-renderer";
 import { CommitInfo } from "src/actions/AppState";
 import { Circle, Graph, Path } from "src/actions/Commit";
-import LogView from "./LogView";
+import { LogView } from "./LogView";
 
 it("matches snapshot", () => {
   const graph: Graph = {

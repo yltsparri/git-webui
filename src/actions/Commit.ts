@@ -1,6 +1,6 @@
-import CommitInfo from "./git/CommitInfo";
+import { CommitInfo } from "./git/CommitInfo";
 import { FileDiff } from "./git/Diff";
-import FileInfo from "./git/FileInfo";
+import { FileInfo } from "./git/FileInfo";
 
 export enum CommitViewMode {
   Diff = 0,
@@ -53,5 +53,3 @@ export interface Commits {
   viewMode: CommitViewMode;
   graph: Graph;
 }
-
-export default Commits;

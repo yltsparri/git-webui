@@ -24,8 +24,8 @@ import {
   DiffOptions
 } from "./Commit";
 import { Diff } from "./git/Diff";
-import FileInfo from "./git/FileInfo";
-import GitBranch from "./git/GitBranch";
+import { FileInfo } from "./git/FileInfo";
+import { GitBranch } from "./git/GitBranch";
 
 export {
   Diff,
@@ -89,5 +89,5 @@ export interface AppState {
   commits: Commits;
   commitTree: CommitTree;
   diffOptions: DiffOptions;
-  offsets: Map<string, Offset>;
+  offsets: { [key: string] : Offset };
 }

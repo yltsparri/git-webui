@@ -19,11 +19,11 @@ import { Action } from "redux";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import Actions from "../Actions";
 import { NavigationType } from "../AppState";
-import BranchStatus from "../git/BranchStatus";
+import { BranchStatus } from "../git/BranchStatus";
 import Git from "../git/Git";
-import GitBrancesResponse from "../git/GitBrancesResponse";
-import GitBranch from "../git/GitBranch";
-import Message from "./Messages";
+import { GitBrancesResponse } from "../git/GitBrancesResponse";
+import { GitBranch } from "../git/GitBranch";
+import { addMessage } from "./Messages";
 import { itemSelected } from "./Navigation";
 
 const setDirName = (dirName: string) => {
@@ -44,7 +44,7 @@ const getViewOnly = (dispatch: ThunkDispatch<{}, {}, Action>) =>
   Git.getViewOnly().then(response => {
     dispatch(setViewOnly(response.data === "1"));
     if (response.message) {
-      dispatch(Message.addMessage(response.message));
+      dispatch(addMessage(response.message));
     }
   });
 
@@ -71,7 +71,7 @@ const getLocalBranches = (dispatch: ThunkDispatch<{}, {}, Action>) =>
       if (response.data) {
         dispatch(setLocalBranches(response.data));
         if (response.message) {
-          dispatch(Message.addMessage(response.message));
+          dispatch(addMessage(response.message));
         }
         const action = selectActiveBranch(response.data);
         if (action) {
@@ -80,7 +80,7 @@ const getLocalBranches = (dispatch: ThunkDispatch<{}, {}, Action>) =>
       }
     })
     .catch(error => {
-      dispatch(Message.addMessage(error.message));
+      dispatch(addMessage(error.message));
     });
 
 const setRemoteBranches = (branches: GitBranch[]) => {
@@ -97,11 +97,11 @@ const getRemoteBranches = (dispatch: ThunkDispatch<{}, {}, Action>) => {
         dispatch(setRemoteBranches(response.data));
       }
       if (response.message) {
-        dispatch(Message.addMessage(response.message));
+        dispatch(addMessage(response.message));
       }
     })
     .catch(error => {
-      dispatch(Message.addMessage(error.message));
+      dispatch(addMessage(error.message));
     });
 };
 
@@ -119,11 +119,11 @@ const getTags = (dispatch: ThunkDispatch<{}, {}, Action>) => {
         dispatch(setTags(response.data));
       }
       if (response.message) {
-        dispatch(Message.addMessage(response.message));
+        dispatch(addMessage(response.message));
       }
     })
     .catch(error => {
-      dispatch(Message.addMessage(error.message));
+      dispatch(addMessage(error.message));
     });
 };
 
@@ -141,14 +141,10 @@ export function initState(): ThunkAction<Promise<void>, {}, {}, Action> &
         dispatch(getTags);
       }
       if (response.message) {
-        dispatch(Message.addMessage(response.message));
+        dispatch(addMessage(response.message));
       }
     });
   };
   action.type = "thunk";
   return action;
 }
-
-export default {
-  initState
-};

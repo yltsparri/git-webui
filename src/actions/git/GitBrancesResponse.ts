@@ -1,8 +1,7 @@
-import GitBranch from "./GitBranch";
-interface GitBrancesResponse {
+import { GitBranch } from "./GitBranch";
+
+export interface GitBrancesResponse {
   data?: GitBranch[];
   returnCode: number;
   message?: string;
 }
-
-export default GitBrancesResponse;

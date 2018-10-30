@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Offset } from "../actions/AppState";
 import { FileDiff } from "../actions/git/Diff";
-import DiffView, { DiffViewMode } from "./DiffView";
+import { DiffView, DiffViewMode } from "./DiffView";
 
 export interface ExploreViewStateProps {
   removedLinesDiff: FileDiff;
@@ -16,7 +16,7 @@ export interface ExploreViewActions {
 
 interface ExploreViewProps extends ExploreViewStateProps, ExploreViewActions {}
 
-export default class ExploreView extends React.PureComponent<ExploreViewProps> {
+export class ExploreView extends React.PureComponent<ExploreViewProps> {
   public render() {
     const { removedLinesDiff, addedLinesDiff, ExploreNavigation } = this.props;
     const removedLinesDiffs = removedLinesDiff ? [removedLinesDiff] : [];

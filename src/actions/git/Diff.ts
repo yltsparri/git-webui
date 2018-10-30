@@ -27,5 +27,3 @@ export interface Hunk {
   header: string;
   parts: HunkPart[];
 }
-
-export default Diff;

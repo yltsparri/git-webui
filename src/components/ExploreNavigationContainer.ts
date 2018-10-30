@@ -1,13 +1,14 @@
 import { connect } from "react-redux";
 import { Dispatch } from "redux";
-import DiffActions from "../actions/actioncreators/Diff";
-import Offsets from "../actions/actioncreators/Offsets";
+import { selectFile } from "../actions/actioncreators/Diff";
+import { setOffset } from "../actions/actioncreators/Offsets";
 import { AppState } from "../actions/AppState";
-import ExploreNavigation, {
+import {
+  ExploreNavigation,
   ExploreNavigationActions,
   ExploreNavigationProps,
   FilePair
-} from "../components/ExploreNavigation";
+} from "./ExploreNavigation";
 
 const mapStateToProps = (state: AppState) => {
   const diff = state.commitDiff;
@@ -16,7 +17,7 @@ const mapStateToProps = (state: AppState) => {
       return { from: file.initialFile, to: file.resultingFile, index };
     }),
     commitDetails: diff.headerLines.join("\n"),
-    filesOffset: state.offsets.get("EXPLORE_DIFF")!,
+    filesOffset: state.offsets.EXPLORE_FILES!,
     selected: diff.selectedFile
   };
 };
@@ -24,20 +25,22 @@ const mapStateToProps = (state: AppState) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     fileSelected: (file: FilePair) => {
-      dispatch(DiffActions.selectFile(file.index));
-      dispatch(Offsets.setOffset("EXPLORE_DIFF", 0, 0));
-      dispatch(Offsets.setOffset("EXPLORE_FILES", 0, 0));
+      dispatch(selectFile(file.index));
+      dispatch(setOffset("EXPLORE_DIFF", 0, 0));
+      dispatch(setOffset("EXPLORE_FILES", 0, 0));
     },
     onFilesScroll: (ev: React.UIEvent<HTMLDivElement>) => {
       const target: HTMLDivElement = ev.target as HTMLDivElement;
-      dispatch(
-        Offsets.setOffset("EXPLORE_FILES", target.scrollTop, target.scrollLeft)
-      );
+      dispatch(setOffset("EXPLORE_FILES", target.scrollTop, target.scrollLeft));
     }
   };
 };
 
-export default connect<ExploreNavigationProps, ExploreNavigationActions, any>(
+export const ExploreNavigationContainer = connect<
+  ExploreNavigationProps,
+  ExploreNavigationActions,
+  any
+>(
   mapStateToProps,
   mapDispatchToProps
 )(ExploreNavigation);

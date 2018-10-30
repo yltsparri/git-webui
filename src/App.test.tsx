@@ -2,7 +2,8 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { create } from "react-test-renderer";
-import { AnyAction, createStore, Store } from "redux";
+import { AnyAction, applyMiddleware, createStore, Store } from "redux";
+import thunk from "redux-thunk";
 import {
   AppMode,
   AppState,
@@ -16,14 +17,14 @@ import {
 } from "./actions/AppState";
 import { Circle, CommitDiff, DiffOptions, Path } from "./actions/Commit";
 import { FileDiff } from "./actions/git/Diff";
-import store from "./actions/Store";
-import App from "./App";
+import { store } from "./actions/Store";
+import { ConnectedApp } from "./App";
 
 it("renders without crashing", () => {
   const div = document.createElement("div");
   ReactDOM.render(
     <Provider store={store}>
-      <App />
+      <ConnectedApp />
     </Provider>,
     div
   );
@@ -114,14 +115,20 @@ it("matches snapshot", () => {
       files: new Array<FileInfo>()
     }
   } as AppState;
-  const store2 = createStore((s: AppState | undefined) => {
-    return s || state;
-  }, state) as Store<AppState, AnyAction>;
+  const store2 = createStore(
+    (s: AppState | undefined) => {
+      return s || state;
+    },
+    state,
+    applyMiddleware(
+      thunk // lets us dispatch() functions
+    )
+  ) as Store<AppState, AnyAction>;
   store2.getState();
 
   const component = create(
     <Provider store={store2}>
-      <App />
+      <ConnectedApp />
     </Provider>
   );
   expect(component).toMatchSnapshot();

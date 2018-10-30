@@ -52,14 +52,14 @@ const filter = (hunks: Hunk[]) => {
               leftHunk.parts.push({
                 type: null,
                 content: new Array<string>(
-                  next.content.length - part.content.length
+                  next.content.length - part.content.length + 1
                 )
               });
             } else if (next.content.length < part.content.length) {
               rightHunk.parts.push({
                 type: null,
                 content: new Array<string>(
-                  part.content.length - next.content.length
+                  part.content.length - next.content.length + 1
                 )
               });
             }
@@ -67,19 +67,19 @@ const filter = (hunks: Hunk[]) => {
             leftHunk.parts.push(part);
             rightHunk.parts.push({
               type: null,
-              content: new Array<string>(part.content.length)
+              content: new Array<string>(part.content.length + 1)
             });
           }
         } else {
           rightHunk.parts.push({
             type: null,
-            content: new Array<string>(part.content.length)
+            content: new Array<string>(part.content.length + 1)
           });
         }
       } else if (part.type === HunkPartType.Add) {
         leftHunk.parts.push({
           type: null,
-          content: new Array<string>(part.content.length)
+          content: new Array<string>(part.content.length + 1)
         });
         rightHunk.parts.push(part);
       }

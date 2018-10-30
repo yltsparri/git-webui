@@ -15,17 +15,12 @@
  * limitations under the License.
  */
 
-import Actions from '../Actions';
+import Actions from "../Actions";
 
-function addMessage(message: string) {
+export function addMessage(message: string) {
   return { type: Actions.ADD_MESSAGE, message };
 }
 
-function closeMessage() {
-  return { type: 'CLOSE_MESSAGE' };
+export function closeMessage() {
+  return { type: "CLOSE_MESSAGE" };
 }
-
-export default {
-  addMessage,
-  closeMessage
-};

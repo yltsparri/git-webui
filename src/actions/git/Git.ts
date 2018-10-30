@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-import CommitInfo from "./CommitInfo";
+import { CommitInfo } from "./CommitInfo";
 import CommitInfoResponseParser from "./CommitInfoResponseParser";
 import { Diff } from "./Diff";
 import DiffParser from "./DiffParser";
-import FileInfo from "./FileInfo";
-import GitBrancesResponse from "./GitBrancesResponse";
+import { FileInfo } from "./FileInfo";
+import { GitBrancesResponse } from "./GitBrancesResponse";
 import GitBranchesResponseParser from "./GitBranchesResponseParser";
-import GitResponse from "./GitResponse";
+import { GitResponse } from "./GitResponse";
 
 export class Git {
   public getViewOnly = (): Promise<GitResponse<string>> => {
-    return this.makeRequest("GET", "viewonly", null, {
+    return this.makeRequest("GET", "/git/viewonly", null, {
       "Content-Type": "text/plain"
     })
       .then((text: string) => {
@@ -42,7 +42,7 @@ export class Git {
   }
 
   public getDirName = (): Promise<GitResponse<string>> => {
-    return this.makeRequest("GET", "dirname", null, {
+    return this.makeRequest("GET", "/git/dirname", null, {
       "Content-Type": "text/plain"
     })
       .then((text: string) => {
@@ -204,7 +204,7 @@ export class Git {
       cmd += "\n" + arg1;
     }
 
-    return this.makeRequest("POST", "git", cmd, {
+    return this.makeRequest("POST", "/git", cmd, {
       "Content-Type": "text/plain"
     }).then((data: string) => {
       const processed = this.processResponse(data);

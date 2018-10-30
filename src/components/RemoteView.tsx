@@ -22,7 +22,7 @@ export interface RemoteViewProps {
   mode?: AppendMode;
 }
 
-export default class RemoteView extends React.PureComponent<RemoteViewProps> {
+export class RemoteView extends React.PureComponent<RemoteViewProps> {
   public render() {
     const { repo } = this.props;
     const location = document.location!;
