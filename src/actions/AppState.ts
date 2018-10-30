@@ -78,7 +78,7 @@ export interface NavigationNode {
 export interface Navigation {
   rootNodes: string[];
   nodes: { [id: string]: NavigationNode };
-  showAll: string;
+  showAll?: string;
   selected: string;
 }
 
@@ -89,5 +89,5 @@ export interface AppState {
   commits: Commits;
   commitTree: CommitTree;
   diffOptions: DiffOptions;
-  offsets: { [key: string] : Offset };
+  offsets: { [key: string]: Offset };
 }

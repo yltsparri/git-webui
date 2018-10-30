@@ -25,13 +25,12 @@ export function diffOptions(
 ): DiffOptions {
   switch (action.type) {
     case Actions.UPDATE_COMMIT_VIEW_DATA:
-      return Object.assign({}, state, action.data);
+      return { ...state, ...action.data };
     case Actions.TOGGLE_SHOW_FULL_FILE:
-      return Object.assign({}, state, { fullFile: !state.fullFile });
+      return {...state,  fullFile: !state.fullFile};
     case Actions.TOGGLE_IGNORE_WHITESPACE:
-      return Object.assign({}, state, {
-        ignoreWhitespace: !state.ignoreWhitespace
-      });
+      return {...state, 
+        ignoreWhitespace: !state.ignoreWhitespace};
   }
   return (
     state || {

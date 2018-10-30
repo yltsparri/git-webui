@@ -22,7 +22,7 @@ import { CommitInfo } from "../actions/git/CommitInfo";
 import { LogView } from "./LogView";
 
 export interface HistoryViewDataProps {
-  commitHash: string;
+  commitHash?: string;
   diffViewMode: CommitViewMode;
   commits: CommitInfo[];
   graph: Graph;

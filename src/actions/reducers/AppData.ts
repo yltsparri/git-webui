@@ -23,10 +23,10 @@ export function appData(state: AppData, action: AnyAction): AppData {
   switch (action.type) {
     case Actions.SET_DIRNAME:
       const dirName = action.dirName;
-      return Object.assign({}, state, { dirName });
+      return { ...state, dirName };
     case Actions.SET_VIEW_ONLY:
       const viewOnly = action.viewOnly;
-      return Object.assign({}, state, { viewOnly });
+      return { ...state, viewOnly };
     case Actions.NODE_SELECTED:
       let mode: AppMode = AppMode.History;
       if (action.data.selected === NavigationType.RemoteAccess) {
@@ -35,17 +35,18 @@ export function appData(state: AppData, action: AnyAction): AppData {
       if (action.data.selected === NavigationType.Workspace) {
         mode = AppMode.Workspace;
       }
-      return Object.assign({}, state, action.data, { mode });
+      return { ...state, ...action.data, mode };
     case Actions.UPDATE_BASEDATA:
-      return Object.assign({}, state, action.data);
+      return { ...state, ...action.data };
     case Actions.ADD_MESSAGE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         messages: (state.messages ? state.messages + "\n" : "") + action.message
-      });
+      };
     case Actions.CLOSE_MESSAGE:
-      return Object.assign({}, state, { messages: null });
+      return { ...state, messages: "" };
     case Actions.SHOW_ALL:
-      return Object.assign({}, state, { showAll: action.type });
+      return { ...state, showAll: action.type };
   }
   return (
     state || {

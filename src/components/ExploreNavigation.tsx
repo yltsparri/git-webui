@@ -10,7 +10,7 @@ export interface FilePair {
 export interface ExploreNavigationProps {
   files: FilePair[];
   commitDetails: string;
-  selected: number;
+  selected?: number;
   filesOffset: Offset;
 }
 

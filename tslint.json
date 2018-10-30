@@ -17,6 +17,7 @@
     "semicolon": [true, "always"],
     "triple-equals": true,
     "object-literal-sort-keys": false,
-    "interface-name": [true, "never-prefix"]
+    "interface-name": [true, "never-prefix"],
+    "prefer-object-spread": true
   }
 }

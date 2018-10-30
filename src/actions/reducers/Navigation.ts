@@ -9,10 +9,11 @@ const mapNodes = (
   parentId: string,
   nodes: { [id: string]: NavigationNode }
 ) => {
-  const parentNode = Object.assign({}, nodes[parentId]);
-  const newNodes: { [id: string]: NavigationNode } = Object.assign({}, nodes, {
+  const parentNode = { ...nodes[parentId] };
+  const newNodes: { [id: string]: NavigationNode } = {
+    ...nodes,
     [parentNode.id]: parentNode
-  });
+  };
   branches.forEach(branch => {
     const id = parentNode.id + "_" + branch.name;
     const props: { [key: string]: any } = {};
@@ -34,39 +35,43 @@ const mapNodes = (
 export function Navigation(state: Navigation, action: AnyAction): Navigation {
   switch (action.type) {
     case Actions.SET_LOCAL_BRANCHES:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         nodes: mapNodes(
           action.data as GitBranch[],
           NavigationType.LocalBranches,
           state.nodes
         ),
-        showAll: null
-      });
+        showAll: undefined
+      };
     case Actions.SET_REMOTE_BRANCHES:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         nodes: mapNodes(
           action.data as GitBranch[],
           NavigationType.RemoteBranches,
           state.nodes
         ),
-        showAll: null
-      });
+        showAll: undefined
+      };
     case Actions.SET_TAGS:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         nodes: mapNodes(
           action.data as GitBranch[],
           NavigationType.Tags,
           state.nodes
         ),
-        showAll: null
-      });
+        showAll: undefined
+      };
     case Actions.NODE_SELECTED:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selected: action.data.selected,
-        showAll: null
-      });
+        showAll: undefined
+      };
     case Actions.SHOW_ALL:
-      return Object.assign({}, state, { showAll: action.data.id });
+      return { ...state, showAll: action.data.id };
   }
   return (
     state || {

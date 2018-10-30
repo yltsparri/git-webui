@@ -22,11 +22,11 @@ export interface CommitTree {
 
 export interface CommitDiff {
   fileDiffs: FileDiff[];
-  selectedFile: number;
+  selectedFile?: number;
   headerLines: string[];
   useSplitDiff: boolean;
-  removedLinesDiff: FileDiff;
-  addedLinesDiff: FileDiff;
+  removedLinesDiff?: FileDiff;
+  addedLinesDiff?: FileDiff;
 }
 
 export interface Path {
@@ -49,7 +49,7 @@ export interface Circle {
 
 export interface Commits {
   commits: CommitInfo[];
-  selectedCommit: string;
+  selectedCommit?: string;
   viewMode: CommitViewMode;
   graph: Graph;
 }

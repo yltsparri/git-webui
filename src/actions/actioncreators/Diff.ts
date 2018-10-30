@@ -69,11 +69,11 @@ export function selectDiffViewMode(mode: CommitViewMode) {
         root = {
           name: state.appData.dirName,
           size: NaN,
-          objectId: state.commits.selectedCommit,
+          objectId: state.commits.selectedCommit!,
           isSymbolicLink: false,
           mode: 0,
           type: "tree",
-          parent: null
+          parent: undefined
         };
       }
       dispatch(selectNode(root));
@@ -92,7 +92,7 @@ export function setDiffContext(context: number) {
     });
     const state = getState();
     if (!state.diffOptions.fullFile) {
-      const commitHash = state.commits.selectedCommit;
+      const commitHash = state.commits.selectedCommit!;
       dispatch(loadDiff(commitHash));
     }
   };
@@ -104,7 +104,7 @@ export function toggleIgnoreWhiteSpace() {
     getState: () => AppState
   ) => {
     dispatch({ type: Actions.TOGGLE_IGNORE_WHITESPACE });
-    const commitHash = getState().commits.selectedCommit;
+    const commitHash = getState().commits.selectedCommit!;
     dispatch(loadDiff(commitHash));
   };
 }
@@ -115,7 +115,7 @@ export function toggleShowFullFile() {
     getState: () => AppState
   ) => {
     dispatch({ type: Actions.TOGGLE_SHOW_FULL_FILE });
-    const commitHash = getState().commits.selectedCommit;
+    const commitHash = getState().commits.selectedCommit!;
     dispatch(loadDiff(commitHash));
   };
 }

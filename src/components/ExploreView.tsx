@@ -4,9 +4,9 @@ import { FileDiff } from "../actions/git/Diff";
 import { DiffView, DiffViewMode } from "./DiffView";
 
 export interface ExploreViewStateProps {
-  removedLinesDiff: FileDiff;
+  removedLinesDiff?: FileDiff;
   position: Offset;
-  addedLinesDiff: FileDiff;
+  addedLinesDiff?: FileDiff;
   ExploreNavigation: React.ComponentClass<any>;
 }
 

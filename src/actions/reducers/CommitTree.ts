@@ -64,9 +64,10 @@ export function commitTree(state: CommitTree, action: AnyAction): CommitTree {
 function selectCommit(state: CommitTree, action: AnyAction) {
   let root;
   if (state.path.length) {
-    root = Object.assign({}, state.path[0], {
+    root = {
+      ...state.path[0],
       objectId: action.selectedCommit
-    });
+    };
   } else {
     root = {
       name: action.selectedCommit,
@@ -75,7 +76,7 @@ function selectCommit(state: CommitTree, action: AnyAction) {
       isSymbolicLink: false,
       mode: 0,
       type: "tree",
-      parent: null
+      parent: undefined
     };
   }
   return {
@@ -87,9 +88,10 @@ function selectCommit(state: CommitTree, action: AnyAction) {
 function setDirName(state: CommitTree, action: AnyAction) {
   let root;
   if (state.path.length) {
-    root = Object.assign({}, state.path[0], {
+    root = {
+      ...state.path[0],
       name: action.data.dirName
-    });
+    };
   } else {
     root = {
       name: action.dirName,

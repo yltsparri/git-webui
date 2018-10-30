@@ -20,16 +20,13 @@ const mapNodes = (
   Object.keys(node.props).forEach(key => {
     props["data-" + key] = node.props[key];
   });
-  return Object.assign(
-    {},
-    {
+  return {
       id,
       text,
       parentId,
       children: node.children.map(childId => mapNodes(childId, state)),
       props
-    }
-  );
+  };
 };
 
 export const SidebarContainer = connect<

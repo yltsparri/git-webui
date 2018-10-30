@@ -88,12 +88,9 @@ const filter = (hunks: Hunk[]) => {
   return { removedHunks, addedHunks };
 };
 
-const getSplitDiff = (
-  fileDiffs: FileDiff[],
-  selectedFile: number | null
-) => {
-  if (selectedFile === null || !fileDiffs[selectedFile]) {
-    return { removedLinesDiff: null, addedLinesDiff: null };
+const getSplitDiff = (fileDiffs: FileDiff[], selectedFile?: number) => {
+  if (selectedFile === undefined || !fileDiffs[selectedFile]) {
+    return { removedLinesDiff: undefined, addedLinesDiff: undefined };
   }
   const file = fileDiffs[selectedFile];
   const filtered =
@@ -126,26 +123,30 @@ export function commitDiff(state: CommitDiff, action: AnyAction): CommitDiff {
         action.data.fileDiffs,
         state.selectedFile || 0
       );
-      return Object.assign({}, state, action.data, splitDiff, {
+      return {
+        ...state,
+        ...action.data,
+        ...splitDiff,
         selectedFile: action.selectedFile || 0
-      });
+      };
     case Actions.SELECT_COMMIT:
-      return Object.assign({}, state, {
-        selectedFile: null,
-        removedLinesDiff: null,
-        addedLinesDiff: null
-      });
+      return {
+        ...state,
+        selectedFile: undefined,
+        removedLinesDiff: undefined,
+        addedLinesDiff: undefined
+      };
     case Actions.SELECT_COMMIT_VIEW_MODE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         useSplitDiff: action.mode === CommitViewMode.SidebySideDiff
-      });
+      };
     case Actions.SELECT_COMMIT_DIFF_FILE:
-      return Object.assign(
-        {},
-        state,
-        { selectedFile: action.selectedFile },
-        getSplitDiff(state.fileDiffs, action.selectedFile)
-      );
+      return {
+        ...state,
+        selectedFile: action.selectedFile as number,
+        ...getSplitDiff(state.fileDiffs, action.selectedFile)
+      };
   }
   return (
     state || {

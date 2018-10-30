@@ -37,7 +37,7 @@ export function commitSelected(commit: CommitInfo) {
       isSymbolicLink: false,
       mode: 0,
       type: "tree",
-      parent: null
+      parent: undefined
     };
     dispatch({ type: Actions.SELECT_COMMIT, selectedCommit: commit.hash });
 

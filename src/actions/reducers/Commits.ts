@@ -122,22 +122,25 @@ export function commits(state: Commits, action: AnyAction): Commits {
     case "SET_COMMITS":
       const commitInfos = (action.commits as CommitInfo[]) || [];
       const graph: Graph = updateGraph(commitInfos, 0);
-      return Object.assign({}, state, {
+      return {
+        ...state,
         commits: commitInfos,
         graph,
         selectedCommit:
           commitInfos.length > 0
             ? commitInfos[commitInfos.length - 1].hash
-            : null
-      });
+            : undefined
+      };
     case Actions.SELECT_COMMIT:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         selectedCommit: action.selectedCommit
-      });
+      };
     case Actions.SELECT_COMMIT_VIEW_MODE:
-      return Object.assign({}, state, {
+      return {
+        ...state,
         viewMode: action.viewMode
-      });
+      };
     default:
       return (
         state || {
