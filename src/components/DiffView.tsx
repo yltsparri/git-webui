@@ -15,6 +15,7 @@
  * limitations under the License.
  */
 
+import memoizeOne from "memoize-one";
 import * as React from "react";
 
 import { Offset } from "../actions/AppState";
@@ -36,6 +37,18 @@ interface DiffViewProps {
 
 export class DiffView extends React.PureComponent<DiffViewProps> {
   private diffView: HTMLDivElement;
+
+  private getDiffLines = memoizeOne((fileDiffs: FileDiff[]) => {
+    if (fileDiffs === null) {
+      return null;
+    }
+    const lines: JSX.Element[] = [];
+    fileDiffs.forEach((fileDiff, index) => {
+      this.addHeaders(fileDiff, lines, index);
+      this.addHunks(fileDiff.hunks, lines, index);
+    });
+    return lines;
+  });
 
   public componentDidMount() {
     const offset = this.props.offset;
@@ -185,17 +198,5 @@ export class DiffView extends React.PureComponent<DiffViewProps> {
         {line}
       </pre>
     );
-  }
-
-  private getDiffLines = (fileDiffs: FileDiff[]) => {
-    if (fileDiffs === null) {
-      return null;
-    }
-    const lines: JSX.Element[] = [];
-    fileDiffs.forEach((fileDiff, index) => {
-      this.addHeaders(fileDiff, lines, index);
-      this.addHunks(fileDiff.hunks, lines, index);
-    });
-    return lines;
   }
 }
